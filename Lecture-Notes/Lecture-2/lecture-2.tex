@@ -1,0 +1,250 @@
+\documentclass{article}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{mathtools}
+
+\title{Lecture 1 - Introduction}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\fancyhead[R]{Lecture 1 - Introduction}
+
+\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+\renewcommand{\thesubsubsection}{\thesection.\alph{subsection}.\Roman{subsubsection}}
+\makeatletter
+\DeclareFontFamily{U}{MnSymbolA}{}
+\DeclareFontShape{U}{MnSymbolA}{m}{n}{
+    <-6>  MnSymbolA5
+   <6-7>  MnSymbolA6
+   <7-8>  MnSymbolA7
+   <8-9>  MnSymbolA8
+   <9-10> MnSymbolA9
+  <10-12> MnSymbolA10
+  <12->   MnSymbolA12}{}
+\DeclareFontShape{U}{MnSymbolA}{b}{n}{
+    <-6>  MnSymbolA-Bold5
+   <6-7>  MnSymbolA-Bold6
+   <7-8>  MnSymbolA-Bold7
+   <8-9>  MnSymbolA-Bold8
+   <9-10> MnSymbolA-Bold9
+  <10-12> MnSymbolA-Bold10
+  <12->   MnSymbolA-Bold12}{}
+\DeclareSymbolFont{MnSyA}{U}{MnSymbolA}{m}{n}
+\SetSymbolFont{MnSyA}{bold}{U}{MnSymbolA}{b}{n}
+
+\DeclareRobustCommand{\overleftharpoon}{\mathpalette{\overarrow@\leftharpoonfill@}}
+\DeclareRobustCommand{\overrightharpoon}{\mathpalette{\overarrow@\rightharpoonfill@}}
+\def\leftharpoonfill@{\arrowfill@\leftharpoondown\mn@relbar\mn@relbar}
+\def\rightharpoonfill@{\arrowfill@\mn@relbar\mn@relbar\rightharpoonup}
+
+\DeclareMathSymbol{\leftharpoondown}{\mathrel}{MnSyA}{'112}
+\DeclareMathSymbol{\rightharpoonup}{\mathrel}{MnSyA}{'100}
+\DeclareMathSymbol{\mn@relbar}{\mathrel}{MnSyA}{'320}
+\makeatother
+
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\arraystretch}{1.8}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\newcommand{\harpoon}[1]{\overrightharpoonup{#1}}
+
+\begin{document}
+\maketitle
+
+\begin{itemize}
+	\item Difference Equations (DEQs) are used to model discrete systems.
+	\begin{itemize}
+		\item DEQs allow us to express systems as the linear combinations of other systems.
+	\end{itemize}
+	\item The goal of discrete system design is to select optimal values of the $\alpha_k$ and $\beta_k$ terms to best model a given scenario.
+	\item Systems without feedback (no $y(n-k), \quad k \ge 1$ terms) exhibit both \emph{linearity} and \emph{time-invariance}.
+	\begin{itemize}
+		\item A system exhibits linearity if its output, for some given input, can be expressed as the linear combination of the outputs of other systems with the same input.
+		\item A system exhibits time-invariance if delaying the input to the system results in the same output but delayed by the same amount.
+	\end{itemize}
+\end{itemize}
+
+\section[Example ~\thesection]{Find the ouputs of the system $y(n) = x(n) + \frac{1}{2}x(n-1) + \frac{1}{4}x(n-2)$ for the following inputs:}
+Note that $y(n)$ has no feedback and thus exhibits both linearity and time-invariance
+
+\subsection[~\thesubsection]{$x_a(n) = \begin{cases} 1, \; \text{if} \; n = 0 \\ 0, \; \text{otherwise} \end{cases}$}
+
+\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
+	\hline
+	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
+	\hline
+	$x_a(n)$ & 1 & 0 & 0 & 0 & 0 & 0 \\
+	$y(n)$ & 1 & $\tfrac{1}{2}$ & $\tfrac{1}{4}$ & 0 & 0 & 0 \\
+	\hline
+\end{tabularx}
+
+\subsection[~\thesubsection]{$x_b(n) = \begin{cases} 1, \; \text{if} \; n = 2 \\ 0, \text{otherwise} \end{cases}$}
+
+\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
+	\hline
+	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
+	\hline
+	$x_b(n)$ & 0 & 0 & 1 & 0 & 0 & 0 \\
+	$y(n)$ & 0 & 0 & 1 & $\tfrac{1}{2}$ & $\tfrac{1}{3}$ & 0 \\
+	\hline
+\end{tabularx}
+
+\vspace{.3cm}
+
+Notice here that $x_b(n) = x_a(n-2)$, and thus $x_b(n)$ is the same as $x_a(n)$ but delayed by 2 cycles. The fact that our output in (b) is likewise delayed by 2 cycles as compared to in (a) is corroboration of the fact that $y(n)$ exhibits time-invariance.
+
+\subsection[~\thesubsection]{$x_c(n) = \begin{cases} 2, \; \text{if} \; n = 1 \\ 0, \text{otherwise} \end{cases}$}
+
+\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
+	\hline
+	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
+	\hline
+	$x_c(n)$ & 0 & 2 & 0 & 0 & 0 & 0 \\
+	$y(n)$ & 0 & 2 & 1 & $\tfrac{1}{2}$ & 0 & 0 \\
+	\hline
+\end{tabularx}
+
+\vspace{.3cm}
+
+Notice here once again that $x_c(n) = 2x_a(n-1)$ and thus $x_c(n)$ is the same as the input in $x_a(n)$ but multiplied by 2 and delayed by a cycle. The fact that y(n) is now delayed by 1 cycle and twice that as in (a) speaks to the fact $y(n)$ exhibits both linearity and time-invariance.
+
+\subsection[~\thesubsection]{$x_d(n) = \begin{cases} 1, \; \text{if} \; n = 0, 2 \\ 2, \; \text{if} \; n = 1 \\ 0, \text{otherwise} \end{cases}$}
+
+\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
+	\hline
+	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
+	\hline
+	$x_d(n)$ & 1 & 2 & 1 & 0 & 0 & 0 \\
+	$y(n)$ & 1 & $\tfrac{5}{2}$ & $\tfrac{9}{4}$ & $\tfrac{3}{2}$ & $\tfrac{3}{4}$ & 0 \\
+	\hline
+\end{tabularx}
+
+\vspace{.3cm}
+
+Notice again that $x_d(n) = x_a(n) + x_b(n) + x_c(n)$, thus $y(n)$ is just the sum of all of the $y(n)$'s computed for (a), (b), and (c).
+
+\begin{itemize}
+	\item The state-equations are an alternative representation to DEQs to represent systems.
+	\begin{itemize}
+		\item Also called the $(A, B, C, D)$ representation.
+		\item In its general form, the state-space representation is written as two equations:
+		\begin{itemize}
+			\item $\overrightharpoon{S(n+1)} = \boldsymbol{A}\overrightharpoon{S(n)} + \overrightharpoon{B(n)}x(n)$
+			\item $y(n) = {C}\overrightharpoon{S(n)} + \boldsymbol{D}x(n)$
+			\begin{itemize}
+				\item $\overrightharpoon{S(n)}$ represents the system's current state.
+				\item $\overrightharpoon{S(n+1)}$ represents the system's next state.
+				\item $\overrightharpoon{S(0)}$ is always defined to be zero.
+				\item $\overrightharpoon{S(0)}$ is called the system's \emph{zero state}.
+			\end{itemize}
+		\end{itemize}
+		\item Systems in state-space form have their outputs described as a function of the system's current state $\overrightharpoon{S(n)}$ and current input $x(n)$.
+		\item $\overrightharpoon{S(n)}$ is found by renaming the inputs/feedbacks in the difference equation representation of $y(n)$ such that the entire difference equation can be expressed in terms of $x(n)$ and $S(n)$.
+	\end{itemize}
+\end{itemize}
+
+\section{Express the system $y(n) = x(n) + \frac{1}{2}x(n-1) + \frac{1}{4}x(n-2)$ in state-space form}
+
+\makeatletter
+\renewcommand\thesubsubsection{\thesection.\Roman{subsubsection}}
+\makeatother
+
+\subsubsection{Find $\overrightharpoon{S(n)}$}
+
+\begin{align*}
+	&\text{Let:} && \text{Then:} \\
+	&s_1(n) = x(n-1) && s_1(n+1) = x(n) \\
+	&s_2(n) = x(n-2) && s_2(n+1) = x(n-1) = s_1(n)
+\end{align*}
+
+Thus, let $\overrightharpoon{S(n)} = \begin{psmallmatrix} s_1(n) \\ s_2(n) \end{psmallmatrix}$.
+
+\subsubsection{Find $\overrightharpoon{S(n+1)}$}
+
+\begin{align*}
+	\overrightharpoon{S(n+1)} &= \begin{pmatrix} s_1(n+1) \\ s_2(n+1) \end{pmatrix} \\
+	&= \begin{pmatrix} x(n) \\ s_1(n) \end{pmatrix} \\
+	&= \begin{pmatrix} 1 \\ 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(n)
+\end{align*}
+
+Therefore, our A and B matrices are $\begin{psmallmatrix} 1 \\ 0 \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \\ 0 \end{psmallmatrix}$ respectively.
+
+\subsubsection{Find $y(n)$}
+
+\begin{align*}
+	y(n) &= x(n) + \frac{1}{2}x(n-1) + \frac{1}{4}x(n-2) \\
+	&= \frac{1}{2}s_1(n) + \frac{1}{4}s_2(n) + x(n) \\
+	&= \begin{pmatrix} \frac{1}{2} & \frac{1}{4} \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+\end{align*}
+
+Therefore, our C and D matrix are $\begin{psmallmatrix} \frac{1}{2} & \frac{1}{4} \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \end{psmallmatrix}$ respectively.
+
+Putting it all together, our system can be represented in state space form as:
+
+\begin{align*}
+	&\overrightharpoon{S(n+1)} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(n) \\ \\
+	&y(n) = \begin{pmatrix} \frac{1}{2} & \frac{1}{4} \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+\end{align*}
+
+\section{Represent the system $y(n) = x(n) - x(n-1) + y(n-2)$ in state-space form}
+
+\subsubsection{Find $\overrightharpoon{S(n)}$}
+
+\begin{align*}
+	&\text{Let:} && \text{Then:} \\
+	&s_1(n) = x(n-1) && s_1(n+1) = x(n) \\
+	&s_2(n) = y(n-2) && s_2(n+1) = y(n-1) = s_3(n) \\
+	&s_3(n) = y(n-1) && s_3(n+1) = y(n) = x(n) - x(n-1) + y(n-2) = -s_1(n) + s_2(n) + x(n)
+\end{align*}
+
+Thus, let $\overrightharpoon{S(n)} = \begin{psmallmatrix} s_1(n) \\ s_2(n) \\ s_3(n) \end{psmallmatrix}$.
+
+\subsubsection{Find $\overrightharpoon{S(n+1)}$}
+
+\begin{align*}
+	\overrightharpoon{S(n+1)} &= \begin{pmatrix} s_1(n+1) \\ s_2(n+1) \\ s_3(n+1)\end{pmatrix} \\
+	&= \begin{pmatrix} x(n) \\ s_3(n) \\ -s_1(n) + s_2(n) + x(n) \end{pmatrix} \\
+	&= \begin{pmatrix} 0 & 0 & 0 \\ 0 & 0 & 1 \\ -1 & 1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 0 \\ 1 \end{pmatrix}x(n)
+\end{align*}
+
+Therefore, our A and B matrices are $\begin{psmallmatrix} 0 & 0 & 0 \\ 0 & 0 & 1 \\ -1 & 1 & 0 \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \\ 0 \\ 1 \end{psmallmatrix}$ respectively.
+
+\subsubsection{Find $y(n)$}
+
+\begin{align*}
+	y(n) &= x(n) - x(n-1) + y(n-2) \\
+	&= -s_1(n) + s_2(n) + x(n) \\
+	&= \begin{pmatrix} -1 & 1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+\end{align*}
+
+Therefore, our C and D matrices are $\begin{psmallmatrix} -1 & 1 & 0 \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \end{psmallmatrix}$ respectively.
+
+Putting it all together, our system can be represented in state space form as:
+
+\begin{align*}
+	\overrightharpoon{S(n+1)} &= \begin{pmatrix} 0 & 0 & 0 \\ 0 & 0 & 1 \\ -1 & 1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 0 \\ 1 \end{pmatrix}x(n) \\ \\
+	y(n) &= \begin{pmatrix} -1 & 1 & 0 \end{pmatrix} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+\end{align*}
+
+
+
+
+
+
+
+
+\end{document}
