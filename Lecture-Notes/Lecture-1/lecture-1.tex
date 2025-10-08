@@ -4,13 +4,22 @@
 \usepackage{sectsty}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
-%TODO: FIX MARGINS
 \usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{tabularx}
 
 \title{Lecture 1 - Introduction}
+
+\hypersetup{
+        colorlinks=true,
+        linkcolor=blue,
+        filecolor=magenta,
+        urlcolor=blue,
+        citecolor=blue,
+	anchorcolor=blue
+}
+
 \author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
 \date{\today}
 
@@ -31,6 +40,7 @@
 
 \begin{document}
 \maketitle
+\pagestyle{fancy}
 
 \begin{itemize}
 	\item The study of signals and system concerns itself with the synthesis and interpretation of signals.
@@ -79,7 +89,6 @@ Note: This system $y(n) = \frac{1}{2}x(n) + \frac{1}{2}x(n-1)$ has a special nam
 	\hline
 \end{tabularx}
 
-
 \subsection[~\thesubsection]{$x(n) = \begin{cases} 1, \; \text{if} \; n = 0 \\ 0, \; \text{otherwise} \end{cases}$}
 
 \begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
@@ -121,7 +130,7 @@ Note: This system $y(n) = \frac{1}{2}x(n) + \frac{1}{2}x(n-1)$ has a special nam
 	\hline
 	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
 	\hline
-	$x(n)$ & 1 & 0 & -1 & 0 & 0 & 1 \\
+	$x(n)$ & 1 & 0 & -1 & 0 & 1 & 0 \\
 	$y(n)$ & 1 & 0 & -2 & 0 & 3 & 0 \\
 	\hline
 \end{tabularx}
@@ -151,9 +160,9 @@ Note: This system $y(n) = \frac{1}{2}x(n) + \frac{1}{2}x(n-1)$ has a special nam
 \vspace{.5cm}
 
 \begin{itemize}
-	\item A system (such as the one given in exercise 2.b) which diverges to $\pm \infty$ as the number of cycles increases is called unstable.
+	\item A system (such as the one given in exercise 2.b) which diverges to $\pm \infty$ as the number of cycles increases is called \emph{unstable}.
 	\begin{itemize}
-		\item Relates to a concept known as resonant frequencies.
+		\item Relates to a concept known as \emph{resonant frequencies}.
 	\end{itemize}
 	\item A system (such as the one given in exercise 4) for which $y(n) = x(n)$ is called an identity system.
 	\item All discrete systems can be represented by a Difference Equation (DEQ)
@@ -164,7 +173,10 @@ Note: This system $y(n) = \frac{1}{2}x(n) + \frac{1}{2}x(n-1)$ has a special nam
 	\begin{itemize}
 		\item $y(n) = \sum_{k=0}^{N}\alpha_{k}x(n-k) + \sum_{k=1}^{M}\beta_{k}y(n-k), \quad N, M \in \mathbb{N}$
 		\begin{itemize}
-			\item Note that the lower bound for the sums of the $y(n-k)'s$ is 1.
+			\item $N$ is called the system's order.
+			\item The $x(n-k)$ terms are the system's inputs.
+			\item The $y(nik)$ terms are called the system's feedback.
+			\item Note that the lower bound for the sums of the $y(n-k)$ terms is 1.
 			\item Also note that each sum is finite.
 		\end{itemize}
 	\end{itemize}
@@ -181,22 +193,4 @@ Selecting $N = 1, M = 0$, $\alpha_k = \begin{cases} \frac{1}{2} \; \text{if} \; 
 
 Thus, we have successfully represented our system using the general DEQ form.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \end{document}
-
-
