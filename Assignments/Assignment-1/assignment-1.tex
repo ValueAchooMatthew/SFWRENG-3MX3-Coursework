@@ -1,0 +1,266 @@
+\documentclass{article}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{mathtools}
+
+\title{Assignment 1}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+
+\hypersetup{
+        colorlinks=true,
+        linkcolor=blue,
+        filecolor=magenta,
+        urlcolor=blue,
+        citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\fancyhead[R]{Assignment 1}
+
+\newenvironment{directsubsubs}{
+  \makeatletter
+  \renewcommand\thesubsubsection{\thesection.\Roman{subsubsection}}
+  \makeatother
+}{
+  \makeatletter
+  \renewcommand\thesubsubsection{\thesubsection.\Roman{subsubsection}}
+  \makeatother
+}
+
+\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+\renewcommand{\thesubsubsection}{\thesection.\alph{subsection}.\Roman{subsubsection}}
+\makeatletter
+\DeclareFontFamily{U}{MnSymbolA}{}
+\DeclareFontShape{U}{MnSymbolA}{m}{n}{
+    <-6>  MnSymbolA5
+   <6-7>  MnSymbolA6
+   <7-8>  MnSymbolA7
+   <8-9>  MnSymbolA8
+   <9-10> MnSymbolA9
+  <10-12> MnSymbolA10
+  <12->   MnSymbolA12}{}
+\DeclareFontShape{U}{MnSymbolA}{b}{n}{
+    <-6>  MnSymbolA-Bold5
+   <6-7>  MnSymbolA-Bold6
+   <7-8>  MnSymbolA-Bold7
+<8-9>  MnSymbolA-Bold8
+   <9-10> MnSymbolA-Bold9
+  <10-12> MnSymbolA-Bold10
+  <12->   MnSymbolA-Bold12}{}
+\DeclareSymbolFont{MnSyA}{U}{MnSymbolA}{m}{n}
+\SetSymbolFont{MnSyA}{bold}{U}{MnSymbolA}{b}{n}
+
+\DeclareRobustCommand{\overleftharpoon}{\mathpalette{\overarrow@\leftharpoonfill@}}
+\DeclareRobustCommand{\overrightharpoon}{\mathpalette{\overarrow@\rightharpoonfill@}}
+\def\leftharpoonfill@{\arrowfill@\leftharpoondown\mn@relbar\mn@relbar}
+\def\rightharpoonfill@{\arrowfill@\mn@relbar\mn@relbar\rightharpoonup}
+
+\DeclareMathSymbol{\leftharpoondown}{\mathrel}{MnSyA}{'112}
+\DeclareMathSymbol{\rightharpoonup}{\mathrel}{MnSyA}{'100}
+\DeclareMathSymbol{\mn@relbar}{\mathrel}{MnSyA}{'320}
+\makeatother
+
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\arraystretch}{1.8}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\newcommand{\harpoon}[1]{\overrightharpoonup{#1}}
+
+\begin{document}
+\maketitle
+\pagestyle{fancy}
+
+\begin{center}
+	\Large{\underline{Discrete Systems}}
+\end{center}
+\section[Question ~\thesection]{The system S is given by $y(n) = y(n - 1) - x(n - 1) + x(n)$. Assume that $y(-1) = 0$}
+
+\subsection[~\thesubsection]{Compute the output to the input $x(n) = \delta(n)$}
+
+\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
+	\hline
+	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
+	\hline
+	$x(n)$ & 1 & 0 & 0 & 0 & 0 & 0 \\
+	$y(n)$ & 1 & 0 & 0 & 0 & 0 & 0 \\
+	\hline
+\end{tabularx}
+
+\subsection[~\thesubsection]{Compute the output to the input $x(n) = \delta(n) + \delta(n - 1) + \delta(n - 2)$}
+
+\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
+	\hline
+	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
+	\hline
+	$x(n)$ & 1 & 1 & 1 & 0 & 0 & 0 \\
+	$y(n)$ & 1 & 1 & 1 & 0 & 0 & 0 \\
+	\hline
+\end{tabularx}
+
+\subsection[~\thesubsection]{Compute the output to the input $x(n) = \cos({\pi}n)$}
+
+\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
+	\hline
+	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
+	\hline
+	$x(n)$ & 1 & -1 & 1 & -1 & 1 & -1 \\
+	$y(n)$ & 2 & 0 & 2 & 0 & 2 & 0 \\
+	\hline
+\end{tabularx}
+
+\newpage
+
+\begin{center}
+	\Large{\underline{Difference Equations to State Space Equations}}
+\end{center}
+
+\section[Question ~\thesection]{Given the difference equation $y(n) = y(n - 1) - y(n - 2) + x(n) - x(n - 2)$, determine the $(A, B, C, D)$ representation of the system.}
+
+\begin{directsubsubs}
+	
+	\subsubsection[~\thesubsubsection]{Find $\overrightharpoon{S(n)}$}
+	
+	\begin{align*}
+		&\text{Let:}& \text{Then:} \\
+		&s_1(n) = x(n - 2) &s_1(n + 1) &= x(n - 1) = s_2(n) \\
+		&s_2(n) = x(n - 1) &s_2(n + 1) &= x(n) \\
+		&s_3(n) = y(n - 2) &s_3(n + 1) &= y(n - 1) = s_4(n) \\
+		&s_4(n) = y(n - 1) &s_4(n + 1) &= y(n) \\
+		& & &= y(n - 1) - y(n - 2) + x(n) - x(n - 2) \\
+		& & &= -s_1(n) - s_3(n) + s_4(n) + x(n)
+	\end{align*}
+
+	Thus, let $\overrightharpoon{S(n)} = \begin{psmallmatrix} s_1 \\ s_2 \\ s_3 \\ s_4 \end{psmallmatrix}$
+
+	\subsubsection[~\thesubsubsection]{Find $\overrightharpoon{S(n + 1)}$}
+	
+	\begin{align*}
+		\overrightharpoon{S(n + 1)} &= \begin{pmatrix} s_1(n + 1) \\ s_2(n + 1) \\ s_3(n + 1) \\ s_4(n + 1) \end{pmatrix} \\
+		&= \begin{pmatrix} s_2(n) \\ x(n) \\ s_4(n) \\ -s_1(n) - s_3(n) + s_4(n) + x(n) \end{pmatrix} \\
+		&= \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ -1 & 0 & -1 & 1 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 0 \\ 1 \\ 0 \\ 1 \end{pmatrix}x(n)
+	\end{align*}
+
+	Therefore, our $\boldsymbol{A}$ and $\boldsymbol{B}$ matrices are $\begin{psmallmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ -1 & 0 & -1 & 1 \end{psmallmatrix}$ and $\begin{psmallmatrix} 0 \\ 1 \\ 0 \\ 1 \end{psmallmatrix}$.
+
+	\subsubsection[~\thesubsubsection]{Find $y(n)$}
+
+	\begin{align*}
+		y(n) &= -x(n - 2) - y(n - 2) + y(n + 1) + x(n) \\
+		&= -s_1(n) -s_3(n) + s_4(n) + x(n) \\
+		&= \begin{pmatrix} -1 & 0 & -1 & 1 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+	\end{align*}
+
+	Therefore, out $\boldsymbol{C}$ and $\boldsymbol{D}$ matrices are $\begin{psmallmatrix} -1 & 0 & -1 & 1 \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \end{psmallmatrix}$ respectively.
+
+	Putting it all together, our system can be represented in state space form as:
+	
+	\begin{align*}
+		\overrightharpoon{S(n + 1)} &= \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ -1 & 0 & -1 & 1 \end{pmatrix}\overrightharpoon{S(n )} + \begin{pmatrix} 0 \\ 1 \\ 0 \\ 1 \end{pmatrix}x(n) \\\\
+		y(n) &= \begin{pmatrix} -1 & 0 & -1 & 1 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+	\end{align*}
+
+\end{directsubsubs}
+
+\newpage
+
+\begin{center}
+	\Large{\underline{$(A, B, C, D)$ Representation}}
+\end{center}
+
+\section[Question ~\thesection]{Given the system $y(n) = x(n) + x(n - 2) - y(n - 2)$}
+
+\subsection[~\thesubsection]{Find the $(A, B, C, D)$ representation of the system}
+
+\subsubsection[~\thesubsubsection]{Find $\overrightharpoon{S(n)}$}
+
+\begin{align*}
+       &\text{Let:}& \text{Then:} \\
+       &s_1(n) = x(n - 2) &s_1(n + 1) &= x(n - 1) = s_2(n) \\
+       &s_2(n) = x(n - 1) &s_2(n + 1) &= x(n) \\
+       &s_3(n) = y(n - 2) &s_3(n + 1) &= y(n - 1) = s_4(n) \\
+       &s_4(n) = y(n - 1) &s_4(n + 1) &= y(n) \\
+       & & &= -y(n - 2) + x(n - 2) + x(n) \\
+       & & &= s_1(n) - s_3(n) + x(n)
+\end{align*}
+
+Thus, let $\overrightharpoon{S(n)} = \begin{psmallmatrix} s_1(n) \\ s_2(n) \\ s_3(n) \\ s_4(n) \end{psmallmatrix}$.
+
+\subsubsection[~\thesubsubsection]{Find $\overrightharpoon{S(n + 1)}$}
+
+\begin{align*}
+	\overrightharpoon{S(n+1)} &= \begin{pmatrix} s_1(n + 1) \\ s_2(n + 1) \\ s_3(n + 1) \\ s_4(n + 1) \end{pmatrix} \\
+	&= \begin{pmatrix} s_2(n) \\ x(n) \\ s_4(n) \\ s_1(n) - s_3(n) + x(n) \end{pmatrix} \\
+	&= \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 0 \\ 1 \\ 0 \\ 1 \end{pmatrix}
+\end{align*}
+
+Therefore, our $\boldsymbol{A}$ and $\boldsymbol{B}$ matrices are $\begin{psmallmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 1 & 0 & -1 & 0 \end{psmallmatrix}$ and $\begin{psmallmatrix} 0 \\ 1 \\ 0 \\ 1 \end{psmallmatrix}$ respectively.
+
+\subsubsection[~\thesubsubsection]{Find $y(n)$}
+
+\begin{align*}
+	y(n) &= -y(n - 2) + x(n - 2) + x(n) \\
+	&= s_1(n) - s_3(n) + x(n) \\
+	&= \begin{pmatrix} 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+\end{align*}
+
+Therefore, our $\boldsymbol{C}$ and $\boldsymbol{D}$ matrices are $\begin{psmallmatrix} 1 & 0 & -1 & 0 \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \end{psmallmatrix}$ respectively.
+
+Putting it all together, our system can be represented in state space form as:
+
+\begin{align*}
+	\overrightharpoon{S(n + 1)} &= \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 0 \\ 1 \\ 0 \\ 1 \end{pmatrix} \\
+	y(n) &= \begin{pmatrix} 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+\end{align*}
+
+\subsection[~\thesubsection]{Use the state space equations to compute 5 outputs to the input $x(n) = \delta(n)$}
+
+\begin{align*}
+	&\underline{\text{Current State} \; (\overrightharpoon{S(n)})}& &\underline{\text{Current Output} \; (y(n))} \\ \\
+	&\overrightharpoon{S(0)} = \overrightharpoon{0}& &y(0) = \begin{pmatrix} 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} 1 \end{pmatrix}x(0) = 1 \\
+	&\overrightharpoon{S(1)} = \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} 0 \\ 1 \\ 0 \\ 1 \end{pmatrix}x(0) = \begin{pmatrix} 0 \\ 1 \\ 0 \\ 1 \end{pmatrix}& &y(1) = \begin{pmatrix} 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} 1 \end{pmatrix}x(1) = 0 \\
+	&\overrightharpoon{S(2)} = \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} 0 \\ 1 \\ 0 \\ 1 \end{pmatrix}x(1) = \overrightharpoon{0}& &y(2) = \begin{pmatrix} 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} 1 \end{pmatrix}x(2) = 0 \\
+	&\overrightharpoon{S(3)} = \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} 0 \\ 1 \\ 0 \\ 1 \end{pmatrix}x(2) = \overrightharpoon{0}& &y(3) = \begin{pmatrix} 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(3)} + \begin{pmatrix} 1 \end{pmatrix}x(3) = 0 \\
+	&\overrightharpoon{S(4)} = \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(3)} + \begin{pmatrix} 0 \\ 1 \\ 0 \\ 1 \end{pmatrix}x(3) = \overrightharpoon{0}& &y(4) = \begin{pmatrix} 1 & 0 & -1 & 0 \end{pmatrix}\overrightharpoon{S(4)} + \begin{pmatrix} 1 \end{pmatrix}x(4) = 0 \\
+\end{align*}
+
+\newpage
+
+\begin{center}
+	\large{\underline{Compound Interest}}
+\end{center}
+
+\section[Question ~\thesection]{A bank account is just a system: Letting $x(n)$ represent the amount deposited or withdrawn (with $x(n) > 0$ representing deposits and $x(n) < 0$ representing withdrawals), and $\alpha$ represent the interest rate, we can express the account balance with the system $y(n) = y(n - 1) + {\alpha}y(n - 1) + x(n)$. How much money do you have after 10 days if you initially deposit \$100?}
+
+We're just going to solve this through direct computation with a relatively simply inference about $y(n)$:
+
+\vspace{1cm}
+
+\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
+	\hline
+	$n$ & 0 & 1 & 2 & 3 & $\cdots$ & 10 \\
+	\hline
+	$x(n)$ & 100 & 0 & 0 & 0 & $\cdots$ & 0 \\
+	$y(n)$ & 100 & $100(1 + \alpha)$ & $100(1 + \alpha)^2$ & $100(1 + \alpha)^3$ & $\cdots$ & $100(1 + \alpha)^{10}$ \\
+	\hline
+\end{tabularx}
+
+\vspace{1cm}
+
+Therefore, with an initial deposit of \$100, the account balance grows to \$$100(1 + \alpha)^{10}$ after 10 days.
+
+\end{document}
