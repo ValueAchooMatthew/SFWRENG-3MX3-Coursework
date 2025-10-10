@@ -11,7 +11,7 @@
 \usepackage{tabularx}
 \usepackage{mathtools}
 
-\title{Lecture 1 - Introduction}
+\title{Lecture 3 - The Impulse Response}
 \author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
 \date{\today}
 
@@ -26,7 +26,17 @@
 
 \fancyhead{}
 \fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
-\fancyhead[R]{Lecture 1 - Introduction}
+\fancyhead[R]{Lecture 3 - The Impulse Response}
+
+\newenvironment{directsubsubs}{
+  \makeatletter
+  \renewcommand\thesubsubsection{\thesection.\Roman{subsubsection}}
+  \makeatother
+}{
+  \makeatletter
+  \renewcommand\thesubsubsection{\thesubsection.\Roman{subsubsection}}
+  \makeatother
+}
 
 \renewcommand{\thesubsection}{\thesection.\alph{subsection}}
 \renewcommand{\thesubsubsection}{\thesection.\alph{subsection}.\Roman{subsubsection}}
@@ -44,7 +54,7 @@
     <-6>  MnSymbolA-Bold5
    <6-7>  MnSymbolA-Bold6
    <7-8>  MnSymbolA-Bold7
-   <8-9>  MnSymbolA-Bold8
+<8-9>  MnSymbolA-Bold8
    <9-10> MnSymbolA-Bold9
   <10-12> MnSymbolA-Bold10
   <12->   MnSymbolA-Bold12}{}
@@ -73,180 +83,243 @@
 
 \begin{document}
 \maketitle
+\pagestyle{fancy}
 
 \begin{itemize}
-	\item Difference Equations (DEQs) are used to model discrete systems.
-	\begin{itemize}
-		\item DEQs allow us to express systems as the linear combinations of other systems.
-	\end{itemize}
-	\item The goal of discrete system design is to select optimal values of the $\alpha_k$ and $\beta_k$ terms to best model a given scenario.
-	\item Systems without feedback (no $y(n-k), \quad k \ge 1$ terms) exhibit both \emph{linearity} and \emph{time-invariance}.
-	\begin{itemize}
-		\item A system exhibits linearity if its output, for some given input, can be expressed as the linear combination of the outputs of other systems with the same input.
-		\item A system exhibits time-invariance if delaying the input to the system results in the same output but delayed by the same amount.
-	\end{itemize}
-\end{itemize}
-
-\section[Example ~\thesection]{Find the ouputs of the system $y(n) = x(n) + \frac{1}{2}x(n-1) + \frac{1}{4}x(n-2)$ for the following inputs:}
-Note that $y(n)$ has no feedback and thus exhibits both linearity and time-invariance
-
-\subsection[~\thesubsection]{$x_a(n) = \begin{cases} 1, \; \text{if} \; n = 0 \\ 0, \; \text{otherwise} \end{cases}$}
-
-\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
-	\hline
-	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
-	\hline
-	$x_a(n)$ & 1 & 0 & 0 & 0 & 0 & 0 \\
-	$y(n)$ & 1 & $\tfrac{1}{2}$ & $\tfrac{1}{4}$ & 0 & 0 & 0 \\
-	\hline
-\end{tabularx}
-
-\subsection[~\thesubsection]{$x_b(n) = \begin{cases} 1, \; \text{if} \; n = 2 \\ 0, \text{otherwise} \end{cases}$}
-
-\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
-	\hline
-	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
-	\hline
-	$x_b(n)$ & 0 & 0 & 1 & 0 & 0 & 0 \\
-	$y(n)$ & 0 & 0 & 1 & $\tfrac{1}{2}$ & $\tfrac{1}{3}$ & 0 \\
-	\hline
-\end{tabularx}
-
-\vspace{.3cm}
-
-Notice here that $x_b(n) = x_a(n-2)$, and thus $x_b(n)$ is the same as $x_a(n)$ but delayed by 2 cycles. The fact that our output in (b) is likewise delayed by 2 cycles as compared to in (a) is corroboration of the fact that $y(n)$ exhibits time-invariance.
-
-\subsection[~\thesubsection]{$x_c(n) = \begin{cases} 2, \; \text{if} \; n = 1 \\ 0, \text{otherwise} \end{cases}$}
-
-\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
-	\hline
-	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
-	\hline
-	$x_c(n)$ & 0 & 2 & 0 & 0 & 0 & 0 \\
-	$y(n)$ & 0 & 2 & 1 & $\tfrac{1}{2}$ & 0 & 0 \\
-	\hline
-\end{tabularx}
-
-\vspace{.3cm}
-
-Notice here once again that $x_c(n) = 2x_a(n-1)$ and thus $x_c(n)$ is the same as the input in $x_a(n)$ but multiplied by 2 and delayed by a cycle. The fact that y(n) is now delayed by 1 cycle and twice that as in (a) speaks to the fact $y(n)$ exhibits both linearity and time-invariance.
-
-\subsection[~\thesubsection]{$x_d(n) = \begin{cases} 1, \; \text{if} \; n = 0, 2 \\ 2, \; \text{if} \; n = 1 \\ 0, \text{otherwise} \end{cases}$}
-
-\begin{tabularx}{\linewidth}{| c || Y Y Y Y Y Y |}
-	\hline
-	$n$ & 0 & 1 & 2 & 3 & 4 & 5 \\
-	\hline
-	$x_d(n)$ & 1 & 2 & 1 & 0 & 0 & 0 \\
-	$y(n)$ & 1 & $\tfrac{5}{2}$ & $\tfrac{9}{4}$ & $\tfrac{3}{2}$ & $\tfrac{3}{4}$ & 0 \\
-	\hline
-\end{tabularx}
-
-\vspace{.3cm}
-
-Notice again that $x_d(n) = x_a(n) + x_b(n) + x_c(n)$, thus $y(n)$ is just the sum of all of the $y(n)$'s computed for (a), (b), and (c).
-
-\begin{itemize}
-	\item The state-equations are an alternative representation to DEQs to represent systems.
-	\begin{itemize}
-		\item Also called the $(A, B, C, D)$ representation.
-		\item In its general form, the state-space representation is written as two equations:
+	\item Systems can be represented:
+	\begin{enumerate}
+		\item As Difference Equations (DEQs).
+		\item In State-Space Form.
 		\begin{itemize}
-			\item $\overrightharpoon{S(n+1)} = \boldsymbol{A}\overrightharpoon{S(n)} + \overrightharpoon{B(n)}x(n)$
-			\item $y(n) = {C}\overrightharpoon{S(n)} + \boldsymbol{D}x(n)$
-			\begin{itemize}
-				\item $\overrightharpoon{S(n)}$ represents the system's current state.
-				\item $\overrightharpoon{S(n+1)}$ represents the system's next state.
-				\item $\overrightharpoon{S(0)}$ is always defined to be zero.
-				\item $\overrightharpoon{S(0)}$ is called the system's \emph{zero state}.
-			\end{itemize}
+			\item The state-space form of a system is analogous to an infinite state machine
 		\end{itemize}
-		\item Systems in state-space form have their outputs described as a function of the system's current state $\overrightharpoon{S(n)}$ and current input $x(n)$.
-		\item $\overrightharpoon{S(n)}$ is found by renaming the inputs/feedbacks in the difference equation representation of $y(n)$ such that the entire difference equation can be expressed in terms of $x(n)$ and $S(n)$.
-	\end{itemize}
+	\end{enumerate}
 \end{itemize}
 
-\section{Express the system $y(n) = x(n) + \frac{1}{2}x(n-1) + \frac{1}{4}x(n-2)$ in state-space form}
+\begin{directsubsubs}
+\section[Example ~\thesection]{Represent the system $y(n) = x(n) + x(n-1) - y(n-1)$}
 
-\makeatletter
-\renewcommand\thesubsubsection{\thesection.\Roman{subsubsection}}
-\makeatother
-
-\subsubsection{Find $\overrightharpoon{S(n)}$}
+\subsubsection[~\thesubsubsection]{Find $\overrightharpoon{S(n)}$}
 
 \begin{align*}
 	&\text{Let:} && \text{Then:} \\
 	&s_1(n) = x(n-1) && s_1(n+1) = x(n) \\
-	&s_2(n) = x(n-2) && s_2(n+1) = x(n-1) = s_1(n)
+	&s_2(n) = y(n-1) && s_2(n+1) = y(n) = x(n) + x(n-1) - y(n-1) = x(n) + s_1(n) - s_2(n)
 \end{align*}
 
 Thus, let $\overrightharpoon{S(n)} = \begin{psmallmatrix} s_1(n) \\ s_2(n) \end{psmallmatrix}$.
 
-\subsubsection{Find $\overrightharpoon{S(n+1)}$}
+\subsubsection[~\thesubsubsection]{Find $\overrightharpoon{S(n+1)}$}
 
 \begin{align*}
 	\overrightharpoon{S(n+1)} &= \begin{pmatrix} s_1(n+1) \\ s_2(n+1) \end{pmatrix} \\
-	&= \begin{pmatrix} x(n) \\ s_1(n) \end{pmatrix} \\
-	&= \begin{pmatrix} 1 \\ 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(n)
+	&= \begin{pmatrix} x(n) \\ x(n) + s_1(n) - s_2(n) \end{pmatrix} \\
+	&= \begin{pmatrix} 0 & 0 \\ 1 & -1 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 1 \end{pmatrix}x(n)
 \end{align*}
 
-Therefore, our A and B matrices are $\begin{psmallmatrix} 1 \\ 0 \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \\ 0 \end{psmallmatrix}$ respectively.
+Therefore, our $\boldsymbol{A}$ and $\overrightharpoon{B}$ matrices are $\begin{psmallmatrix} 0 & 0 \\ 1 & -1 \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \\ 1 \end{psmallmatrix}$ respectively.
 
-\subsubsection{Find $y(n)$}
+\subsubsection[~\thesubsubsection]{Find $y(n)$}
 
 \begin{align*}
-	y(n) &= x(n) + \frac{1}{2}x(n-1) + \frac{1}{4}x(n-2) \\
-	&= \frac{1}{2}s_1(n) + \frac{1}{4}s_2(n) + x(n) \\
-	&= \begin{pmatrix} \frac{1}{2} & \frac{1}{4} \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+	y(n) &= x(n) + x(n-1) - y(n-1) \\
+	&= s_1(n) - s_2(n) + x(n) \\
+	&= \begin{pmatrix} -1 & 1 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
 \end{align*}
 
-Therefore, our C and D matrix are $\begin{psmallmatrix} \frac{1}{2} & \frac{1}{4} \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \end{psmallmatrix}$ respectively.
+Therefore, our $\boldsymbol{C}$ and $\boldsymbol{D}$ matrices are $\begin{psmallmatrix} -1 & 1 \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \end{psmallmatrix}$ respectively.
 
 Putting it all together, our system can be represented in state space form as:
 
 \begin{align*}
-	&\overrightharpoon{S(n+1)} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(n) \\ \\
-	&y(n) = \begin{pmatrix} \frac{1}{2} & \frac{1}{4} \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+	\overrightharpoon{S(n+1)} &= \begin{pmatrix} 0 & 0 \\ 1 & -1 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 1 \end{pmatrix}x(n) \\ \\
+	y(n) &= \begin{pmatrix} 0 & 0 \\ 1 & -1 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 1 \end{pmatrix}x(n)
 \end{align*}
 
-\section{Represent the system $y(n) = x(n) - x(n-1) + y(n-2)$ in state-space form}
+\begin{itemize}
+	\item The Kronecker-Delta function $\delta(n - k)$ is defined as:
+	\begin{itemize}
+		\item $\delta(n - k) = \begin{cases} 1, \; \text{if} \; n = k \\ 0 \; \text{otherwise} \end{cases}$
+		\item The Kronecker-Delta function acts as the discrete analog to the continuous Dirac-Delta function.
+	\end{itemize}
+\end{itemize}
 
-\subsubsection{Find $\overrightharpoon{S(n)}$}
+\end{directsubsubs}
+
+\section[Example ~\thesection]{Using the state space equations from example 1, compute the outputs to the system for the input $x(n) \delta(n - 2)$}
 
 \begin{align*}
-	&\text{Let:} && \text{Then:} \\
-	&s_1(n) = x(n-1) && s_1(n+1) = x(n) \\
-	&s_2(n) = y(n-2) && s_2(n+1) = y(n-1) = s_3(n) \\
-	&s_3(n) = y(n-1) && s_3(n+1) = y(n) = x(n) - x(n-1) + y(n-2) = -s_1(n) + s_2(n) + x(n)
+	&\underline{\text{Current State} \; (\overrightharpoon{S(n)})}& &\underline{\text{Current Output} \; (y(n))} \\ \\
+	&\overrightharpoon{S(0)} = \overrightharpoon{0}& &y(0) = \begin{pmatrix} 1 & -1 \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} 1 \end{pmatrix}x(0) = 0 \\
+	&\overrightharpoon{S(1)} = \begin{pmatrix} 0 & 0 \\ 1 & -1 \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} 1 \\ 1 \end{pmatrix}x(0) = \overrightharpoon{0}& &y(1) = \begin{pmatrix} 1 & -1 \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} 1 \end{pmatrix}x(1) = 0 \\
+	&\overrightharpoon{S(2)} = \begin{pmatrix} 0 & 0 \\ 1 & -1 \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} 1 \\ 1 \end{pmatrix}x(1) = \overrightharpoon{0}& &y(2) = \begin{pmatrix} 1 & -1 \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} 1 \end{pmatrix}x(2) = 1 \\
+	&\overrightharpoon{S(3)} = \begin{pmatrix} 0 & 0 \\ 1 & -1 \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} 1 \\ 1 \end{pmatrix}x(2) = \begin{pmatrix} 1 \\ 1 \end{pmatrix}& &y(3) = \begin{pmatrix} 1 & -1 \end{pmatrix}\overrightharpoon{S(3)} + \begin{pmatrix} 1 \end{pmatrix}x(3) = 0 \\
+	&\overrightharpoon{S(4)} = \begin{pmatrix} 0 & 0 \\ 1 & -1 \end{pmatrix}\overrightharpoon{S(3)} + \begin{pmatrix} 1 \\ 1 \end{pmatrix}x(3) = \overrightharpoon{0} & &y(4) = \begin{pmatrix} 1 & -1 \end{pmatrix}\overrightharpoon{S(4)} + \begin{pmatrix} 1 \end{pmatrix}x(4) = 0 \\
+	&\vdots & &\vdots
 \end{align*}
 
-Thus, let $\overrightharpoon{S(n)} = \begin{psmallmatrix} s_1(n) \\ s_2(n) \\ s_3(n) \end{psmallmatrix}$.
+\section[Example ~\thesection]{Model the system $y(n) = x(n) + {\alpha}y(n - 1)$ in state-space form and compute its outputs for $x(n) = \delta(n)$.}
+Note that this system models compound interest.
 
-\subsubsection{Find $\overrightharpoon{S(n+1)}$}
+\subsection[~\thesubsection]{Express system in state-space form}
+
+\subsubsection[\thesubsubsection]{Find $S(n)$}
 
 \begin{align*}
-	\overrightharpoon{S(n+1)} &= \begin{pmatrix} s_1(n+1) \\ s_2(n+1) \\ s_3(n+1)\end{pmatrix} \\
-	&= \begin{pmatrix} x(n) \\ s_3(n) \\ -s_1(n) + s_2(n) + x(n) \end{pmatrix} \\
-	&= \begin{pmatrix} 0 & 0 & 0 \\ 0 & 0 & 1 \\ -1 & 1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 0 \\ 1 \end{pmatrix}x(n)
+	&\text{Let:}& &\text{Then:} \\
+	&s_1(n) - y(n - 1)& &s_1(n + 1) = y(n) = x(n) + {\alpha}y(n - 1) = {\alpha}s_1(n) + x(n) \\
 \end{align*}
 
-Therefore, our A and B matrices are $\begin{psmallmatrix} 0 & 0 & 0 \\ 0 & 0 & 1 \\ -1 & 1 & 0 \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \\ 0 \\ 1 \end{psmallmatrix}$ respectively.
+Thus, let $\overrightharpoon{S(n)} = \begin{psmallmatrix} s_1(n) \end{psmallmatrix}$
 
-\subsubsection{Find $y(n)$}
+\subsubsection[~\thesubsubsection]{Find $S(n+1)$}
 
 \begin{align*}
-	y(n) &= x(n) - x(n-1) + y(n-2) \\
-	&= -s_1(n) + s_2(n) + x(n) \\
-	&= \begin{pmatrix} -1 & 1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+	\overrightharpoon{S(n+1)} &= \begin{pmatrix} s_1(n + 1) \end{pmatrix} \\
+	&= \begin{pmatrix} {\alpha}s_1(n) + x(n) \end{pmatrix} \\
+	&= \begin{pmatrix} \alpha \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
 \end{align*}
 
-Therefore, our C and D matrices are $\begin{psmallmatrix} -1 & 1 & 0 \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \end{psmallmatrix}$ respectively.
+Therefore, our $\boldsymbol{A}$ and $\overrightharpoon{B}$ matrices are $\begin{psmallmatrix} \alpha \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \end{psmallmatrix}$ respectively.
+
+\subsubsection[~\thesubsubsection]{Find $y(n)$}
+
+\begin{align*}
+	y(n) &= x(n) + {\alpha}y(n - 1) \\
+	&= s_1(n) + x(n) \\
+	&= \begin{pmatrix} \alpha \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+\end{align*}
+
+Therefore, our $\boldsymbol{C}$ and $\boldsymbol{D}$ matrices are $\begin{psmallmatrix} \alpha \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \end{psmallmatrix}$ respectively.
 
 Putting it all together, our system can be represented in state space form as:
 
 \begin{align*}
-	\overrightharpoon{S(n+1)} &= \begin{pmatrix} 0 & 0 & 0 \\ 0 & 0 & 1 \\ -1 & 1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 0 \\ 1 \end{pmatrix}x(n) \\ \\
-	y(n) &= \begin{pmatrix} -1 & 1 & 0 \end{pmatrix} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+	\overrightharpoon{S(n + 1)}&= \begin{pmatrix} \alpha \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n) \\
+	y(n) &= \begin{pmatrix} \alpha \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
 \end{align*}
+
+\subsection[~\thesubsection]{Compute the inputs of $y(n)$}
+
+\begin{align*}
+	&\underline{\text{Current State} \; (\overrightharpoon{S(n)})}& &\underline{\text{Current Output} \; (y(n))} \\ \\
+	&\overrightharpoon{S(0)} = \overrightharpoon{0}& &y(0) = \begin{pmatrix} \alpha \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} 1 \end{pmatrix}x(0) = 1 \\
+	&\overrightharpoon{S(1)} = \begin{pmatrix} \alpha \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} 1 \end{pmatrix}x(0) = 1 & &y(1) = \begin{pmatrix} \alpha \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} 1 \end{pmatrix}x(1) = \alpha \\
+	&\overrightharpoon{S(2)} = \begin{pmatrix} \alpha \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} 1 \end{pmatrix}x(1) = \alpha & &y(2) = \begin{pmatrix} \alpha \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} 1 \end{pmatrix}x(2) = {\alpha}^2 \\
+	&\overrightharpoon{S(3)} = \begin{pmatrix} \alpha \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} 1 \end{pmatrix}x(2) = {\alpha}^2 & &y(3) = \begin{pmatrix} \alpha \end{pmatrix}\overrightharpoon{S(3)} + \begin{pmatrix} 1 \end{pmatrix}x(3) = {\alpha}^3 \\
+	&\vdots& &\vdots
+\end{align*}
+
+Generalizing, for input $x(n) = \delta(n)$, $y(n) = {\alpha}^n$ for this system.
+
+\section[Example ~\thesection]{Describe the outputs of any system for the input $x(n) = \delta(n - 1)$ using the state-space form of systems}
+
+We know that any system can be represented in state space form by the equations:
+
+\begin{align*}
+	\overrightharpoon{S(n+1)} &= \boldsymbol{A}\overrightharpoon{S(n)} + \overrightharpoon{B(n)}x(n) \\
+	y(n) &= \boldsymbol{C}\overrightharpoon{S(n)} + \boldsymbol{D}x(n)
+\end{align*}
+
+For the input $x(n) = \delta(n)$, we can deduce that:
+
+\begin{align*}
+	&\underline{\text{Current State} \; (\overrightharpoon{S(n)})}& &\underline{\text{Current Output} \; (y(n))} \\ \\
+	&\overrightharpoon{S(0)} = \overrightharpoon{0}& &y(0) = \boldsymbol{C}\overrightharpoon{S(0)} + \boldsymbol{D}x(0) = \boldsymbol{D} \\
+	&\overrightharpoon{S(1)} = \boldsymbol{A}\overrightharpoon{S(0)} + \overrightharpoon{B}x(0) = \overrightharpoon{B}& & y(1) = \boldsymbol{C}\overrightharpoon{S(1)} + \boldsymbol{D}x(1) = \boldsymbol{C}\overrightharpoon{B} \\
+	&\overrightharpoon{S(2)} = \boldsymbol{A}\overrightharpoon{S(1)} + \overrightharpoon{B}x(1) = \boldsymbol{A}\overrightharpoon{B} & &y(2) = \boldsymbol{C}\overrightharpoon{S(2)} + \boldsymbol{D}x(2) = \boldsymbol{C}\boldsymbol{A}\overrightharpoon{B} \\
+	&\overrightharpoon{S(3)} = \boldsymbol{A}\overrightharpoon{S(2)} + \overrightharpoon{B}x(2) = \boldsymbol{A}^2\overrightharpoon{B} & &y(3) = \boldsymbol{C}\overrightharpoon{S(3)} + \boldsymbol{D}x(3) = \boldsymbol{C}\boldsymbol{A}^2\overrightharpoon{B} \\
+	&\vdots& &\vdots
+\end{align*}
+
+Thus, we can describe the inputs to any system with input $x(n) = \delta(n)$ in state-space form as:
+
+\begin{align*}
+	y(n) &= \begin{cases} 0, \; \text{if} \; n < 0 \\ \boldsymbol{D}, \text{if} \; n = 0 \\ \boldsymbol{C}\boldsymbol{A}^{n-1}\overrightharpoon{B} \end{cases}
+\end{align*}
+
+\begin{itemize}
+	\item The impulse response of a system is defined as the outputs of a system when $x(n) = \delta(n)$
+	\begin{itemize}
+		\item Denoted $h(n)$
+	\end{itemize}
+\end{itemize}
+
+\section[Example ~\thesection]{Represent the system $y(n) = {\alpha_1}x(n) + {\alpha_2}x(n - 1) + {\alpha_3}x(n - 2)$ in state-space form and describe its impulse response}
+
+Note that we can clearly take a shortcut here and realize that for $x(n) = \delta(n)$, $y(n) = {\alpha_1}\delta(n) + {\alpha_2}\delta(n - 1) + {\alpha_3}\delta(n - 2)$, and thus:
+
+\begin{align*}
+	h(n) &= \begin{cases} \alpha_1, \; \text{if} \; n = 0 \\ \alpha_2, \; \text{if} n = 1 \\ \alpha_3, \; \text{if} \; n = 2 \\ 0, \; \text{otherwise} \end{cases}
+\end{align*}
+
+However, we will do as the question asks
+
+\subsection[~\thesubsection]{Represent the system in state-space form}
+
+\subsubsection[~\thesubsubsection]{Find $\overrightharpoon{S(n)}$}
+
+\begin{align*}
+	&\text{Let:}& &\text{Then:} \\
+	&s_1(n) = x(n - 2) & &s_1(n + 1) = x(n - 1) = s_2(n) \\
+	&s_2(n) = x(n - 1) & &s_2(n + 1) = x(n)
+\end{align*}
+
+Thus, let $\overrightharpoon{S(n)} = \begin{psmallmatrix} s_1(n) \\ s_2(n) \end{psmallmatrix}$.
+
+\subsubsection[~\thesubsubsection]{Find $S(n + 1)$}
+
+\begin{align*}
+	\overrightharpoon{S(n + 1)} &= \begin{pmatrix} s_1(n + 1) \\ s_2(n + 1) \end{pmatrix} \\
+	&= \begin{pmatrix} s_2(n) \\ x(n) \end{pmatrix} \\
+	&= \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 0 \\ 1 \end{pmatrix}x(n)
+\end{align*}
+
+Therefore, our $\boldsymbol{A}$ and $\overrightharpoon{B}$ are $\begin{psmallmatrix} 0 \\ 1 \end{psmallmatrix}$ and $\begin{psmallmatrix} 0 \\ 1 \end{psmallmatrix}$ respectively.
+
+\subsubsection[~\thesubsubsection]{Find $y(n)$}
+
+\begin{align*}
+	y(n) &= {\alpha_1}x(n) + {\alpha_2}x(n - 1) + {\alpha_3}x(n - 2) \\
+	&= {\alpha_3}s_1(n) + {\alpha_2}s_2(n) + {\alpha_1}x(n) \\
+	&= \begin{pmatrix} \alpha_3 & \alpha_2 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} \alpha_1 \end{pmatrix}x(n)
+\end{align*}
+
+Therefore, our $\boldsymbol{C}$ and $\boldsymbol{D}$ matrices are $\begin{psmallmatrix} \alpha_3 & \alpha_2 \end{psmallmatrix}$ and $\begin{psmallmatrix} \alpha_1 \end{psmallmatrix}$ respectively.
+
+Putting it all together, our system can be represented in state space form as:
+
+\begin{align*}
+	\overrightharpoon{S(n + 1)} &= \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 0 \\ 1 \end{pmatrix}x(n) \\
+	y(n) &= \begin{pmatrix} \alpha_3 & \alpha_2 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} \alpha_1 \end{pmatrix}x(n)
+\end{align*}
+
+\subsection[~\thesubsection]{Compute $y(n)$ for $x(n) = \delta(n)$ using the state space equations}
+
+\begin{align*}
+	&\underline{\text{Current State} \; (\overrightharpoon{S(n)})}& &\underline{\text{Current Output} \; (y(n))} \\ \\
+	&\overrightharpoon{S(0)} = \overrightharpoon{0} & &y(0) = \begin{pmatrix} \alpha_3 & \alpha_2 \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} \alpha_1 \end{pmatrix}x(0) = \alpha_1 \\
+	&\overrightharpoon{S(1)} = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} 0 \\ 1 \end{pmatrix}x(0) = \begin{pmatrix} 0 \\ 1 \end{pmatrix}& &y(1) = \begin{pmatrix} \alpha_3 & \alpha_2 \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} \alpha_1 \end{pmatrix}x(1) = \alpha_2 \\
+	&\overrightharpoon{S(2)} = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} 0 \\ 1 \end{pmatrix}x(1) = \begin{pmatrix} 1 \\ 0 \end{pmatrix}& &y(2) = \begin{pmatrix} \alpha_3 & \alpha_2 \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} \alpha_1 \end{pmatrix}x(2) = \alpha_3 \\
+	&\overrightharpoon{S(3)} = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} 0 \\ 1 \end{pmatrix}x(2) = \overrightharpoon{0}& &y(3) = \begin{pmatrix} \alpha_3 & \alpha_2 \end{pmatrix}\overrightharpoon{S(3)} + \begin{pmatrix} \alpha_1 \end{pmatrix}x(3) = 0 \\
+	&\vdots& &\vdots
+\end{align*}
+
+Thus, the impulse response of the system is given by:
+
+\begin{align*}
+	h(n) &= \begin{cases} \alpha_1 \; \text{if} \; n = 0 \\ \alpha_2 \; \text{if} \; n = 1 \\ \alpha_3 \; \text{if} \; n = 2 \\ 0 \; \text{otherwise} \end{cases}
+\end{align*}
+
+\begin{itemize}
+	\item A \emph{Finite Impulse Response} (FIR) system is a system for where there exists some same after which the system's output is always equal to zero.
+		\begin{itemize}
+			\item Expressed in mathematical notation, for an FIR system, $\exists N \in \mathbb{N} \quad \text{such that} \quad \forall n \ge N, h(n) = 0$
+			\item FIR systems have a finite number of possible outputs for its impulse response.
+			\item FIR systems can be expressed as a linear combination of Kronecker-Delta functions.
+		\end{itemize}
+	\item An \emph{Infinite Impulse Response} (IIR) system is any system which is \underline{NOT} an FIR system.
+	\item All systems without feedback are FIR systems, but not all systems with feedback are IIR.
+\end{itemize}
 
 \end{document}
