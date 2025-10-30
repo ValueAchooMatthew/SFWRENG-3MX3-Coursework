@@ -1,0 +1,330 @@
+\documentclass{article}
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{listings}
+\lstset{breaklines=true}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\renewcommand{\thesubsubsection}{\Roman{subsubsection}}
+\title{SFWRENG 3O03 2023 Midterm Solutions}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+
+\makeatletter
+\setlist{listparindent=\parindent}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, $\langle$\href{mailto:farahm11@mcmaster.ca}{farahm11@mcmaster.ca}$\rangle$, 400468251}
+\fancyhead[R]{SFWRENG 3O03 2023 Midterm Solutions}
+
+\newcounter{problem}
+\renewcommand{\theproblem}{\arabic{problem}}
+
+\newenvironment{problem}[1][]{
+	\ifx\\#1\\
+		\refstepcounter{problem}
+	\else
+		\setcounter{problem}{#1}
+	\fi
+	\large{\par\noindent\textbf{Problem \theproblem}}\vspace{.5em}\par\noindent
+}{\vspace{1.5em}}
+
+\newenvironment{solution}{
+	\vspace{0.4cm}\par\noindent\large\textbf{{Solution:}}\par\vspace{1em}
+}{\vspace{2.5em}}
+
+\newcounter{partslist}
+
+\makeatletter
+\newcommand{\parts@seriesname}{parts@\theproblem}
+
+\newenvironment{parts}{
+	\edef\parts@ser{\parts@seriesname}
+	\ifcsname\parts@ser\endcsname
+		\begin{enumerate}[resume=\parts@ser,label=\textbf{(\alph*)},leftmargin=3.3em,itemsep=0.4em,before=\large]
+	\else
+		\begin{enumerate}[series=\parts@ser,label=\textbf{(\alph*)},leftmargin=3.3em,itemsep=0.4em,before=\large]
+		\expandafter\gdef\csname\parts@ser\endcsname{1}
+	\fi
+}{
+	\end{enumerate}
+}
+
+\makeatother
+
+\makeatletter
+
+\newcounter{currentstep}[partslist]
+\renewcommand{\thecurrentstep}{\Roman{currentstep}}
+
+\newenvironment{steps}{
+	\edef\steps@ser{steps@\theproblem}
+	\ifcsname\steps@ser\endcsname
+		\begin{enumerate}[
+			resume=\steps@ser,
+			label=\bfseries{(\Roman*)},
+			leftmargin=3.15em,
+			itemsep=0.4em,
+			topsep=0.8em
+		]
+	\else
+		\begin{enumerate}[
+			series=\steps@ser,
+			label=\bfseries{(\Roman*)},
+			leftmargin=3.15em,
+			itemsep=0.4em,
+			topsep=0.8em
+		]
+		\expandafter\gdef\csname\steps@ser\endcsname{1}
+	\fi
+	\let\steps@saved@item\item
+	\renewcommand{\item}{\stepcounter{currentstep}\steps@saved@item}
+}{
+	\let\item\steps@saved@item
+	\end{enumerate}
+}
+
+\makeatother
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+\begin{problem}
+	We know that for a discrete system that $H(\omega) = e^{-i\omega} -e^{-2i\omega}$. What is the corresponding difference equation for this system?
+\end{problem}
+
+\begin{solution}
+	We can use the fact $y(n) = H(\omega)e^{in\omega}$ when $x(n) = e^{in\omega}$ to recover the system's difference equation
+
+	\begin{align*}
+		H(\omega) &= e^{-i\omega} - e^{-2i\omega} \\
+		H(\omega)e^{in\omega} &= e^{in\omega} \cdot \left( e^{-i\omega} - e^{-2i\omega} \right ) \\
+		y(n) & = e^{-i\omega} \cdot e^{in\omega} - e^{-2i\omega} \cdot e^{in\omega} \\
+		&= e^{i\omega(n - 1)} - e^{i\omega(n - 2)} \\
+		&= x(n - 1) - x(n - 2)
+	\end{align*}
+\end{solution}
+
+\begin{problem}
+	What are the Fourier series coefficients of the signal $x(t) = 2 + \sin(t) + \cos(3t) + 2\cos(5t)$? You do not need to compute integrals to get full marks.
+\end{problem}
+
+%TODO: Consider not giving all coefficients newlines?
+
+\begin{solution}
+	We will rely on the fact that each term which makes up the signal is periodic, we can use the coefficients of the complex exponential expansions of sine and cosine ($sin(t) = \frac{e^{it} - e^{-it}}{2i}, \cos(t) = \frac{e^{it} - e^{-it}}{2})$ respectively) to find the Fourier series coefficients. Therefore:
+
+	\begin{align*}
+		&X_{-5} = 1 \\
+		&X_{-4} = 0 \\
+		&X_{-3} = \frac{1}{2} \\
+		&X_{-2} = 0 \\
+		&X_{-1} = \frac{-1}{2i} \\
+		&X_0 = 2 \\
+		&X_1 = \frac{i}{2i} \\
+		&X_2 = 0 \\
+		&X_3 = \frac{1}{2} \\
+		&X_4 = 0 \\
+		&X_5 = 1
+	\end{align*}
+
+	Notice here that:
+
+	\begin{enumerate}
+		\item The value of the Fourier series coefficient at index $j$ corresponds to the complex exponential expansion of the term in $x(n)$ with angular frequency $j$.
+		\item Angular frequencies which do not appear in the signal are given a value of zero.
+		\item $X_j = \bar{X}_{-j}$
+	\end{enumerate}
+\end{solution}
+
+\begin{problem}
+	Define the frequency response of a continuous system.
+\end{problem}
+
+\begin{solution}
+	The frequency response, $H(\omega)$ of a continuous system $y(t)$ is defined as $y(t) = H(\omega)e^{it\omega}$ when $x(t) = e^{it\omega}$.
+\end{solution}
+
+\begin{problem}
+	Use convolution to compute the output of a discrete system with impulse response $h(n)$ for the input $x(n) = e^{-in\omega}$. Note that the final result is the \emph{Discrete Time Fourier Series} (DTFT)
+\end{problem}
+
+\begin{solution}
+	\begin{align*}
+		y(n) &= \sum_{k = -\infty}^{\infty} \left( h(k)x(n - k) \right) \\
+		&= \sum_{k = -\infty}^{\infty} \left( h(k)e^{i\omega(n - k)} \right) \\
+		&= \sum_{k = -\infty}^{\infty} \left( h(k) \cdot e^{-in\omega} \cdot e^{ik\omega} \right) \implies \\
+		y(n)e^{in\omega} &= \sum_{k = -\infty}^{\infty} \left( h(k) \cdot e^{ik\omega} \right) \implies \\
+		H(\omega) &= \sum_{k = -\infty}^{\infty} \left( h(k) \cdot e^{ik\omega} \right)
+	\end{align*}
+\end{solution}
+
+\begin{problem}
+	Given the difference equation $y(n) = x(n) - y(n - 2)$, compute the system's output to the signal $x(n) = 1 + \cos(n\pi + \frac{\pi}{2}) + \sin(n\frac{\pi}{4}))$ using the its frequency response.
+\end{problem}
+
+\begin{solution}
+
+	\begin{steps}
+		\item Find the system's frequency response ($H(\omega)$).
+	\end{steps}
+
+	\begin{gather*}
+		y(n) = x(n) - y(n - 2) \\\\
+		H(\omega)e^{in\omega} = e^{in\omega} - H(\omega)e^{i\omega(n - 2))} \\\\
+		H(\omega)e^{in\omega} = e^{in\omega} - H(\omega)e^{in\omega}e^{-2i\omega} \\\\
+		H(\omega) = 1 - H(\omega)e^{-2i\omega} \\\\
+		H(\omega) + H(\omega)e^{-2i\omega} = 1 \\\\
+		H(\omega)(1 + e^{-2i\omega}) = 1 \\\\
+		H(\omega) = \frac{1}{1 + e^{-2i\omega}}
+	\end{gather*}
+
+	\begin{steps}
+		\item Compute $H(\omega), \, |H(\omega)|$, and $arg(H(\omega))$ for each $\omega$ in the signal $x(n)$.
+	\end{steps}
+
+	\begin{tabularx}{\linewidth}{Y | Y | Y | Y}
+		$\omega$ & $H(\omega)$ & $|H(\omega)|$ & $arg(H(\omega))$ \\
+		\hline
+		0 & $1/2$ & $1/2$ & 0 \\
+		$\pi$ & $1/2$ & $1/2$ & 0 \\
+		$\pi/4$ & $1/{(1 - i)}$ & $\sqrt{2}/2$ & $-7\pi/4$
+	\end{tabularx}
+
+	\begin{steps}
+		\item Use the formula $y(n) = |H(\omega)|\cos(n\omega + arg(H(\omega)))$ for each of the terms we computed.
+	\end{steps}
+
+	\begin{align*}
+		\begin{split}
+			y(n) &= |H(\omega_1)|\cos(n\omega_1 + arg(H(\omega_1))) + |H(\omega_2)|\cos(n\omega_2 + arg(H(\omega_2))) \\\\
+			&+ |H(\omega_3)|\cos(n\omega_3 + arg(H(\omega_3))) \\\\
+			&= \frac{1}{2}\cos(0n + 0) + \frac{1}{2}\cos(n\pi + 0) + \frac{\sqrt{2}}{2}\cos(\frac{pi}{4} + \frac{-7\pi}{4}) \\\\
+			&= \frac{1}{2} + \frac{1}{2}\cos(\pi) + \frac{\sqrt{2}}{2}\cos(\frac{\pi}{4} + \frac{-7\pi}{4})
+		\end{split}
+	\end{align*}
+\end{solution}
+
+\begin{problem}
+	Compute the impulse response and the frequency response of $y(n) = x(n - 3)$.
+
+	\begin{steps}
+		\item Compute the impulse response ($h(n)$).
+	\end{steps}
+
+	Substituting $x(n) = \delta(n)$, we find:
+
+	\begin{align*}
+		y(n) &= x(n - 3) \implies \\
+		h(n) &= \delta(n - 3)
+	\end{align*}
+
+	\begin{steps}
+		\item Compute the frequency response ($H(\omega)$).
+	\end{steps}
+
+	Using $y(n) = H(\omega)e^{in\omega}$ when $x(n) = e^{in\omega}$, we find:
+
+	\begin{align*}
+		y(n) &= x(n - 3) \\
+		H(\omega)e^{in\omega} &= e^{i\omega(n - 3)} \\
+		H(\omega)e^{in\omega} &= e^{in\omega} \cdot e^{-3i\omega} \\
+		H(\omega) &= e^{-3i\omega}
+	\end{align*}
+\end{problem}
+
+\begin{problem}
+	What is the output y(n) given the system $y(n) = x(n) + {\alpha}y(n - 1)$ and input $x(n) = 1 \; \forall n \in \mathbb{N}$?
+\end{problem}
+
+\begin{solution}
+	\begin{align*}
+		y(0) &= 1 + \alpha(0) = 1 \\
+		y(1) &= 1 + \alpha(1) = 1 + \alpha \\
+		y(2) &= 1 + \alpha(1 + \alpha) = 1 + \alpha + {\alpha}^2 \\
+		y(3) &= 1 + \alpha(1 + \alpha + {\alpha}^2) = 1 + \alpha + {\alpha}^2 + {\alpha}^3 \\
+	\end{align*}
+
+	Extrapolating, we can surmise that:
+
+	\begin{gather*}
+		y(n) = 1 + \alpha + {\alpha}^2 + \ldots + {\alpha}^n
+	\end{gather*}
+\end{solution}
+
+\begin{problem}
+	The Fourier series for the 4-periodic signal $x(n) = \sin(\frac{\pi}{2}n)$ was computed and yielded:
+	\begin{gather*}
+		X_0 = 0, \, X_1 = -i, \, X_2 = 0, \, X_3 = i \\
+	\end{gather*}
+	Compute the values of x(n) for one period.
+\end{problem}
+
+\begin{solution}
+	\begin{steps}
+		\item Compute $\omega_0$.
+	\end{steps}
+
+	Since we are given that $x(n)$ is 4-periodic, we can use the formula $\omega_0 = \frac{2\pi}{P}$ to find that:
+
+	\begin{align*}
+		\omega_0 &= \frac{2\pi}{4} \\
+		&= \frac{\pi}{2}
+	\end{align*}
+
+	\begin{steps}
+		\item Compute the values of $x(n)$ for one period.
+	\end{steps}
+
+	Using the formula:
+
+	\begin{gather*}
+		x(n) = \sum_{k = 0}^{p = 1}\left( X_k e^{ink\omega_0} \right) \\
+	\end{gather*}
+
+	we can compute the values of x(n) as follows:
+
+	\begin{align*}
+		x(0) &= \sum_{k = 0}^{3} \left( X_k e^{i(0)k\frac{\pi}{2}} \right) = (0 - i + 0 - i) = 0 \\
+		x(1) &= \sum_{k = 0}^{3} \left( X_k e^{i(1)k\frac{\pi}{2}} \right) = (-ie^{\frac{\pi}{2}i} + ie^{\frac{3\pi}{2}i}) = 2 \\
+		x(2) &= \sum_{k = 0}^{3} \left( X_k e^{i(2)k\frac{\pi}{2}} \right) = (-ie^{i\pi} + ie^{3i\pi}) = 0 \\
+		x(3) &= \sum_{k = 0}^{3} \left( X_k e^{i(3)k\frac{\pi}{2}} \right) = (-ie^{\frac{3\pi}{2}i} + ie^{\frac{9\pi}{2}i}) = -2 \\
+	\end{align*}
+\end{solution}
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
