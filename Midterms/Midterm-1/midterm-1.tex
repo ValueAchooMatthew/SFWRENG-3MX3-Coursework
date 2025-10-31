@@ -27,7 +27,7 @@
 }
 
 \renewcommand{\thesubsubsection}{\Roman{subsubsection}}
-\title{SFWRENG 3O03 2023 Midterm Solutions}
+\title{SFWRENG 3MX3 2025 Midterm Solutions}
 \author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
 \date{\today}
 
@@ -38,7 +38,7 @@
 \pagestyle{fancy}
 \fancyhead{}
 \fancyhead[L]{Matthew Farah, $\langle$\href{mailto:farahm11@mcmaster.ca}{farahm11@mcmaster.ca}$\rangle$, 400468251}
-\fancyhead[R]{SFWRENG 3O03 2023 Midterm Solutions}
+\fancyhead[R]{SFWRENG 3MX3 2025 Midterm Solutions}
 
 \newcounter{problem}
 \renewcommand{\theproblem}{\arabic{problem}}
@@ -207,6 +207,8 @@
 	\begin{steps}
 		\item Compute $H(\omega), \, |H(\omega)|$, and $arg(H(\omega))$ for each $\omega$ in the signal $x(n)$.
 	\end{steps}
+	
+	\vspace{.75cm}
 
 	\begin{tabularx}{\linewidth}{Y | Y | Y | Y}
 		$\omega$ & $H(\omega)$ & $|H(\omega)|$ & $arg(H(\omega))$ \\
@@ -215,6 +217,8 @@
 		$\pi$ & $1/2$ & $1/2$ & 0 \\
 		$\pi/4$ & $1/{(1 - i)}$ & $\sqrt{2}/2$ & $-7\pi/4$
 	\end{tabularx}
+
+	\vspace{.75cm}
 
 	\begin{steps}
 		\item Use the formula $y(n) = |H(\omega)|\cos(n\omega + arg(H(\omega)))$ for each of the terms we computed.
@@ -263,12 +267,13 @@
 \end{problem}
 
 \begin{solution}
-	\begin{align*}
-		y(0) &= 1 + \alpha(0) = 1 \\
-		y(1) &= 1 + \alpha(1) = 1 + \alpha \\
-		y(2) &= 1 + \alpha(1 + \alpha) = 1 + \alpha + {\alpha}^2 \\
-		y(3) &= 1 + \alpha(1 + \alpha + {\alpha}^2) = 1 + \alpha + {\alpha}^2 + {\alpha}^3 \\
-	\end{align*}
+	\begin{gather*}
+		y(0) = 1 + \alpha(0) = 1 \\
+		y(1) = 1 + \alpha(1) = 1 + \alpha \\
+		y(2) = 1 + \alpha(1 + \alpha) = 1 + \alpha + {\alpha}^2 \\
+		y(3) = 1 + \alpha(1 + \alpha + {\alpha}^2) = 1 + \alpha + {\alpha}^2 + {\alpha}^3 \\
+		\vdots
+	\end{gather*}
 
 	Extrapolating, we can surmise that:
 
@@ -317,13 +322,76 @@
 	\end{align*}
 \end{solution}
 
+\begin{problem}
+	Give the difference equation of a minimum order causal filter that filters the discrete frequencies $\pi$ and $\frac{\pi}{2}$ and has a gain of 1 at DC. Derive the frequency response and corresponding difference equation of such a filter.
+\end{problem}
 
+\begin{solution}
+	\begin{steps}
+		\item Find a prototype filter $\tilde{H}(\omega)$.
+	\end{steps}
 
+	We know that our prototype filter must satisfy $|\tilde{H}(0)| = 1$ and $\tilde{H}(\pi)), \, \tilde{H}(\frac{\pi}{2}) = 0$. Using this we can arrive at the following prototype filter.
 
+	\begin{align*}
+		\tilde{H}(\omega) &= (e^{-i\omega} - e^{-i\pi})(e^{-i\omega} - e^{-\frac{\pi}{2}i})(e^{-i\omega} - e^{\frac{\pi}{2}}) \\
+		&= (e^{-i\omega} + 1)(e^{-i\omega} - i)(e^{-i\omega} + i) \\
+	\end{align*}
 
+	Note here that to ensure conjugate complex symmetry at $\frac{\pi}{2}$, we had to include both $\frac{\pi}{2}$ and $\frac{-\pi}{2}$ as zeros of our prototpe filter.
 
+	Evaluating for $\omega = 0$, which is the DC, we can see the gain of our filter is:
 
+	\begin{align*}
+		|\tilde{H}(0)| &= |(1 + 1)(1 - i)(1 + i)| \\
+		&= 2(1 - i^2) \\
+		&= 2(1 - (-1)) \\
+		&= 4 \\
+	\end{align*}
 
+	Thus, our actual filter, $H(\omega)$, should be given by:
+
+	\begin{align*}
+		H(\omega) &= \frac{1}{4}(e^{-i\omega} + 1)(e^{-i\omega} - i)(e^{-i\omega} + i) \\
+		&= \frac{1}{4}(e^{-i\omega} + 1)(e^{-2i\omega} + ie^{-i\omega} - ie^{-i\omega} + 1) \\
+		&= \frac{1}{4}(e^{-i\omega} + 1)(e^{-2i\omega} + 1) \\
+		&= \frac{1}{4}(e^{-3i\omega} + e^{-2i\omega} + e^{-i\omega} + 1) \\
+	\end{align*}
+
+	\begin{steps}
+		\item Find the filter's difference equation.
+	\end{steps}
+
+	Using $y(n) = H(\omega)e^{in\omega}$ when $x(n) = e^{in\omega}$, we find:
+	
+	\begin{align*}
+		H(\omega) &= \frac{1}{4}(e^{-3i\omega} + e^{-2i\omega} + e^{-i\omega} + 1) \\
+		H(\omega)e^{in\omega} &= \frac{e^{in\omega}}{4}(e^{-3i\omega} + e^{-2i\omega} + e^{-i\omega} + 1) \\
+		H(\omega)e^{in\omega} &= \frac{1}{4}(e^{-3i\omega}e^{in\omega} + e^{-2i\omega}e^{in\omega} + e^{-i\omega}e^{in\omega} + e^{in\omega}) \\
+		H(\omega)e^{in\omega} &= \frac{1}{4}(e^{-3i\omega(n - 3)} + e^{-2i\omega(n - 2)} + e^{-i\omega(n - 1)} + e^{in\omega}) \\
+		y(n) &= \frac{1}{4}(x(n - 3) + x(n - 2) + x(n - 1) + x(n))
+	\end{align*}
+\end{solution}
+
+\begin{problem}
+	Given the following matricies:
+	\begin{gather*}
+		A = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, \, B = \begin{pmatrix} 1 \\ 0 \end{pmatrix}, \, C = \begin{pmatrix} 1 & 1 \end{pmatrix}, \, D = \begin{pmatrix} 0 \end{pmatrix} \\
+	\end{gather*}
+	Compute the zero state output to the input $x(n) = \delta(n)$. (Show $s(n)$ and $y(n)$ for $n = 0, 1, 2$, and $3$.
+\end{problem}
+
+\begin{solution}
+	Using the state space equations, we can compute the outputs of the system as follows:
+
+	\begin{align*}
+		&\underline{S(n)} &&\underline{y(n)} \\\\
+		&S(0) = 0 &&y(0) = \begin{pmatrix} 1 & 1\end{pmatrix}(0) = 0 \\
+		&S(1) = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}S(0) + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(0) = \begin{pmatrix} 1 \\ 0 \end{pmatrix} &&y(1) \begin{pmatrix} 1 & 1 \end{pmatrix}\begin{pmatrix} 1 \\ 0 \end{pmatrix} = 1 \\
+		&S(2) = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}S(1) + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(1) = \begin{pmatrix} 0 \\ 1 \end{pmatrix} &&y(2) \begin{pmatrix} 1 & 1 \end{pmatrix}\begin{pmatrix} 0 \\ 1 \end{pmatrix} = 1 \\
+		&S(3) = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}S(2) + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(2) = \begin{pmatrix} 1 \\ 0 \end{pmatrix} &&y(3) \begin{pmatrix} 1 & 1 \end{pmatrix}\begin{pmatrix} 1 \\ 0 \end{pmatrix} = 1 \\
+	\end{align*}
+\end{solution}
 
 
 
