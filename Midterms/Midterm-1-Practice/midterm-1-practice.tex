@@ -1,0 +1,484 @@
+\documentclass{article}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{mathtools}
+
+\title{Midterm 1 Practice}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+
+\hypersetup{
+        colorlinks=true,
+        linkcolor=blue,
+        filecolor=magenta,
+        urlcolor=blue,
+        citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\fancyhead[R]{Midterm 1 Practice}
+
+\newenvironment{directsubsubs}{
+  \makeatletter
+  \renewcommand\thesubsubsection{\thesection.\Roman{subsubsection}}
+  \makeatother
+}{
+  \makeatletter
+  \renewcommand\thesubsubsection{\thesubsection.\Roman{subsubsection}}
+  \makeatother
+}
+
+\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+\renewcommand{\thesubsubsection}{\thesection.\alph{subsection}.\Roman{subsubsection}}
+\makeatletter
+\DeclareFontFamily{U}{MnSymbolA}{}
+\DeclareFontShape{U}{MnSymbolA}{m}{n}{
+    <-6>  MnSymbolA5
+   <6-7>  MnSymbolA6
+   <7-8>  MnSymbolA7
+   <8-9>  MnSymbolA8
+   <9-10> MnSymbolA9
+  <10-12> MnSymbolA10
+  <12->   MnSymbolA12}{}
+\DeclareFontShape{U}{MnSymbolA}{b}{n}{
+    <-6>  MnSymbolA-Bold5
+   <6-7>  MnSymbolA-Bold6
+   <7-8>  MnSymbolA-Bold7
+<8-9>  MnSymbolA-Bold8
+   <9-10> MnSymbolA-Bold9
+  <10-12> MnSymbolA-Bold10
+  <12->   MnSymbolA-Bold12}{}
+\DeclareSymbolFont{MnSyA}{U}{MnSymbolA}{m}{n}
+\SetSymbolFont{MnSyA}{bold}{U}{MnSymbolA}{b}{n}
+
+\DeclareRobustCommand{\overleftharpoon}{\mathpalette{\overarrow@\leftharpoonfill@}}
+\DeclareRobustCommand{\overrightharpoon}{\mathpalette{\overarrow@\rightharpoonfill@}}
+\def\leftharpoonfill@{\arrowfill@\leftharpoondown\mn@relbar\mn@relbar}
+\def\rightharpoonfill@{\arrowfill@\mn@relbar\mn@relbar\rightharpoonup}
+
+\DeclareMathSymbol{\leftharpoondown}{\mathrel}{MnSyA}{'112}
+\DeclareMathSymbol{\rightharpoonup}{\mathrel}{MnSyA}{'100}
+\DeclareMathSymbol{\mn@relbar}{\mathrel}{MnSyA}{'320}
+\makeatother
+
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\arraystretch}{1.8}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\newcommand{\harpoon}[1]{\overrightharpoonup{#1}}
+
+\begin{document}
+\maketitle
+\pagestyle{fancy}
+
+\begin{center}
+	\Large{\underline{Short Answer Questions}}
+\end{center}
+
+\section[Question ~\thesection]{Define the Impulse Response}
+
+The impulse response, $h(n)$, is defined as the output of a system when its input is $\delta(n)$.
+
+\section[Question ~\thesection]{Consider the signal $x(n) = \cos{(\frac{2\pi}{3}n)}$}
+
+\subsection[~\thesubsection]{What is the Period of $x(n)$?}
+
+The for a discrete periodic function, its period is defined as $P \in \mathbb{N}$ such that $x(n) = x(n + P) \; \forall n \in \mathbb{N}$. Using this fact, we find:
+
+\begin{align*}
+	x(n) &= x(n + P) \implies \\
+	\cos{(\frac{2\pi}{3}n)} &= \cos{(\frac{2\pi}{3}(n + P))} \\
+	&= \cos{(\frac{2\pi}{3}n + \frac{2\pi}{3}P)} \\
+\end{align*}
+
+Therefore, since cosine is $2\pi$ periodic, the smallest value of $P$ which makes $\frac{2\pi}{3}P$ a multiple of $2\pi$ is 3. Therefore, the period of $x(n)$ is 3.
+
+\subsection[~\thesubsection]{What is the Discrete Frequency of $x(n)$?}
+
+The discrete frequency $f$ of a $P$-periodic discrete system is given by $f = \frac{1}{P}$. Therefore, the discrete frequency of $x(n)$ is $\frac{1}{3}$.
+
+\section[Question ~\thesection]{What is the Frequency Response $(H(\omega))$ of the system $y'' + y = x$?}
+
+We know that the frequency response $H(\omega)$ of a continuous system is given by $H(\omega)e^{i{\omega}t} = y(t)$ when $x(t) = e^{i{\omega}t}$. Using this, we can find that:
+
+\begin{align*}
+	y'' + y &= x \implies \\
+	(H(\omega)e^{i{\omega}t})'' + H(\omega)e^{i{\omega}t} &= e^{i{\omega}t} \\
+	-{\omega}^2{H(\omega)} + H(\omega) &= 1 \\
+	H(\omega)(1 - {\omega}^2) &= 1 \\
+	H(\omega) &= \frac{1}{1 - {\omega}^2} \\\\
+\end{align*}
+
+Therefore, the frequency response of the system is $H(\omega) = \frac{1}{1 - {\omega}^2}$.
+
+\section[Question ~\thesection]{What are the units for:}
+
+\subsection[~\thesubsection]{The period of a signal?}
+
+The units for period are $\frac{samples}{cycle}$.
+
+\subsection[~\thesubsection]{The discrete frequency of a signal?}
+
+The units for discrete frequency are $\frac{periods}{sample}$.
+
+\newpage
+
+\begin{center}
+	\Large{\underline{State Space}}
+\end{center}
+
+\section[Question ~\thesection]{Given the difference equation $y(n) = y(n - 2) - x(n - 2)$, determine the $(A, B, C, D)$ representation of the system.}
+
+\begin{directsubsubs}
+
+\subsubsection[~\thesubsubsection]{Find $\overrightharpoon{S(n)}$}
+
+\begin{align*}
+	&\text{Let:}& &\text{Then:} \\
+	&s_1(n) = x(n - 2)& &s_1(n + 1) = x(n - 1) = s_2(n) \\
+	&s_2(n) = x(n - 1)& &s_2(n + 1) = x(n) \\
+	&s_3(n) = y(n - 2)& &s_3(n + 1) = y(n - 1) = s_4(n) \\
+	&s_4(n) = y(n - 1)& &s_4(n + 1) = y(n) = -x(n - 2) + y(n - 2) = -s_1(n) + s_3(n) \\\\
+\end{align*}
+
+Thus, let $\overrightharpoon{S(n)} = \begin{psmallmatrix} s_1(n) \\ s_2(n) \\ s_3(n) \\ s_4(n) \end{psmallmatrix}$.
+
+\subsubsection[~\thesubsubsection]{Find $\overrightharpoon{S(n + 1)}$}
+
+\begin{align*}
+	\overrightharpoon{S(n + 1)} &= \begin{pmatrix} s_1(n + 1) \\ s_2(n + 1) \\ s_3(n + 1) \\ s_4(n + 1) \end{pmatrix} \\\\
+	&= \begin{pmatrix} s_2(n) \\ x(n) \\ s_4(n) \\ -s_1(n) + s_3(n) \end{pmatrix} \\\\
+	&= \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ -1 & 0 & 1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 0 \\ 1 \\ 0 \\ 0 \end{pmatrix}x(n) \\\\
+\end{align*}
+
+Therefore, our $\boldsymbol{A}$ and $\boldsymbol{B}$ matrices are $\begin{psmallmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ -1 & 0 & 1 & 0 \end{psmallmatrix}$ and $\begin{psmallmatrix} 0 \\ 1 \\ 0 \\ 0 \end{psmallmatrix}$ respectively.
+
+\subsubsection[~\thesubsubsection]{Find $y(n)$}
+
+\begin{align*}
+	y(n) &= -x(n - 2) + y(n - 2) \\
+	&= -s_1(n) + s_3(n) \\
+	&= \begin{pmatrix} -1 & 0 & 1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 0 \end{pmatrix}x(n) \\\\
+\end{align*}
+
+Therefore, out $\boldsymbol{C}$ and $\boldsymbol{D}$ matrices are $\begin{psmallmatrix} -1 & 0 & 1 & 0 \end{psmallmatrix}$ and $\begin{psmallmatrix} 1 \end{psmallmatrix}$ respectively.
+
+Putting it all together, our system can be represented in state space form as:
+
+\begin{align*}
+	\overrightharpoon{S(n + 1)} &= \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ -1 & 0 & 1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 0 \\ 1 \\ 0 \\ 0 \end{pmatrix}x(n) \\\\
+	y(n) &= \begin{pmatrix} -1 & 0 & 1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 0 \end{pmatrix}x(n) \\
+\end{align*}
+
+\end{directsubsubs}
+
+\section[Question ~\thesection]{Given the matrices: \begin{align*} A = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}, B = \begin{pmatrix} 1 \\ 0 \end{pmatrix}, C = \begin{pmatrix} 1 & 1 \end{pmatrix}, D = \begin{pmatrix} 1 \end{pmatrix} \end{align*} Compute the zero state output to the input $x(n) = \delta(n) + \delta(n - 1)$ (Find $y(n)$ for $n=0, 1, 2, 3$)}
+
+\begin{align*}
+	&\underline{\text{Current State} \; (\overrightharpoon{S(n)})}& &\underline{\text{Current Output} \; (y(n))} \\\\
+	&\overrightharpoon{S(0)} = \overrightharpoon{0}& &y(0) = \begin{pmatrix} 1 & 1 \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} 1 \end{pmatrix}x(0) = 1 \\
+	&\overrightharpoon{S(1)} = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(0) = \begin{pmatrix} 1 \\ 0 \end{pmatrix}& &y(1) = \begin{pmatrix} 1 & 1 \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} 1 \end{pmatrix}x(1) = 2 \\
+	&\overrightharpoon{S(2)} = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(1) = \begin{pmatrix} 1 \\ 1 \end{pmatrix}& &y(2) = \begin{pmatrix} 1 & 1 \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} 1 \end{pmatrix}x(2) = 2 \\
+	&\overrightharpoon{S(3)} = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(2) = \begin{pmatrix} 0 \\ 1 \end{pmatrix}& &y(3) = \begin{pmatrix} 1 & 1 \end{pmatrix}\overrightharpoon{S(3)} + \begin{pmatrix} 1 \end{pmatrix}x(3) = 1 \\
+\end{align*}
+
+\section[Question ~\thesection]{Given the state-space equations: \begin{align*} \overrightharpoon{S(n + 1)} &= \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}\overrightharpoon{S(n)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(n) \\ y(n) &= \begin{pmatrix} 1 & 1 \end{pmatrix} + \begin{pmatrix} 1 \end{pmatrix}x(n) \end{align*} Compute the zero-state output for the input $x(n) = \delta(n)$. (Find $y(n)$ for $n = 0, 1, 2, 3, 4$)}
+
+\begin{align*}
+	&\underline{\text{Current State} \; (\overrightharpoon{S(n)})}& &\underline{\text{Current Output} \; (y(n))} \\\\
+	&\overrightharpoon{S(0)} = \overrightharpoon{0}& &y(0) = \begin{pmatrix} 1 & 1 \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} 1 \end{pmatrix}x(0) = 1 \\\\
+	&\overrightharpoon{S(1)} = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}\overrightharpoon{S(0)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(0) = \begin{pmatrix} 1 \\ 0 \end{pmatrix}& &y(1) = \begin{pmatrix} 1 & 1 \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} 1 \end{pmatrix}x(1) = 1 \\\\
+	&\overrightharpoon{S(2)} = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}\overrightharpoon{S(1)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(1) = \begin{pmatrix} 1 \\ 1 \end{pmatrix}& &y(2) = \begin{pmatrix} 1 & 1 \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} 1 \end{pmatrix}x(2) = 2 \\\\
+	&\overrightharpoon{S(3)} = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}\overrightharpoon{S(2)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(2) = \begin{pmatrix} 2 \\ 1 \end{pmatrix}& &y(3) = \begin{pmatrix} 1 & 1 \end{pmatrix}\overrightharpoon{S(3)} + \begin{pmatrix} 1 \end{pmatrix}x(3) = 3 \\\\
+	&\overrightharpoon{S(4)} = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}\overrightharpoon{S(3)} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}x(3) = \begin{pmatrix} 3 \\ 2 \end{pmatrix}& &y(4) = \begin{pmatrix} 1 & 1 \end{pmatrix}\overrightharpoon{S(4)} + \begin{pmatrix} 1 \end{pmatrix}x(4) = 5 \\\\
+\end{align*}
+
+\newpage
+
+\begin{center}
+	\Large{\underline{Convolution}}
+\end{center}
+
+\section[Question ~\thesection]{An LTI system is given by its frequency response $h(n) = \delta(n) + \delta(n - 2)$. Determine the output of the system to the input $x(n) = \delta(n) + \delta(n - 2) + \delta(n - 4)$}
+
+Although we could use the convolutional equation here, since the system is given to be LTI, it is much easier to just take the linear combination of $h(n)$ and $x(n)$ directly. Thus:
+
+\begin{align*}
+	y(n) &= h(n) + h(n - 2) + h(n - 4) \\
+	&= \delta(n) + \delta(n - 2) + \delta(n - 2) + \delta(n - 4) + \delta(n - 4) + \delta(n - 6) \\
+	&= \delta(n) + 2\delta(n - 2) + 2\delta(n - 4) + \delta(n - 6) \\\\
+\end{align*}
+
+Therefore, the output of the system for the input $x(n) = \delta(n) + \delta(n - 2) + \delta(n - 4)$ is given by:
+
+\begin{align*}
+	y(n) &= \delta(n) + 2\delta(n - 2) + 2\delta(n - 4) + \delta(n - 6) \\
+	\intertext{\centering OR} \\
+	y(n) &= \begin{cases} 1, \; \text{if} \; n = 0, 6 \\ 2, \; \text{if} \; n = 2, 4 \\0, \; \text{otherwise} \end{cases}
+\end{align*}
+
+\newpage
+
+\begin{center}
+	\Large{\underline{The Frequency Response}}
+\end{center}
+
+\section[Question ~\thesubsection]{Compute the frequency response $(H(\omega))$ of the system $y(n) + y(n - 1) = 2x(n) - 5x(n - 2)$.}
+
+Using the familiar fact that $y(n) = H(\omega)e^{i{\omega}n}$ when $x(n) = e^{i{\omega}n}$, we can find that:
+
+\begin{align*}
+	y(n) + y(n - 1) &= 2x(n) - 5x(n - 2) \implies \\
+	H(\omega)e^{i{\omega}n} + H(\omega)e^{i{\omega}(n - 1)} &= 2e^{i{\omega}n} - 5e^{i{\omega}(n - 2)} \\
+	H(\omega)e^{i{\omega}n} + H(\omega)e^{i{\omega}n - i{\omega}} &= 2e^{i{\omega}n} - 5e^{i{\omega}n - 2i{\omega}} \\
+	H(\omega)e^{i{\omega}n} + H(\omega)e^{i{\omega}n}e^{-i{\omega}} &= 2e^{i{\omega}n} - 5e^{i{\omega}n}e^{-2i{\omega}} \\
+	H(\omega) + H(\omega)e^{-i{\omega}} &= 2 - 5e^{-2i{\omega}} \\
+	H(\omega)(1 + e^{-i{\omega}}) &= 2 - 5e^{-2i{\omega}} \\
+	H(\omega) &= \frac{2 - 5e^{-2i{\omega}}}{1 + e^{-i{\omega}}} \\\\
+\end{align*}
+
+Therefore, the frequency response of the system is given by $H(\omega) = \frac{2 - 5e^{-2i{\omega}}}{1 + e^{-i{\omega}}}$.
+
+\begin{directsubsubs}
+
+\section[Question ~\thesection]{The frequency response of a system is given by $H(\omega) = \cos{(\omega)}$. Compute the output of the system to the signal $x(n) = 2 + \cos{(\frac{\pi}{2}n + \frac{\pi}{4})} + \sin{({\pi}n + \frac{3\pi}{2})}$.}
+
+\subsubsection[~\thesubsubsection]{Find the frequency of each term of $x(n)$}
+
+\begin{tabularx}{\linewidth}{| c || Y |}
+	\hline
+	Terms of $x(n)$ & Angular Frequency $(\omega)$ \\
+	\hline
+	$2$ & $0$ \\
+	$\cos{(\tfrac{\pi}{2}n + \tfrac{\pi}{4})}$ & $\tfrac{\pi}{2}$ \\
+	$\sin{({\pi}n + \frac{3\pi}{2})}$ & $\pi$ \\
+	\hline
+\end{tabularx}
+
+\subsubsection[~\thesubsubsection]{Find $|H(\omega)|$ and $arg(H(\omega))$ for each term of $x(n)$}
+
+\begin{tabularx}{\linewidth}{| c || Y | Y | Y | Y|}
+	\hline
+	Terms of $x(n)$ & Angular Frequency $(\omega)$ & Frequency Response $(H(\omega))$ & Gain $(|H(\omega)|)$ & Phase Shift $(arg(H(\omega)))$ \\
+	\hline
+	$2$ & $0$ & $1$ & $1$ & $0$ \\
+	$\cos{(\tfrac{\pi}{2}n + \tfrac{\pi}{4})}$ & $\tfrac{\pi}{2}$ & $0$ & $0$ & $-$ \\
+	$\sin{({\pi}n + \tfrac{3\pi}{2})}$ & $\pi$ & $-1$ & $1$ & $0$ \\
+	\hline
+\end{tabularx}
+
+\subsubsection[~\thesubsubsection]{Compute $y(n)$ using the cosine formula}
+
+THIS ANSWER IS WRONG, I NEED TO REACH OUT TO A TA TO DETERMINE WHY
+%FIX: INCORRECT SOLUTION
+
+Note here that since $arg(H(\pi))$ does not exist, we do not include it in our computation.
+
+\begin{align*}
+	y(n) &= |H(\omega_1)|\cos{({\omega_1}n + arg(H(\omega_1))} + |H(\omega_2)|\cos{({\omega_2}n + arg(H(\omega_2))} \\
+	&= \cos{((0)n + 0)} + \cos{((\pi)n + 0)} \\
+	&= 1 + \cos{((\pi)n)}
+\end{align*}
+
+Therefore, the output of a system with frequency response $H(\omega)$ for the input $x(n) = 2 + \cos{(\frac{\pi}{2}n + \frac{\pi}{4})} + \sin{({\pi}n + \frac{3\pi}{2})}$ is given by $y(n) = 1 + \cos{((\pi)n)}$.
+
+\section[Question ~\thesection]{A system's frequency response is given by $H(\omega) = \frac{1 + e^{-i{\omega}}}{e^{-i{\omega}}}$. Compute the output of the system for the input signal $x(n) = \cos{(\frac{\pi}{2}n + \frac{\pi}{4})} + \sin{({\pi}n + \frac{3\pi}{2})}$}
+
+FIX BASED ON FEEDBACK!!!!
+
+\end{directsubsubs}
+
+\newpage
+
+\begin{center}
+	\Large{\underline{Impulse Response}}
+\end{center}
+
+\section[Question ~\thesection]{Find a closed-form expression for the impulse response of the system $y(n) = x(n) - 2x(n - 1) + 3x(n - 3)$}
+
+Since the system is FIR, we can simply substitute $x(n)$ for $\delta(n)$ to find that:
+
+\begin{align*}
+	y(n) &= x(n) - 2x(n - 1) + 3x(n - 3) \\
+	&= \delta(n) - 2\delta(n - 1) + 3\delta(n - 3)
+\end{align*}
+
+Therefore, the impulse response of the system is given by $h(n) = \delta(n) - 2\delta(n - 1) + 3\delta(n - 3)$
+
+\newpage
+
+\begin{center}
+	\Large{\underline{Complex Numbers}}
+\end{center}
+
+\section[Question ~\thesection]{Express the following numbers as complex exponential}
+
+\subsection[~\thesubsection]{$z = 1 + i$}
+
+\begin{align*}
+	|z| &= \sqrt{(1)^2 + (1)^2} = \sqrt{2} \\
+	arg(z) &= \frac{\pi}{4} = \frac{-7\pi}{4} \\
+\end{align*}
+
+Therefore, $z = 1 + i = \sqrt(2)e^{i{\frac{-7\pi}{4}}}$.
+
+\subsection[~\thesubsection]{$z = -1$}
+
+\begin{align*}
+	|z| &= \sqrt{(-1)^2 + (0)^2} = 1 \\
+	arg(z) &= \pi = -\pi \\
+\end{align*}
+
+Therefore, $z = -1 = e^{i{-\pi}}$.
+
+\subsection[~\thesubsection]{$z = -i$}
+
+\begin{align*}
+	|z| &= \sqrt{(0)^2 + (-1)^2} = 1 \\
+	arg(z) &= \frac{3\pi}{2} = \frac{-\pi}{2} \\
+\end{align*}
+
+Therefore, $z = -i = e^{i{\frac{-\pi}{2}}}$.
+
+\subsection[~\thesubsection]{$z = - 1 - i$}
+
+\begin{align*}
+	|z| &= \sqrt{(-1)^2 + (1)^2} = \sqrt(2) \\
+	arg(z) &= \frac{5\pi}{4} = \frac{-3\pi}{4} \\
+\end{align*}
+
+Therefore, $z = - 1 - i = e^{i\frac{-3\pi}{4}}$.
+
+\section[Question ~\thesection]{Find the argument of the following complex numbers}
+
+\subsection[~\thesubsection]{$z = \frac{1}{1 + i}$}
+
+\begin{align*}
+	z &= \frac{1}{1 + i} \\
+	&= \frac{1}{1 + i} \cdot \frac{1 - i}{1 - i} \\
+	&= \frac{1 - i}{(1)^2 - (i)^2} \\
+	&= \frac{1 - i}{2} \\
+\end{align*}
+
+Therefore, $arg(z) = arg(\frac{1}{1 + i}) = arg(\frac{1 - i}{2}) = \frac{-7\pi}{4}$.
+
+\subsection[~\thesubsection]{$z = -2i$}
+
+Therefore, $arg(z) = arg(-2i) = \frac{-\pi}{2}$.
+
+\subsection[~\thesubsection]{$2$}
+
+Therefore, $arg(z) = arg(2) = 0$.
+
+\newpage
+
+\begin{center}
+	\Large{\underline{Discrete Fourier Series}}
+\end{center}
+
+\section[Question ~\thesection]{Find the discrete Fourier Series of the signal $x(n) = 1 + \cos{(\frac{1}{2}{\pi}n)}$ where $N = 4$}
+
+To begin, we first compute $x(0), x(1), x(2)$, and $x(3)$.
+
+\begin{align*}
+	x(0) &= 1 + \cos{(\frac{1}{2}{\pi}(0))} = 1 + 1 = 2 \\
+	x(1) &= 1 + \cos{(\frac{1}{2}{\pi}(1))} = 1 + 0 = 1 \\
+	x(2) &= 1 + \cos{(\frac{1}{2}{\pi}(2))} = 1 + -1 = 0 \\
+	x(3) &= 1 + \cos{(\frac{1}{2}{\pi}(3))} = 1 + 0 = 1 \\
+\end{align*}
+
+Since the fundamental frequency of $1$ and $\cos{(\frac{1}{2}{\pi}n)}$ is $1$ and $\frac{\pi}{2}$ respectively, the fundamental frequency $(\omega_0)$ of the signal $x(n)$ is $\frac{\pi}{n}$.
+
+Using this, we can compute $X(0), X(1), X(2)$, and $X(3)$.
+
+\begin{align*}
+	X(0) &= \frac{1}{N}\sum_{n = 0}^{N - 1}(x(n)e^{-i{\omega_0}(0)n}) = \frac{1}{4}\sum_{n = 0}^{3}(x(n)) = \frac{1}{4}(2 + 0 + 1 + 1) = 1 \\
+	X(1) &= \frac{1}{N}\sum_{n = 0}^{N - 1}(x(n)e^{-i{\omega_0}(1)n}) = \frac{1}{4}\sum_{n = 0}^{3}(x(n)e^{-i\frac{\pi}{2}n}) = \frac{1}{4}(2 + e^{-i\frac{\pi}{2}}+ e^{-3i{\frac{\pi}{2}}}) = \frac{1}{4}(2 - i + i) = \frac{1}{2} \\
+	X(2) &= \frac{1}{N}\sum_{n = 0}^{N - 1}(x(n)e^{-i{\omega_0}(2)n}) = \frac{1}{4}\sum_{n = 0}^{3}(x(n)e^{-i{\pi}n}) = \frac{1}{4}(2 + e^{-i{\pi}}+ e^{-3i{\pi}}) = \frac{1}{4}(2 - 1 - 1 ) = 0 \\
+	X(3) &= \frac{1}{N}\sum_{n = 0}^{N - 1}(x(n)e^{-i{\omega_0}(3)n}) = \frac{1}{4}\sum_{n = 0}^{3}(x(n)e^{-i\frac{3\pi}{2}n}) = \frac{1}{4}(2 + e^{-i\frac{3\pi}{2}}+ e^{-i{\frac{9\pi}{2}}}) = \frac{1}{4}(2 + i - i) = \frac{1}{2} \\
+\end{align*}
+
+\newpage
+
+\begin{center}
+	\Large{\underline{Filter Design}}
+\end{center}
+
+\section[Question ~\thesection]{Give the difference equation of a causal, minimum order, discrete and real valued system that removed any frequency of 0 and $\frac{\pi}{2}$ annd passes signals with a normalized frequency of $\pi$ with a gain of 1}
+
+To create such a system, we must first find an appropriate frequency response for the system.
+
+\begin{directsubsubs}
+
+\subsubsection[~\thesubsubsection]{Find an appropriate $H(\omega)$ for the system}
+
+We know that:
+
+\begin{align*}
+	H(0) = 0, \; H(\frac{\pi}{2}) = 0, \; |H(\pi)| = 1
+\end{align*}
+
+Therefore, by factoring to ensure our filter has the correct zeros (and ensuring complex conjugate symmetry), we can arrive at a prototype $\tilde{H}(\omega)$ of the system's frequency response:
+
+\begin{align*}
+	\tilde{H}(\omega) &= (e^{-i{\omega}} - e^{-i{\omega}(0)})(e^{-i{\omega}} - e^{-i{\frac{\pi}{2}}})(e^{-i{\omega}} - e^{i{\frac{\pi}{2}}}) \\
+	&= (e^{-i{\omega}} - 1)(e^{-i{\omega}} - i)(e^{-i{\omega}} + i) \\
+	&= e^{-3i{\omega}} - e^{-2i{\omega}} + e^{-i{\omega}} - 1 \\
+\end{align*}
+
+To arrive at $H(\omega)$, we want to normalize our prototype filter by ensuring it has a gain of 1 when $\omega = \pi$. Plugging $\omega = \pi$ into our prototype filter gives us:
+
+\begin{align*}
+	\tilde{H}(\pi) &= e^{-3i{\pi}} - e^{-2i{\pi}} + e^{-i{\omega}} - 1 \\
+	\tilde{H}(\pi) &= 4 \implies \\
+	|\tilde{H}(\pi)| &= 4 \\
+\end{align*}
+
+Therefore, $H(\omega) = \frac{-1}{4}\tilde{H}(\omega) = \frac{1}{4} - \frac{1}{4}e^{-i{\omega}} + \frac{1}{4}e^{-2i{\omega}} - \frac{1}{4}e^{-3i{\omega}}$ gives us our system's frequency response with the correct gain at $\pi$. Note here that we could choose to multiply by either $\frac{1}{4}$ or $\frac{-1}{4}$, which has no effect on our gain, I simply chose $\frac{-1}{4}$ because the final solution provided does this.
+
+\subsubsection[~\thesubsubsection]{Find the difference equation}
+
+Using the identity $y(n) = H(\omega)e^{i{\omega}n}$ when $x(n) = e^{i{\omega}n}$, we can multiply both sides of our original equation to arrive at a difference equation for the system.
+
+\begin{align*}
+	H(\omega) &= \frac{1}{4} - \frac{1}{4}e^{-i{\omega}} + \frac{1}{4}e^{-2i{\omega}} - \frac{1}{4}e^{-3i{\omega}} \implies \\
+	H(\omega)e^{i{\omega}n} &= \frac{1}{4}e^{i{\omega}n} - \frac{1}{4}e^{-i{\omega}}e^{i{\omega}n} + \frac{1}{4}e^{-2i{\omega}}e^{i{\omega}n} - \frac{1}{4}e^{-3i{\omega}}e^{i{\omega}n} \implies \\
+	y(n) &= \frac{1}{4}e^{i{\omega}n} - \frac{1}{4}e^{-i{\omega} + i{\omega}n} + \frac{1}{4}e^{-2i{\omega} + i{\omega}n} - \frac{1}{4}e^{-3i + i{\omega}n} \\
+	&= \frac{1}{4}e^{i{\omega}n} - \frac{1}{4}e^{i{\omega}(n - 1)} + \frac{1}{4}e^{i{\omega}(n - 2)} - \frac{1}{4}e^{i{\omega}(n - 3)} \\
+	&= \frac{1}{4}x(n) - \frac{1}{4}x(n - 1) + \frac{1}{4}x(n - 2) - \frac{1}{4}x(n - 3) \\\\
+\end{align*}
+
+Therefore, the difference equation of our system is given by $y(n) = \frac{1}{4}x(n) - \frac{1}{4}x(n - 1) + \frac{1}{4}x(n - 2) - \frac{1}{4}x(n - 3)$.
+
+
+
+
+
+
+\end{directsubsubs}
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
