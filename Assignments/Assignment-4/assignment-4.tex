@@ -1,0 +1,415 @@
+\documentclass{article}
+\usepackage{enumitem}
+\usepackage{etoolbox}
+\usepackage{bm}
+\usepackage{diagbox}
+\usepackage{mathtools}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{listings}
+\lstset{breaklines=true}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage[margin=1in]{geometry}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\renewcommand{\thesubsubsection}{\Roman{subsubsection}}
+\title{SFWRENG-3O03 Assignment 4}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+\makeatletter
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, $\langle$\href{mailto:farahm11@mcmaster.ca}{farahm11@mcmaster.ca}$\rangle$, 400468251}
+\fancyhead[R]{Assignment 4}
+
+\setlength{\parindent}{0cm}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\newcounter{problem}
+\renewcommand{\theproblem}{\arabic{problem}}
+
+\newenvironment{problem}[1][0]{
+	\refstepcounter{problem}
+	\newpage\vspace{1cm}\large{\par\noindent\textbf{\theproblem) #1}}\par\vspace{.5cm}
+	\addcontentsline{toc}{section}{\protect{\large{Problem \theproblem $\;$ \emph{(#1)}}}}
+}{\vspace{0.8em}}
+
+\newenvironment{solution}{
+	\vspace{0.4cm}\par\noindent\large\textbf{{Solution:}}\par\vspace{1em}
+}{\vspace{0.1em}}
+
+\newcounter{partslist}
+
+\makeatletter
+\newcommand{\parts@seriesname}{parts@\theproblem}
+
+\newenvironment{parts}{
+	\edef\parts@ser{\parts@seriesname}
+	\ifcsname\parts@ser\endcsname
+		\begin{enumerate}[resume=\parts@ser,label=\textbf{\theproblem.\alph*)},leftmargin=2.5em,itemsep=0.4em,before=\large]
+	\else
+		\begin{enumerate}[series=\parts@ser,label=\textbf{\theproblem.\alph*)},leftmargin=2.5em,itemsep=0.4em,before=\large]
+		\expandafter\gdef\csname\parts@ser\endcsname{1}
+	\fi
+}{
+	\end{enumerate}
+}
+
+\makeatother
+
+\makeatletter
+
+\newcounter{currentstep}
+\renewcommand{\thecurrentstep}{\Roman{currentstep}}
+
+\newenvironment{steps}{
+	\let\steps@olditem\item
+	\begin{list}{}{
+		\setlength\leftmargin{2.0em}
+		\setlength\itemsep{0.4em}
+		\setlength\topsep{0.8em}
+	}
+	\renewcommand{\item}{
+		\stepcounter{currentstep}
+		\steps@olditem[\textbf{(\thecurrentstep)}]
+	}
+}{
+	\end{list}
+	\let\item\steps@olditem
+}
+
+\makeatother
+
+\AtBeginEnvironment{parts}{\setcounter{currentstep}{0}}
+\AtBeginEnvironment{problem}{\setcounter{currentstep}{0}}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+\tableofcontents
+
+\begin{problem}[LTI Systems]
+	Given the two impulse responses:
+
+	\begin{align*}
+		h_1(n) &= \begin{cases} 1, \; \text{if} \; n \; \text{is even and} \; n \ge 0 \\ 0, \; \text{if} \; n \; \text{is odd or} \; n < 0 \end{cases} \\\\
+		h_2(n) &= \delta(n) - \delta(n - 1) + \delta(n - 2) - \delta(n - 3)
+	\end{align*}
+\end{problem}
+
+\begin{parts}
+	\item Find the difference equation representation of the system with impulse response $h_1(n)$.
+\end{parts}
+
+\begin{solution}
+	This one is a little tricky. My first instinct was to simply make the difference equation of the system $y(n) = \sum_{k = 0}^{\infty}(\delta(n - k))$ with only even values of k, however the difference equation of a system cannot be an infinite sum. However, what we can do instead to model the whether the current input is even or odd is to use the past outputs of the system. Thus, keeping this in mind and with a bit of trial and error, I arrived at the difference equation representing the impulse response:
+
+	\begin{align*}
+		y(n) &= \delta(n) + y(n - 2) \\
+	\end{align*}
+
+	Therefore, substituting in $\delta(n) = x(n)$, we get the difference equation of the system to be:
+
+	\begin{align*}
+		y(n) &= x(n) + y(n - 2) \\
+	\end{align*}
+\end{solution}
+
+\begin{parts}
+	\item Find the difference equation representation of the system with impulse response $h_2(n)$.
+\end{parts}
+
+\begin{solution}
+	Since we know that the impulse response is $y(n)$ given when the input of the system is given by $x(n) = \delta(n)$, we can simply substitute each occurrence of $\delta(n)$ with $x(n)$ to arrive at the difference equation:
+
+	\begin{align*}
+		y(n) &= x(n) - x(n - 1) + x(n - 2) - x(n - 3)
+	\end{align*}
+\end{solution}
+
+\begin{parts}
+	\item Find the $\left( A, B, C, D \right)$ representation of the system corresponding to $h_1(n)$.
+\end{parts}
+
+\begin{solution}
+	\begin{steps}
+		\item Find $\bm{S(n)}$.
+	\end{steps}
+
+	\begin{tabularx}{\linewidth}{c | Y}
+		Let: & Then: \\
+		\hline
+		\\
+		$s_1(n) = y(n - 2)$ & $s_1(n + 1) = y(n - 1) = s_2(n)$ \\[6pt]
+		$s_2(n) = y(n - 1)$ & $s_2(n + 1) = y(n) = x(n) + y(n - 2) = x(n) + s_1(n)$ \\
+	\end{tabularx} \\\\
+
+	Therefore, let $\bm{S(n)} = \begin{pmatrix} s_1(n) \\ s_2(n) \end{pmatrix}$ \\
+
+	\begin{steps}
+		\item Find $\bm{S(n + 1)}$.
+	\end{steps}
+
+	\begin{align*}
+		\bm{S(n + 1)} &= \begin{pmatrix} s_1(n + 1) \\ s_2(n + 1) \end{pmatrix} \\[6pt]
+		&= \begin{pmatrix} s_2(n) \\ x(n) + s_1(n) \end{pmatrix} \\[6pt]
+		&= \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}\bm{S(n)} + \begin{pmatrix} 0 \\ 1 \end{pmatrix}x(n) \\
+	\end{align*}
+
+	Therefore, the $\bm{A}$ and $\bm{B}$ matrices of our system are given by:
+
+	\begin{align*}
+		\bm{A} &= \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \\
+		\bm{B} &= \begin{pmatrix} 0 \\ 1 \end{pmatrix} \\
+	\end{align*}
+
+	respectively.
+
+	\begin{steps}
+		\item Find $y(n)$.
+	\end{steps}
+
+	\begin{align*}
+		y(n) &= x(n) + y(n - 2) \\
+		&= x(n) + s(1) \\
+		&= \begin{pmatrix} 1 & 0 \end{pmatrix}\bm{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n)
+	\end{align*}
+
+	Therefore, the $\bm{C}$ and $\bm{D}$ matrices of our system are given by:
+
+	\begin{align*}
+		\bm{C} &= \begin{pmatrix} 1 & 0 \end{pmatrix} \\
+		\bm{D} &= \begin{pmatrix} 1 \end{pmatrix} \\
+	\end{align*}
+
+	respectively.
+\end{solution}
+
+\begin{parts}
+	\item Find the $\left( A, B, C, D \right)$ representation of the system with impulse response $h_2(n)$.
+\end{parts}
+
+\begin{solution}
+
+	\begin{steps}
+		\item Find $\bm{S(n)}$.
+	\end{steps}
+
+	\begin{tabularx}{\linewidth}{Y | Y}
+		Let: & Then: \\
+		\hline
+		\\
+		$s_1(n) = x(n - 3)$ & $s_1(n + 1) = x(n - 2) = s_2(n)$ \\[6pt]
+		$s_2(n) = x(n - 2)$ & $s_2(n + 1) = x(n - 1) = s_3(n)$ \\[6pt]
+		$s_3(n) = x(n - 1)$ & $s_3(n + 1) = x(n)$ \\[6pt]
+	\end{tabularx} \\\\
+
+	Therefore, let $\bm{S(n)} = \begin{pmatrix} s_1(n) \\ s_2(n) \\ s_3(n) \end{pmatrix}$ \\
+
+	\begin{steps}
+		\item Find $\bm{S(n + 1)}$.
+	\end{steps}
+
+	\begin{align*}
+		\bm{S(n + 1)} &= \begin{pmatrix} s_1(n + 1) \\ s_2(n + 1) \\ s_3(n + 1) \end{pmatrix} \\[6pt]
+		&= \begin{pmatrix} s_2(n) \\ s_3(n) \\ x(n) \end{pmatrix} \\[6pt]
+		&= \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix}\bm{S(n)} + \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}x(n) \\
+	\end{align*}
+
+	Therefore, the $\bm{A}$ and $\bm{B}$ matrices of our system are given by:
+
+	\begin{align*}
+		\bm{A} &= \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix} \\
+		\bm{B} &= \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} \\
+	\end{align*}
+
+	respectively.
+
+	\begin{steps}
+		\item Find $y(n)$.
+	\end{steps}
+
+	\begin{align*}
+		y(n) &= x(n) - x(n - 1) + x(n + 2) - x(n - 3) \\
+		&= x(n) - s_3(n) + s_2(n) - s_1(n) \\[6pt]
+		&= \begin{pmatrix} -1 & 1 & -1 \end{pmatrix}\bm{S(n)} + \begin{pmatrix} 1 \end{pmatrix}x(n) \\
+	\end{align*}
+
+	Therefore, the $\bm{C}$ and $\bm{D}$ matrices of our system are given by:
+
+	\begin{align*}
+		\bm{C} &= \begin{pmatrix} 1 & -1 & 1 \end{pmatrix} \\
+		\bm{D} &= \begin{pmatrix} 1 \end{pmatrix} \\
+	\end{align*}
+
+	respectively.
+\end{solution}
+
+\begin{problem}[The Frequency Response]
+	Compute the frequency response for each of the following systems.
+\end{problem}
+
+\begin{parts}
+	\item $y(n) = -2x(n - 1) + x(n - 2)$
+\end{parts}
+
+\begin{solution}
+	Since the frequency response, $H(\omega)$, of a system is given by $y(n) = H(\omega)e^{i\omega{n}}$ when $x(n) = e^{i\omega{n}}$, we can simply substitute $y(n)$ and $x(n)$ for each of these values respectively to find that:
+
+	\begin{align*}
+		H(\omega)e^{i\omega{n}} &= -2e^{i\omega(n - 1)} + e^{i\omega(n - 2)} \\
+		H(\omega)e^{i\omega{n}} &= -2 \left( e^{i\omega{n}} \cdot e^{-i\omega} \right) + \left( e^{i\omega{n}} \cdot e^{-2i\omega} \right) \\
+		H(\omega) &= -2e^{-i\omega} + e^{-2i\omega} \\
+	\end{align*}
+\end{solution}
+
+\begin{parts}
+	\item $y(n) = \frac{1}{2}y(n - 1) + x(n)$
+\end{parts}
+
+\begin{solution}
+	Likewise, we can solve this problem with the same substitution, noting that $y(n - 1) = H(\omega)e^{i\omega(n - 1)}$.
+
+	\begin{align*}
+		H(\omega)e^{i\omega{n}} &= \frac{1}{2}H(\omega)e^{i\omega(n - 1)} + e^{i\omega{n}} \\
+		H(\omega)e^{i\omega{n}} &= \frac{1}{2}H(\omega) \left( e^{i\omega{n}} \cdot e^{-i\omega} \right) + e^{i\omega{n}} \\
+		H(\omega) &= \frac{1}{2}H(\omega)e^{-i\omega} + 1 \\
+		H(\omega) - \frac{1}{2}H(\omega)e^{-i\omega} &= 1 \\
+		H(\omega)(1 - \frac{1}{2}e^{-i\omega}) &= 1 \\
+		H(\omega) &= \frac{1}{1 - \frac{1}{2}e^{-i\omega}} \\
+	\end{align*}
+\end{solution}
+
+\begin{parts}
+	\item $h(n) = \delta(n - 2)$
+\end{parts}
+
+\begin{solution}
+	Clearly, we can see that the difference equation representation of the system corresponding to this impulse response is given by $y(n) = x(n - 2)$, thus:
+
+	\begin{align*}
+		H(\omega)e^{i\omega{n}} &= e^{i\omega(n - 2)} \\
+		H(\omega)e^{i\omega{n}} &= e^{i\omega{n}} \cdot e^{-2i\omega} \\
+		H(\omega) &= e^{-2i\omega}
+	\end{align*}
+\end{solution}
+
+\begin{problem}[Frequency and Periodicity]
+	Given the two signals:
+
+	\begin{align*}
+		x_1(t) &= \sin \left( \frac{3}{2}t \right) \\
+		x_2(n) &= \cos \left( \frac{\pi}{4}n \right)
+	\end{align*}
+\end{problem}
+
+\begin{parts}
+	\item Give the period, frequency, and normalized frequency of $x_1$ (with units)
+\end{parts}
+
+\begin{solution}
+	\begin{steps}
+		\item Find the period of $x_1(t)$.
+	\end{steps}
+
+	Since we know that $\sin(t)$ is $2\pi$-periodic, we can easily deduce that the period of $\sin\left( \frac{3}{2}t \right)$ must be $\frac{2\pi}{\frac{3}{2}} = \frac{4\pi}{3}$. Thus, the period of $x_1(t)$ is $\frac{4\pi}{3}$ seconds/cycle, noting that $x_1(t)$ is continuous.
+
+	\begin{steps}
+		\item Find the frequency of $x_1(t)$.
+	\end{steps}
+
+	The frequency of the signal is given simply as the coefficient of $t$ inside the $\sin$ term. Thus, the frequency of the system is $\frac{3}{2}$ radians per period.
+
+	\begin{steps}
+		\item Find the normalized frequency of $x_1(t)$.
+	\end{steps}
+
+	The normalized frequency of a signal is given as the reciprocal of its period. Thus, the frequency of the system is $\frac{1}{\frac{4\pi}{3}} = \frac{3\pi}{4}$ seconds per period.
+\end{solution}
+
+\begin{parts}
+	\item Give the frequency and normalized frequency of $x_2(n)$ (with units).
+\end{parts}
+
+\begin{solution}
+	\begin{steps}
+		\item Find the frequency of $x_2(n)$.
+	\end{steps}
+
+	The frequency of the signal is given simply as the coefficient of $n$ inside the $\cos$ term. Thus, the frequency of the system is $\frac{\pi}{4}$ radians per step.
+
+	\begin{steps}
+		\item Find the normalized frequency of $x_2(n)$.
+	\end{steps}
+
+	To find the normalized frequency of $x_2(n)$, we must first find its period. To find its period, we must find the smallest possible $P \in \mathbb{N}$ such that $\forall n \in \mathbb{N}, x_2(n) = x_2(n + P)$. Therefore:
+
+	\begin{align*}
+		\cos \left( \frac{\pi}{4}n \right) &= \cos \left( \frac{\pi}{4}(n + P) \right) \\
+		\cos \left( \frac{\pi}{4}n \right) &= \cos \left( \frac{\pi}{4}n + \frac{\pi}{4}P \right) \\
+	\end{align*}
+
+	Therefore, to set these two equal, we need $\frac{\pi}{4}P$ to be a multiple of $2\pi$. Thus, since the smallest possible value of $P$ which satisfies this is 8, the period of the system is given by $8$ and thus, the normalized frequency of the system is given by $\frac{1}{8}$ steps per cycle.
+\end{solution}
+
+\begin{parts}
+	\item If $x_2$ is played back on a computer with a sampling frequency of $f_2 = 8000$Hz, what is the pitch of the resulting audio signal?
+\end{parts}
+
+\begin{solution}
+	The pitch of a signal is given as $f_s \cdot f$, where $f_s$ and $f$ are the sampling frequency and normalized frequency of the signal respectively. Thus:
+
+	\begin{align*}
+		\text{pitch} \; &= f_s \cdot f \\
+		&= 8000 \cdot \frac{1}{8} \\
+		&= 1000
+	\end{align*}
+
+	Thus, the pitch of the resulting audio signal is 1000 cycles/second.
+\end{solution}
+
+\begin{problem}[Discrete Fourier Series]
+	Compute the discrete Fourier series of the 4-periodic signal:
+	\begin{gather*}
+		1, 1, 0, 0, 1, 1, 0, 0, \ldots
+	\end{gather*}
+\end{problem}
+
+\begin{solution}
+
+	Using the formula for the discrete formula series $\left( X_k = \frac{1}{P}\sum_{n = 0}^{P - 1}x(n)e^{-i\omega_0{n}k} \right)$, and noting that $\omega_0 = \frac{2\pi}{4} = \frac{\pi}{2}$, we can compute the Fourier series' coefficients as:
+
+	\vspace{.75cm}
+
+	\begin{center}
+		\begin{tabularx}{\linewidth/3}{l l l}
+			$X_0$ &$= \frac{1}{4}(1 + 1 + 0 + 0)$ &= $\frac{1}{2}$ \\[6pt]
+			$X_1$ &$= \frac{1}{4}(1 + e^{-i\frac{\pi}{2}})$ &$= \frac{1 - i}{4}$ \\[6pt]
+			$X_2$ &$= \frac{1}{4}(1 + e^{-i\frac{\pi}{2}(2)})$ &$= 0$ \\[6pt]
+			$X_3$ &$= \frac{1}{4}(1 + e^{-i\frac{\pi}{2}(3)})$ &$= \frac{1 + i}{4}$ \\[6pt]
+		\end{tabularx}
+	\end{center}
+	\vspace{.75cm}
+
+\end{solution}
+
+\end{document}
