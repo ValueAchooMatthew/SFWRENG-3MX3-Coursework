@@ -165,11 +165,11 @@
 \end{itemize}
 
 \begin{example}
-	Using the general state-space equaions and the definition of $h(n)$, derive the convolutional equation.
+	Using the general state-space equations and the definition of $h(n)$, derive the convolutional equation.
 \end{example}
 
 \begin{solution}
-	For any input $x(n)$, out state space equations look like:
+	For any input $x(n)$, our state space equations look like:
 
 	\begin{center}
 		\begin{tabularx}{\linewidth}{Y | Y}
@@ -199,8 +199,8 @@
 \end{solution}
 
 \begin{itemize}
-	\item The \emph{effect} of a system is defined as
-	\item The convolutional equation tells us how the effect of a system evolved over time.
+	\item The \emph{effect} of a system is defined as how a system's outputs compound over time/steps.
+	\item The convolutional equation tells us how the effect of a system evolves over time/steps.
 \end{itemize}
 
 \begin{example}
@@ -208,7 +208,7 @@
 \end{example}
 
 \begin{solution}
-	From a previous question, we determined the inpulse response of this sytem to be \\ $h(n) = \begin{cases} \frac{1}{2}, \; \text{if} \; n = 0, 1 \\ 0, \; \text{otherwise} \end{cases}$. Thus, using the convolutional equation, we can see that:
+	From a previous question, we determined the impulse response of this system to be \\ $h(n) = \begin{cases} \frac{1}{2}, \; \text{if} \; n = 0, 1 \\ 0, \; \text{otherwise} \end{cases}$. Thus, using the convolutional equation, we can see that:
 
 	\begin{align*}
 		y(n) &= \sum_{k = -\infty}^{\infty}h(n - k)x(n) \\
@@ -247,11 +247,11 @@
 \end{solution}
 
 \begin{itemize}
-	\item The identity system is defined as a system where the impulse response, $h(n)$, is the Kroncker-Delta function, $\delta(n)$.
+	\item The identity system is defined as a system where the impulse response, $h(n)$, is the Kronecker-Delta function, $\delta(n)$.
 \end{itemize}
 
 \begin{example}
-	Find the output of the system $y(n) = x(n) + \alpha{y(n - 1)}$ for the input $x(n) = 1$ using its impilse response.
+	Find the output of the system $y(n) = x(n) + \alpha{y(n - 1)}$ for the input $x(n) = 1$ using its impulse response.
 \end{example}
 
 \begin{solution}
