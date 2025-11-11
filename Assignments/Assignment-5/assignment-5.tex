@@ -1,0 +1,197 @@
+\documentclass{article}
+\usepackage{enumitem}
+\usepackage{etoolbox}
+\usepackage{bm}
+\usepackage{diagbox}
+\usepackage{mathtools}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{listings}
+\lstset{breaklines=true}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage[margin=1in]{geometry}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\renewcommand{\thesubsubsection}{\Roman{subsubsection}}
+\title{SFWRENG-3MX3 Assignment 5}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+\makeatletter
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, $\langle$\href{mailto:farahm11@mcmaster.ca}{farahm11@mcmaster.ca}$\rangle$, 400468251}
+\fancyhead[R]{Assignment 5}
+
+\setlength{\parindent}{0cm}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\newcounter{problem}
+\renewcommand{\theproblem}{\arabic{problem}}
+
+\newenvironment{problem}[1][0]{
+	\refstepcounter{problem}
+	\newpage\vspace{1cm}\large{\par\noindent\textbf{\theproblem) #1}}\par\vspace{.5cm}
+	\addcontentsline{toc}{section}{\protect{\large{Problem \theproblem $\;$ \emph{(#1)}}}}
+}{\vspace{0.8em}}
+
+\newenvironment{solution}{
+	\vspace{0.4cm}\par\noindent\large\textbf{{Solution:}}\par\vspace{1em}
+}{\vspace{0.1em}}
+
+\newcounter{partslist}
+
+\makeatletter
+\newcommand{\parts@seriesname}{parts@\theproblem}
+
+\newenvironment{parts}{
+	\edef\parts@ser{\parts@seriesname}
+	\ifcsname\parts@ser\endcsname
+		\begin{enumerate}[resume=\parts@ser,label=\textbf{\theproblem.\alph*)},leftmargin=2.5em,itemsep=0.4em,before=\large]
+	\else
+		\begin{enumerate}[series=\parts@ser,label=\textbf{\theproblem.\alph*)},leftmargin=2.5em,itemsep=0.4em,before=\large]
+		\expandafter\gdef\csname\parts@ser\endcsname{1}
+	\fi
+}{
+	\end{enumerate}
+}
+
+\makeatother
+
+\makeatletter
+
+\newcounter{currentstep}
+\renewcommand{\thecurrentstep}{\Roman{currentstep}}
+
+\newenvironment{steps}{
+	\let\steps@olditem\item
+	\begin{list}{}{
+		\setlength\leftmargin{2.0em}
+		\setlength\itemsep{0.4em}
+		\setlength\topsep{0.8em}
+	}
+	\renewcommand{\item}{
+		\stepcounter{currentstep}
+		\steps@olditem[\textbf{(\thecurrentstep)}]
+	}
+}{
+	\end{list}
+	\let\item\steps@olditem
+}
+
+\makeatother
+
+\AtBeginEnvironment{parts}{\setcounter{currentstep}{0}}
+\AtBeginEnvironment{problem}{\setcounter{currentstep}{0}}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+\tableofcontents
+
+\begin{problem}[Impulse to Frequency Response]
+	Use the Discrete Time Fourier Transform (DTFT) or the Continuous Time Fourier Series (CTFT) to find the frequency response that corresponds to the following impulse responses:
+\end{problem}
+
+\begin{parts}
+	\item $h(t) = \delta(t - 1) + 2\delta(t - 2)$
+\end{parts}
+
+\begin{solution}
+	\begin{align*}
+		X(\omega) &= \int_{-\infty}^{\infty}(x(t) e^{-i\omega{t}}) \, dt \\
+		&= \int_{-\infty}^{\infty}(\delta(t - 1) + 2\delta(t - 2)e^{-i\omega{t}}) \, dt \\
+		&= \int_{-\infty}^{\infty}(\delta(t - 1)e^{-i\omega{t}} + 2\delta(t - 2)e^{-i\omega{t}}) \, dt \\
+		&= e^{-i\omega} + 2e^{-2i\omega} \\
+	\end{align*}
+\end{solution}
+
+\begin{parts}
+	\item $h(t) = \begin{cases} \frac{1}{3}, \; \text{if} \; n = 0, 1, 2 \\ 0, \; \text{otherwise} \end{cases}$
+\end{parts}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{problem}[The Step Response]
+	In control theory, people use the step response in addition to the impulse response. The reason for this is that the step response gives information on how a controlled system reacts to a change of its set-point, which is a desired state for the system to be in. The step function is given by:
+
+	\begin{align*}
+		\text{step}(n) &= \begin{cases} 0, \; \text{if} \; n < 0 \\ 1, \; \text{otherwise} \end{cases}
+	\end{align*}
+
+	and the step response is the output of an LTI system in its zero state when $x(n) = \text{step}(n)$.
+\end{problem}
+
+\begin{parts}
+	\item How might we compute the step response from the impulse response?
+\end{parts}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{parts}
+	\item Compute the step response of the system given by $y(n) = x(n) + \frac{1}{2}y(n - 1)$ \emph{directly}.
+\end{parts}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{parts}
+	\item Compute the step response of the system given by $y(n) = x(n) + \frac{1}{2}y(n - 1)$ using the formula derived in \textbf{(a)}.
+\end{parts}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{problem}[Filter Design]
+	Design a simple FIR filter that removes any frequency component at $\frac{\pi}{2}$ and passes any constant signal with a gain of 1. Give the difference equation and state space representations for such a filter.
+\end{problem}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{problem}[Filtering Signals]
+	What is the the output of a system with the frequency response:
+
+	\begin{align*}
+		H(\omega) &= \begin{cases} 1, \; \text{if} \; |w| \le 2.5 \; \text{radians/second} \end{cases} \\
+	\end{align*}
+
+	when its input is a sawtooth signal, the periodic extension of the signal:
+
+	\begin{align*}
+		x(t) &= \begin{cases} t, \; \text{if} 0 \le t \le 1 \\ 0, \; \text{otherwise} \end{cases} \\
+	\end{align*}
+
+	\emph{Hint}: The sawtooth signal is 1-periodic, hence we can use the Fourier series to determine its frequency content.
+\end{problem}
+
+\begin{solution}
+
+\end{solution}
+
+\end{document}
