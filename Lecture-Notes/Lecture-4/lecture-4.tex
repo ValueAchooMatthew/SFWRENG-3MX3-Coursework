@@ -1,0 +1,281 @@
+\documentclass{article}
+\usepackage{bm}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{mathtools}
+
+\title{Lecture 4 - FIR Systems and Convolution}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\fancyhead[R]{Lecture 4 - FIR Systems and Convolution}
+
+\setlength{\parindent}{0cm}
+
+\newcounter{example}
+\renewcommand{\theexample}{\arabic{example}}
+
+\newenvironment{example}{
+	\refstepcounter{example}
+	\newpage\vspace{1cm}\large{\par\noindent\textbf{Example \theexample}}\par\vspace{.5cm}
+}{\vspace{0.8em}}
+
+\newenvironment{solution}{
+	\vspace{0.4cm}\par\noindent\large\textbf{{Solution:}}\par\vspace{1em}
+}{\vspace{0.1em}}
+
+\newcounter{partslist}
+
+\makeatletter
+\newcommand{\parts@seriesname}{parts@\theexample}
+
+\newenvironment{parts}{
+	\edef\parts@ser{\parts@seriesname}
+	\ifcsname\parts@ser\endcsname
+		\begin{enumerate}[resume=\parts@ser,label=\textbf{\theexample.\alph*)},leftmargin=2.5em,itemsep=0.4em,before=\large]
+	\else
+		\begin{enumerate}[series=\parts@ser,label=\textbf{\theexample.\alph*)},leftmargin=2.5em,itemsep=0.4em,before=\large]
+		\expandafter\gdef\csname\parts@ser\endcsname{1}
+	\fi
+}{
+	\end{enumerate}
+}
+
+\makeatother
+
+\makeatletter
+
+\newcounter{currentstep}
+\renewcommand{\thecurrentstep}{\Roman{currentstep}}
+
+\newenvironment{steps}{
+	\let\steps@olditem\item
+	\begin{list}{}{
+		\setlength\leftmargin{2.0em}
+		\setlength\itemsep{0.4em}
+		\setlength\topsep{0.8em}
+	}
+	\renewcommand{\item}{
+		\stepcounter{currentstep}
+		\steps@olditem[\textbf{(\thecurrentstep)}]
+	}
+}{
+	\end{list}
+	\let\item\steps@olditem
+}
+
+\makeatother
+
+\AtBeginEnvironment{parts}{\setcounter{currentstep}{0}}
+\AtBeginEnvironment{example}{\setcounter{currentstep}{0}}
+
+\makeatletter
+\DeclareFontFamily{U}{MnSymbolA}{}
+\DeclareFontShape{U}{MnSymbolA}{m}{n}{
+    <-6>  MnSymbolA5
+   <6-7>  MnSymbolA6
+   <7-8>  MnSymbolA7
+   <8-9>  MnSymbolA8
+   <9-10> MnSymbolA9
+  <10-12> MnSymbolA10
+  <12->   MnSymbolA12}{}
+\DeclareFontShape{U}{MnSymbolA}{b}{n}{
+    <-6>  MnSymbolA-Bold5
+   <6-7>  MnSymbolA-Bold6
+   <7-8>  MnSymbolA-Bold7
+<8-9>  MnSymbolA-Bold8
+   <9-10> MnSymbolA-Bold9
+  <10-12> MnSymbolA-Bold10
+  <12->   MnSymbolA-Bold12}{}
+\DeclareSymbolFont{MnSyA}{U}{MnSymbolA}{m}{n}
+\SetSymbolFont{MnSyA}{bold}{U}{MnSymbolA}{b}{n}
+
+\DeclareRobustCommand{\overleftharpoon}{\mathpalette{\overarrow@\leftharpoonfill@}}
+\DeclareRobustCommand{\overrightharpoon}{\mathpalette{\overarrow@\rightharpoonfill@}}
+\def\leftharpoonfill@{\arrowfill@\leftharpoondown\mn@relbar\mn@relbar}
+\def\rightharpoonfill@{\arrowfill@\mn@relbar\mn@relbar\rightharpoonup}
+
+\DeclareMathSymbol{\leftharpoondown}{\mathrel}{MnSyA}{'112}
+\DeclareMathSymbol{\rightharpoonup}{\mathrel}{MnSyA}{'100}
+\DeclareMathSymbol{\mn@relbar}{\mathrel}{MnSyA}{'320}
+\makeatother
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\arraystretch}{1.8}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\newcommand{\harpoon}[1]{\overrightharpoonup{#1}}
+
+\begin{document}
+\maketitle
+\pagestyle{fancy}
+
+\begin{itemize}
+	\item The Kronecker-Delta function is defined as:
+\end{itemize}
+
+\begin{align*}
+	\delta(n - m) &= \begin{cases} 1, \; \text{if} \; n = m \\ 0, \; \text{otherwise} \end{cases} \\
+\end{align*}
+
+\begin{itemize}
+	\item The impulse response $h(n)$ of a system is defined as the system's output, $y(n)$, when its input, $x(n)$, is $\delta(n)$.
+	\item As computed in the previous lecture, for system's described by its $\left( A, B, C, D \right)$ representation, its impulse response is given by:
+\end{itemize}
+
+\begin{align*}
+	h(n) &= \begin{cases} 0, \; \text{if} \; n < 0 \\ \bm{D}, \; \text{if} \; n = 0 \\ \bm{C}\bm{A}^{n - 1}\bm{B}, \; \text{if} \; n > 0 \end{cases}
+\end{align*}
+
+\begin{itemize}
+	\item The \emph{convolutional equation} is a formula used to determine what the output of a system will be for a generic input, $x(n)$, based on its impulse response.
+	\item The convolutional equation is given by two equivalent formulations:
+\end{itemize}
+
+\begin{align*}
+	y(n) &= \sum_{k = -\infty}^{\infty}(h(n - k)x(k)) \\
+	y(n) &= \sum_{k = -\infty}^{\infty}(h(k)x(n - k)) \\
+\end{align*}
+
+\begin{itemize}
+	\item The specific equation which should be used is entirely a matter of convenience based on the problem at hand.
+	\item Convolution is also a process used in continuous systems, but given by a different formula which will be covered in a future lecture.
+\end{itemize}
+
+\begin{example}
+	Using the general state-space equaions and the definition of $h(n)$, derive the convolutional equation.
+\end{example}
+
+\begin{solution}
+	For any input $x(n)$, out state space equations look like:
+
+	\begin{center}
+		\begin{tabularx}{\linewidth}{Y | Y}
+			$\bm{S(n)}$ & $y(n)$ \\
+			\hline \\
+			$\bm{S(0)} = \bm{0}$ & $y(0) = \bm{C}\bm{S(0)} + \bm{D}x(0) = \bm{x(0)}$ \\
+			$\bm{S(1)} = \bm{A}\bm{S(0)} + \bm{B}x(0) = \bm{B}x(0)$ & $\bm{y(1)} = \bm{C}\bm{S(1)} + \bm{D}x(1) = \bm{C}\bm{B}x(0) + \bm{D}x(1)$ \\
+			$\bm{S(2)} = \bm{A}\bm{S(1)} + \bm{B}x(1) = \bm{A}\bm{B}x(0) + \bm{B}x(1)$ & $y(2) = \bm{C}\bm{S(2)} + \bm{D}x(2) = \bm{C}(\bm{A}\bm{B}x(0) + \bm{B}x(1) + \bm{B}x(1)) + \bm{D}x(2)$ \\
+			$\bm{S(3)} = \bm{A}\bm{S(2)} + \bm{B}x(2) = \bm{A}(\bm{A}\bm{B}x(0) + \bm{B}x(1)) + \bm{B}x(2)$ & $y(3) = \bm{C}\bm{S(3)} + \bm{D}x(3) = \bm{C}(\bm{A}(\bm{A}\bm{B}x(0) + \bm{B}x(1)) + \bm{B}x(2)) + \bm{D}x(3)$ \\
+			$\vdots$ & $\vdots$ \\
+			$\bm{S(n)} = \sum_{k = 0}^{n - 1 - k}\bm{A}^{n - 1}\bm{B}x(k)$ & $y(n) = \sum_{k = 0}^{n - 1}(\bm{C}\bm{A^{n - 1 - k}}\bm{B}(x(k))) + \bm{D}x(n)$. \\
+		\end{tabularx}
+	\end{center}
+
+	From our earlier definition of $h(n)$, we know that $h(n) = \begin{cases} 0, \; \text{if} \; n < 0 \\ \bm{D} \; \text{if} \; n = 0 \\ \bm{C}\bm{A}^{n - 1}\bm{B}, \; \text{if} \; n > 0 \end{cases}$, and therefore $\bm{C}\bm{A}^{n - 1 - k}\bm{B}x(k) = h(n - k)$, and since $\bm{D} = h(0)$, we have:
+
+	\begin{align*}
+		y(n) &= \sum_{k = 1}^{n - 1}h(n - k)x(k) + h(0)x(0) = \sum_{k = 0}^{n - 1}h(n - k)x(k) \\
+	\end{align*}
+
+	%TODO: REWORD, MISLEADNG
+	Since, in the context of FIR systems, $h(n - k) = 0, \forall n < k$, and $\exists N \in \mathbb{N}$ such that $\forall n \ge N, \; h(n - k) = 0$, we have:
+
+	\begin{align*}
+		y(n) &= \sum_{k = -\infty}^{\infty}h(n - k)x(k) \\
+	\end{align*}
+\end{solution}
+
+\begin{itemize}
+	\item The \emph{effect} of a system is defined as
+	\item The convolutional equation tells us how the effect of a system evolved over time.
+\end{itemize}
+
+\begin{example}
+	Find the output of the system $y(n) = \frac{1}{2}x(n) + \frac{1}{2}x(n - 1)$ for the input $x(n) = \begin{cases} 1, \; \text{if} \; n = 0, 2 \\ 2, \; \text{if} \; n - 1 \\ 0, \; \text{otherwise} \end{cases}$.
+\end{example}
+
+\begin{solution}
+	From a previous question, we determined the inpulse response of this sytem to be \\ $h(n) = \begin{cases} \frac{1}{2}, \; \text{if} \; n = 0, 1 \\ 0, \; \text{otherwise} \end{cases}$. Thus, using the convolutional equation, we can see that:
+
+	\begin{align*}
+		y(n) &= \sum_{k = -\infty}^{\infty}h(n - k)x(n) \\
+		&= \sum_{k = 0}^{k = 2}h(n - k)x(k) \\
+		&= h(n)x(0) + h(n - 1)x(1) + h(n - 2)x(2) = h(n) + 2h(n - 1) + h(n - 2) \\
+	\end{align*}
+
+	Therefore, we can determine that:
+
+	\begin{center}
+		\begin{tabularx}{\linewidth/2}{c c c}
+			$y(0)$ & $= h(0) + 2h(-1) + h(-2)$ & $= \frac{1}{2}$ \\
+			$y(1)$ & $= h(1) + 2h(0) + h(-1)$ & $= \frac{3}{2}$ \\
+			$y(2)$ & $= h(2) + 2h(1) + h(0)$ & $= \frac{3}{2}$ \\
+			$y(3)$ & $= h(3) + 2h(2) + h(1)$ & $= \frac{1}{2}$ \\
+			$y(4)$ & $= h(4) + 2h(3) + h(2)$ & $= 0$ \\
+			$\vdots$ & $\vdots$ & $\vdots$ \\
+		\end{tabularx}
+	\end{center}
+\end{solution}
+
+\begin{example}
+	Use the impulse response $h(n) = \frac{1}{2}\delta(n) + \frac{1}{2}\delta(n - 1)$ to derive the system $y(n) = \frac{1}{2}x(n) + \frac{1}{2}x(n - 1)$.
+\end{example}
+
+\begin{solution}
+	Using the convolutional equation, we can find that:
+
+	\begin{align*}
+		y(n) &= \sum_{k = -\infty}^{\infty}(h(n - k)x(k)) \\
+		&= \sum_{k = -\infty}^{\infty}((\frac{1}{2}\delta(n - k) + \frac{1}{2}\delta(n - k - 1))x(k)) \\
+		&= \sum_{k = -\infty}^{\infty}(\frac{1}{2}\delta(n - k)x(k) + \frac{1}{2}\delta(n - k - 1)x(k)) \\
+		&= \frac{1}{2}\delta(0)x(n) + \frac{1}{2}\delta(0)x(n - 1) \\
+		&= \frac{1}{2}x(n) + \frac{1}{2}x(n = 1) \\
+	\end{align*}
+\end{solution}
+
+\begin{itemize}
+	\item The identity system is defined as a system where the impulse response, $h(n)$, is the Kroncker-Delta function, $\delta(n)$.
+\end{itemize}
+
+\begin{example}
+	Find the output of the system $y(n) = x(n) + \alpha{y(n - 1)}$ for the input $x(n) = 1$ using its impilse response.
+\end{example}
+
+\begin{solution}
+	From a previous example, we know that the system's impulse response is given by:
+
+	\begin{align*}
+		h(n) &= \begin{cases} \alpha^n, \; \text{if} \; n \ge 0 \\ 0, \; \text{otherwise} \end{cases}
+	\end{align*}
+
+	Therefore, using the convolutional equation, we find:
+
+	\begin{align*}
+		y(n) &= \sum_{k = -\infty}^{\infty}(h(k)x(n - k)) \\
+		&= \sum_{k = -\infty}^{\infty}(\alpha^{k}x(n - k)) \\
+		&= \sum_{k = 0}^{n}(\alpha^{k}) \\
+		&= \frac{1 - \alpha^{n - 1}}{1 - \alpha} \\
+	\end{align*}
+\end{solution}
+
+\begin{itemize}
+	\item A \emph{non-causal} system is a system whose current output depends on future inputs.
+	\begin{itemize}
+		\item Image and audio systems are often implemented as non-causal systems.
+	\end{itemize}
+\end{itemize}
+
+\end{document}
