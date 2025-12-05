@@ -1,0 +1,125 @@
+\documentclass[10pt]{article}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{mathtools}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\geometry{margin=1in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\title{SFWRENG 3MX3 - Assignment 8}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\fancyhead[R]{SFWRENG 3MX3 - Assignment 8}
+
+\setlength{\parindent}{0cm}
+
+\newcommand{\sectiontitle}{SFWRENG 3MX3 - Assignment 8}
+\setcounter{section}{1}
+
+\newcounter{exercise}
+\renewcommand{\theexercise}{\arabic{exercise}}
+
+\newenvironment{exercise}[1][]{
+	\refstepcounter{exercise}
+	\addcontentsline{toc}{section}{\protect{\large{Exercise \theexercise}}}
+	\vspace{1em}
+	\par
+	\large\textbf{Exercise \theexercise}
+	\vspace{.2cm}
+	\par
+	\setcounter{subexercise}{0}
+	\setcounter{step}{0}
+}{\vspace{.5em}}
+
+\newenvironment{solution}{
+	\vspace{1em}\par\large\textbf{{Solution:}}\par\vspace{1em}
+}{
+	\vspace{1em}
+}
+
+\newcounter{subexercise}
+\renewcommand{\thesubexercise}{\alph{subexercise}}
+
+\newenvironment{subexercise}{
+	\refstepcounter{subexercise}
+	\vspace{1em}\par\large\textbf{(\thesubexercise)}\hspace{-.5em}
+	\setcounter{step}{0}
+	\addcontentsline{toc}{subsection}{\protect{\large{\theexercise.\thesubexercise.)}}}
+}{
+	\par
+	\vspace{1em}
+}
+
+\makeatother
+
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1.5em}\par\noindent\large\textbf{(\thestep)}
+}{
+	\par
+	\vspace{1.5em}
+}
+
+\makeatother
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\arraystretch}{1.8}
+
+\fontsize{10pt}{14pt}\selectfont
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\begin{exercise}
+
+\end{exercise}
+
+\begin{subexercise}
+	Compute the transfer function of the system $y(n) = x(n) - y(n - 1) + x(n - 1)$.
+\end{subexercise}
+
+\begin{solution}
+	For a discrete system given in difference equation form $y(n) = \sum_{k = 0}^{M}\alpha_{k}x(n - k) + \sum_{k = 1}^{N}\beta_{k}y(n - k)$ its transfer function, $G(z)$, is given by $G(z) = \frac{\sum_{k = 0}^{M}\alpha_k{z^{-k}}}{1 - \sum_{k = 1}^{N}\beta_k{z^-{k}}} \hat{X}(z)$. Therefore, to find the transfer function, we must first compute $\hat{X}(z)$.
+
+	\begin{step}
+		Compute $\hat{X}(z)$.
+	\end{step}
+
+\end{solution}
+
+\begin{subexercise}
+	What is the frequency response of the system with the transfer function $G(z) = \frac{z}{.5 - z}$?
+\end{subexercise}
+
+\begin{solution}
+
+\end{solution}
+
+\end{document}
