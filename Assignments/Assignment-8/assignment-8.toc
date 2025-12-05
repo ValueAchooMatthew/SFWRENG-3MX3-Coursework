@@ -1,3 +1,7 @@
-\contentsline {section}{{\large {Exercise 1}}}{2}{exercise.1}%
-\contentsline {subsection}{{\large {1.a.)}}}{2}{subexercise.1}%
-\contentsline {subsection}{{\large {1.b.)}}}{2}{subexercise.2}%
+\contentsline {section}{{\large {Exercise 1} - The $z$-Transform}}{2}{section*.1}%
+\contentsline {subsection}{{\large {1.a.)}}}{2}{section*.2}%
+\contentsline {subsection}{{\large {1.b.)}}}{2}{section*.3}%
+\contentsline {subsection}{{\large {1.c.)}}}{3}{section*.4}%
+\contentsline {section}{{\large {Exercise 2} - The Laplace-transform}}{4}{section*.5}%
+\contentsline {section}{{\large {Exercise 3} - Block diagrams and stability}}{5}{section*.6}%
+\contentsline {section}{{\large {Exercise 4} - Filters}}{7}{section*.7}%

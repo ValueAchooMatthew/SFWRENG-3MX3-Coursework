@@ -7,7 +7,10 @@
 \usepackage{geometry}
 \usepackage{fancyhdr}
 \usepackage{titlesec}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, shapes.geometric, fit}
 \usepackage{hyperref}
+\usepackage{bookmark}
 \geometry{margin=1in}
 
 \pagestyle{fancy}
@@ -24,6 +27,13 @@
 	citecolor=blue,
 	anchorcolor=blue
 }
+\tikzset{
+	block/.style = {draw, rectangle, minimum height=1cm, minimum width=1.4cm},
+	sum/.style   = {draw, circle, inner sep=5pt},
+	gain/.style  = {draw, isosceles triangle, isosceles triangle apex angle=60,
+		minimum height=1cm, minimum width=1cm, shape border rotate=180},
+	connector/.style={thick},
+}
 
 \fancyhead{}
 \fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
@@ -39,7 +49,8 @@
 
 \newenvironment{exercise}[1][]{
 	\refstepcounter{exercise}
-	\addcontentsline{toc}{section}{\protect{\large{Exercise \theexercise}}}
+	\phantomsection
+	\addcontentsline{toc}{section}{\protect{\large{Exercise \theexercise} - #1}}
 	\vspace{1em}
 	\par
 	\large\textbf{Exercise \theexercise}
@@ -62,6 +73,7 @@
 	\refstepcounter{subexercise}
 	\vspace{1em}\par\large\textbf{(\thesubexercise)}\hspace{-.5em}
 	\setcounter{step}{0}
+	\phantomsection
 	\addcontentsline{toc}{subsection}{\protect{\large{\theexercise.\thesubexercise.)}}}
 }{
 	\par
@@ -97,8 +109,7 @@
 \tableofcontents
 \newpage
 
-\begin{exercise}
-
+\begin{exercise}[The $z$-Transform]
 \end{exercise}
 
 \begin{subexercise}
@@ -106,12 +117,32 @@
 \end{subexercise}
 
 \begin{solution}
-	For a discrete system given in difference equation form $y(n) = \sum_{k = 0}^{M}\alpha_{k}x(n - k) + \sum_{k = 1}^{N}\beta_{k}y(n - k)$ its transfer function, $G(z)$, is given by $G(z) = \frac{\sum_{k = 0}^{M}\alpha_k{z^{-k}}}{1 - \sum_{k = 1}^{N}\beta_k{z^-{k}}} \hat{X}(z)$. Therefore, to find the transfer function, we must first compute $\hat{X}(z)$.
+	The transfer function, $G(z)$ of a system is given by $G(z) = \frac{\hat{X}(z)}{\hat{Y}{z}}$. Thus, to find $G(z)$, we must find $\hat{Y}(z)$.
 
 	\begin{step}
-		Compute $\hat{X}(z)$.
+		Find $\hat{Y}(z)$.
 	\end{step}
 
+	\begin{align*}
+		y(n) &= x(n) - y(n - 1) + x(n - 1) \implies \\
+		\hat{Y}(z) &= \hat{X}(z) - z^{-1}\hat{Y}(z) + z^{-1}\hat{X}(z) \\
+		\hat{Y}(z) + z^{-1}\hat{Y}(z) &= \hat{X}(z) + z^{-1}\hat{X}(z) \\
+		\hat{Y}(z) \left( 1 + z^{-1} \right) &= \hat{X}(z) \left( 1 + z^{-1} \right) \\
+		\hat{Y}(z) &= \frac{\hat{X}(z) \left( 1 + z^{-1} \right)}{1 + z^{-1}} \\
+		\hat{Y}(z) &= \hat{X}(z)
+	\end{align*}
+
+	\begin{step}
+		Find $G(z)$.
+	\end{step}
+
+	As stated prior, $G(z)$ can be given by $\frac{\hat{Y}(z)}{\hat{X}(z)}$. Thus:
+
+	\begin{align*}
+		G(z) &= \frac{\hat{Y}(z)}{\hat{X}(z)} \\
+		&= \frac{\hat{X}(z)}{\hat{X}(z)} \\
+		&= 1
+	\end{align*}
 \end{solution}
 
 \begin{subexercise}
@@ -119,7 +150,250 @@
 \end{subexercise}
 
 \begin{solution}
+	We know that the frequency response of a system $H(\omega)$ is equivalent to $G(e^{i\omega})$. Thus:
 
+	\begin{align*}
+		H(\omega) &= G(e^{i\omega}) \\
+		&= \frac{e^{i\omega}}{.5 - e^{i\omega}} \\
+		&= \frac{1}{.5e^{-i\omega} - 1}
+	\end{align*}
+\end{solution}
+
+\begin{subexercise}
+	Is the system $y(n) = x(n) + 2y(n - 1) - x(n - 1)$ stable?
+\end{subexercise}
+
+\begin{solution}
+	To determine whether the given system is BIBO stable, we must find its corresponding transfer function, $G(z)$, and determine whether or not in the unit circle lies in it's region of convergence (\emph{ROC}).
+
+	\begin{step}
+		Find $G(z)$ for the system.
+	\end{step}
+
+	Since $G(z)$ is given by $G(z) = \frac{\hat{Y}(z)}{\hat{X}(z)}$, we need to first compute $\hat{Y}(z)$ from the difference equation as follows:
+
+	\begin{align*}
+		y(n) &= x(n) + 2y(n - 1) - x(n - 1) \implies \\
+		\hat{Y}(z) &= \hat{X}(z) + 2z^{-1}\hat{Y}(z) - z^{-1}\hat{X}(z) \\
+		\hat{Y}(z) - 2z^{-1}\hat{Y}(z) &= \hat{X}(z) - z^{-1}\hat{X}(z) \\
+		\hat{Y}(z) \left( 1 - 2z^{-1} \right) &= \hat{X}(z) \left(1 - z^{-1} \right) \\
+		\hat{Y}(z) &= \frac{\hat{X}(z) \left( 1 - z^{-1} \right)}{1 - 2z^{-1}} \\
+	\end{align*}
+
+	Thus, we can conclude that:
+
+	\begin{align*}
+		G(z) &= \frac{\hat{Y}(z)}{\hat{X}(z)} \\
+		&= \frac{\frac{\hat{X}(z) \left( 1 - z^{-1} \right)}{1 - 2z^{-1}}}{\hat{X}(z)} \\
+		&= \frac{1 - z^{-1}}{1 - 2z^{-1}} \\
+	\end{align*}
+
+	\begin{step}
+		Determine BIBO stability.
+	\end{step}
+
+	We know that the system is BIBO stable if the unit circle is contained within the region of convergence of the transfer function, and in turn, we can determine what the region of convergence of the transfer function is by examining its zeros and poles. \\
+
+	We know that $G(z)$ has a zero when $1 - z^{-1} = 0$. Thus:
+
+	\begin{align*}
+		1 - z^{-1} &= 0 \implies \\
+		z - 1 &= 0 \implies \\
+		z &= 1 \\
+	\end{align*}
+
+	Thus, the transfer function has a zero when $z = 1$. \\
+
+	Similarly, we know that $G(z)$ has a pole when $1 - z^{-1} = 0$. Thus:
+
+	\begin{align*}
+		1 - 2z^{-1} &= 0 \implies \\
+		z - 2 &= 0 \implies \\
+		z &= 2 \\
+	\end{align*}
+
+	Thus, the transfer function has a pole when $z = 2$. Since $z = 2$ lies outside our unit circle, and such a pole is not cancelled out by any zeros, the system is NOT BIBO stable.
+\end{solution}
+
+\begin{exercise}[The Laplace-transform]
+	Determine if the system given by $\ddot{y} - 2\dot{y} + y(t) = x(t)$ is stable.
+\end{exercise}
+
+\begin{solution}
+	As in the previous exercise, to determine whether the given system is BIBO stable, we must first find the transfer function $G(s)$ corresponding to the system and then examine its region of convergence.
+
+	\begin{step}
+		Find $G(s)$ for the system.
+	\end{step}
+
+	Since $G(s)$ is given by $G(s) = \frac{\hat{Y}(s)}{\hat{X}(s)}$, we need to first compute $\hat{Y}(s)$ from the difference equation as follows:
+
+	\begin{align*}
+		\ddot{y} - 2\dot{y} + y(t) &= x(t) \implies \\
+		s^{-2}\hat{Y}(s) - 2s^{-1}\hat{Y}(s) + \hat{Y}(s) &= \hat{X}(s) \\
+		\hat{Y}(s) \left( s^{-2} - 2s^{-1} + 1 \right) &= \hat{X}(s) \\
+		\hat{Y}(s) &= \frac{\hat{X}(s)}{s^{-2} - 2s^{-1} + 1} \\
+	\end{align*}
+
+	Thus, we can conclude that:
+
+	\begin{align*}
+		\hat{G}(s) &= \frac{\frac{\hat{X}(s)}{s^{-2} - 2s^{-1} + 1}}{\hat{X}(s)} \\
+		&= \frac{1}{s^{-2} - 2s^{-1} + 1} \\
+	\end{align*}
+
+	\begin{step}
+		Determine BIBO stability.
+	\end{step}
+
+	We know that the system is BIBO stable if all poles are on the left plane of the $\sigma \textendash i\omega$ axes. Thus, we must find the poles and zeros associated with the transfer function. \\
+
+	We know that $G(s)$ has no zeros, since the numerator is a non-zero constant. However, we know $G(s)$ has a pole when $s^{-2} - 2s^{-1} + 1 = 0$. Thus:
+
+	\begin{align*}
+		s^{-2} - 2s^{-1} + 1 &= 0 \implies \\
+		s^2 - 2s + 1 &= 0 \implies \\
+		\left( s - 1 \right)^2 &= 0 \\
+	\end{align*}
+
+	Thus the transfer function has two poles at $s = 1$. Therefore, since $s = 1 > 0$, and there exist no zeros to cancel out such a pole, the system is NOT BIBO stable.
+\end{solution}
+
+\begin{exercise}[Block diagrams and stability]
+	For which values of the real paramater $\alpha$ is the following system stable?
+
+	\begin{center}
+		\begin{tikzpicture}
+			\node[sum] (sum1) {$+$};
+			\node[sum, right=6cm of sum1] (sum2) {$+$};
+			\node[gain, above right=1.5cm and 2cm of sum1, shape border rotate=0] (g1) {0.5};
+			\node[block, right=1cm of g1] (s1) {$s$};
+			
+			\node[block, below left= 1.5cm and 1cm of sum2] (s2) {$\frac{1}{s}$};
+			\node[gain, left=1cm of s2] (g2) {$\alpha$};
+			
+			\draw[connector] (sum1) -- (sum2);
+			\draw[connector] ($(sum1) + (1.0cm,0)$) |- (g1);
+			\draw[connector] (g1) -- (s1);
+			\draw[connector] (s1) -| (sum2);
+			
+			\draw[connector] (sum1) |- (g2);
+			\draw[connector] (g2) -- (s2);
+			\draw[connector] ($(sum2) + (1cm, 0)$) |- (s2);
+			
+			\draw[connector] (sum1) -- ++(-3cm,0);
+			\draw[connector] (sum2) -- ++(3cm,0);
+		\end{tikzpicture}
+	\end{center}
+\end{exercise}
+
+\begin{solution}
+	\emph{Note: This may not be 1000\% correct} \\\\\
+	To begin, we first find the transfer function, $G_1(s)$ for the part of the diagram indicated below:
+
+	\begin{center}
+		\begin{tikzpicture}
+			\node[sum] (sum1) {$+$};
+			\node[sum, right=6cm of sum1] (sum2) {$+$};
+			\node[gain, above right=1.5cm and 2cm of sum1, shape border rotate=0] (g1) {0.5};
+			\node[block, right=1cm of g1] (s1) {$s$};
+			
+			\node[block, below left= 1.5cm and 1cm of sum2] (s2) {$\frac{1}{s}$};
+			\node[gain, left=1cm of s2] (g2) {$\alpha$};
+			
+			\draw[connector] (sum1) -- (sum2);
+			\draw[connector] ($(sum1) + (1.0cm,0)$) |- (g1);
+			\draw[connector] (g1) -- (s1);
+			\draw[connector] (s1) -| (sum2);
+			
+			\draw[connector] (sum1) |- (g2);
+			\draw[connector] (g2) -- (s2);
+			\draw[connector] ($(sum2) + (1cm, 0)$) |- (s2);
+			
+			\draw[connector] (sum1) -- ++(-3cm,0);
+			\draw[connector] (sum2) -- ++(3cm,0);
+	
+			\node[draw, inner xsep = 1.5cm, inner ysep = 2.5cm, fit = (g1) (s1), label = $G_1(s)$] {};
+		\end{tikzpicture}
+	\end{center}
+
+	\begin{align*}
+		G_1(s) = 1 + \frac{1}{2}s \\
+	\end{align*}
+
+	Therefore, we can simplify our diagram to look like:
+
+	\begin{center}
+		\begin{tikzpicture}
+			\node[sum] (sum1) {$+$};
+			\node[block, right=3cm of sum1] (G1) {$G_1(s)$};
+			
+			\node[block, below right = 2cm and 5cm of sum1] (s2) {$\frac{1}{s}$};
+			\node[gain, left=2.5cm of s2] (g2) {$\alpha$};
+			
+			\draw[connector] (sum1) -- (G1);
+			
+			\draw[connector] (sum1) |- (g2);
+			\draw[connector] (g2) -- (s2);
+			\draw[connector] ($(G1) + (4cm, 0)$) |- (s2);
+			
+			\draw[connector] (sum1) -- ++(-3cm,0);
+			\draw[connector] (G1) -- ++(6cm,0);
+		\end{tikzpicture}
+	\end{center}
+
+	Thus, the system is now a simple feedback loop. Therefore, transfer function of the system can be given by:
+
+	\begin{align*}
+		G(s) &= \frac{G_1(s)}{1 - \alpha{\frac{1}{s}}G_1(s)} \\
+		&= \frac{1 + \frac{1}{2}s}{1 - \alpha\frac{1}{s}\left(1 + \frac{1}{2}s\right)} \\
+		&= \frac{1 + \frac{1}{2}s}{1 - \alpha\left(\frac{1}{s} + \frac{1}{2} \right)} \\
+	\end{align*}
+
+	For the system to be BIBO stable, we need to ensure that its poles reside on the left plane of the $\sigma \textendash i\omega$ axes. Thus, we find that:
+
+	\begin{align*}
+		1 - \alpha\left( \frac{1}{s} + \frac{1}{2} \right) &< 0 \\
+		\alpha\left( \frac{1}{s} + \frac{1}{2} \right) &> 1 \\
+		\alpha > \; &\frac{1}{\frac{1}{s} + \frac{1}{2}} \\
+	\end{align*}
+\end{solution}
+
+\begin{exercise}[Filters]
+	Consider a discrete filter which takes an input, delays it by 2 samples, multiplies it by .5, then adds it to the current input resulting in the output. Show that the system is BIBO.
+\end{exercise}
+
+\begin{solution}
+	Trivially, the difference equation for such a filter can be given by $y(n) = \frac{1}{2}x(n - 2) + x(n)$. We can also very directly see that since the system is BIBO stable, since it is an LTI system, but for the purposes of being thorough, I will proceed to prove it using its transfer function. First, we need to find $\hat{Y}(z)$ for the system.
+
+	\begin{step}
+		Find $\hat{Y}(z)$ for the system.
+	\end{step}
+
+	\begin{align*}
+		y(n) &= \frac{1}{2}x(n - 2) + x(n) \implies \\
+		\hat{Y}(z) &= \frac{1}{2}z^{-2}\hat{X}(z) + \hat{X}(z) \\
+		\hat{Y}(z) &= \hat{X}(z) \left( \frac{1}{2}z^{-2} + 1 \right) \\
+	\end{align*}
+
+	\begin{step}
+		Find $G(z)$ for the system.
+	\end{step}
+
+	Using our prior findings about $\hat{Y}(z)$ for the system, we can conclude its transfer function is given by:
+
+	\begin{align*}
+		G(z) &= \frac{\hat{Y}(z)}{\hat{X}(z)} \\
+		&= \frac{\hat{X}(z) \left( \frac{1}{2}z^{-1} + 1 \right)}{\hat{X}(z)} \\
+		&= \frac{\frac{1}{2}z^{-1} + 1}{1} \\
+		&= \frac{\frac{1}{2} + z}{z}
+	\end{align*}
+
+	\begin{step}
+		Determine BIBO stability.
+	\end{step}
+
+	Therefore, since the only pole for the transfer function can trivially be seen to be when $z = 0$, the unit circle is included in the region of convergence of $G(z)$. Thus, the system is BIBO stable
 \end{solution}
 
 \end{document}
