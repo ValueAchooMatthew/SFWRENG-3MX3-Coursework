@@ -1,4 +1,4 @@
 \contentsline {section}{{\large {Problem 1$\tmspace +\thickmuskip {.2777em}$ \emph {(Impulse to Frequency Response)}}}}{2}{problem.1}%
 \contentsline {section}{{\large {Problem 2$\tmspace +\thickmuskip {.2777em}$ \emph {(The Step Response)}}}}{3}{problem.2}%
-\contentsline {section}{{\large {Problem 3$\tmspace +\thickmuskip {.2777em}$ \emph {(Filter Design)}}}}{4}{problem.3}%
-\contentsline {section}{{\large {Problem 4$\tmspace +\thickmuskip {.2777em}$ \emph {(Filtering Signals)}}}}{5}{problem.4}%
+\contentsline {section}{{\large {Problem 3$\tmspace +\thickmuskip {.2777em}$ \emph {(Filter Design)}}}}{5}{problem.3}%
+\contentsline {section}{{\large {Problem 4$\tmspace +\thickmuskip {.2777em}$ \emph {(Filtering Signals)}}}}{6}{problem.4}%
