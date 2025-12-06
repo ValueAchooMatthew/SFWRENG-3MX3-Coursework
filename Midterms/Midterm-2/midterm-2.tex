@@ -1,0 +1,538 @@
+\documentclass[10pt]{article}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{mathtools}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, shapes.geometric, fit}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\geometry{margin=1in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\title{SFWRENG 3MX3 2025 Midterm 2 Solutions}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\tikzset{
+	block/.style = {draw, rectangle, minimum height=1cm, minimum width=1.4cm},
+	sum/.style   = {draw, circle, inner sep=5pt},
+	gain/.style  = {draw, isosceles triangle, isosceles triangle apex angle=60,
+		minimum height=1cm, minimum width=1cm, shape border rotate=180},
+	connector/.style={thick},
+}
+
+\DeclareMathOperator{\sinc}{sinc}
+
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\fancyhead[R]{SFWRENG 3MX3 2025 Midterm 2 Solutions}
+
+\setlength{\parindent}{0cm}
+
+\newcounter{question}
+\renewcommand{\thequestion}{\arabic{question}}
+
+\newenvironment{question}[1][]{
+	\newpage
+	\refstepcounter{question}
+	\phantomsection
+	\addcontentsline{toc}{section}{\protect{\large{Question \thequestion} - #1}}
+	\vspace{1em}
+	\par
+	\large\textbf{Question \thequestion}
+	\vspace{.2cm}
+	\par
+	\setcounter{subquestion}{0}
+	\setcounter{step}{0}
+}{\vspace{.5em}}
+
+\newenvironment{solution}{
+	\vspace{1em}\par\large\textbf{{Solution:}}\par\vspace{1em}
+}{
+	\vspace{1em}
+}
+
+\newcounter{subquestion}
+\renewcommand{\thesubquestion}{\alph{subquestion}}
+
+\newenvironment{subquestion}{
+	\refstepcounter{subquestion}
+	\vspace{1em}\par\large\textbf{(\thesubquestion)}\hspace{-.5em}
+	\setcounter{step}{0}
+	\phantomsection
+	\addcontentsline{toc}{subsection}{\protect{\large{\thequestion.\thesubquestion}}}
+}{
+	\par
+	\vspace{1em}
+}
+
+\makeatother
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1.5em}\par\noindent\large\textbf{(\thestep)}
+}{
+	\par
+	\vspace{1.5em}
+}
+
+\makeatother
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\arraystretch}{1.8}
+
+\fontsize{10pt}{14pt}\selectfont
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\begin{question}[Block Diagrams]
+	Given the following block diagram of a discrete system, find its frequency response.
+
+	\begin{center}
+		\begin{tikzpicture}
+			\node[sum] (sum1) {$+$};
+			\node[sum, right = 2cm of sum1] (sum2) {$+$};
+			\node[sum, right = 4cm of sum2] (sum3) {$+$};
+
+			\node[gain, above left = 1.5cm and .5cm of sum1, shape border rotate = 0] (g1) {$.1$};
+			\node[gain, right = 1.5cm of sum2, shape border rotate = 0] (g2) {$.3$};
+			\node[gain, below right = 1.5cm and .5cm of sum2] (g3) {$.5$};
+			\node[gain, below right = 4cm and 1cm of sum2, shape border rotate = 0] (g4) {$.2$};
+
+			\node[block, below right = 1.3cm and 2cm of sum2] (d1) {$D$};
+			\node[block, below = 3.625cm of sum2] (d2) {$D$};
+
+			\draw[connector] (sum1) -- (sum2);
+			\draw[connector] (sum2) -- (g2);
+			\draw[connector] (g2) -- (sum3);
+
+			\draw[connector] ($(sum3) - (1cm, 0)$) |- (d1);
+			\draw[connector] (d1) -- (g3);
+			\draw[connector] (g3) -| (sum2);
+
+			\draw[connector] ($(sum1) - (2cm, 0)$) |- (d2);
+			\draw[connector] (d2) -- (g4);
+			\draw[connector] (g4) -| (sum3);
+
+			\draw[connector] ($(sum1) - (2cm, 0)$) |- (g1);
+			\draw[connector] (g1) -| (sum1);
+
+			\draw[connector] (sum1) -- ++(-3cm,0);
+			\draw[connector] (sum3) -- ++(3cm,0);
+		\end{tikzpicture}
+	\end{center}
+\end{question}
+
+\begin{solution}
+	First, we simplify the block diagram by computing the frequency response, $H(\omega)$, of the indicated portion of the block diagram:
+
+	\begin{center}
+		\begin{tikzpicture}
+			\node[sum] (sum1) {$+$};
+			\node[sum, right = 2cm of sum1] (sum2) {$+$};
+			\node[sum, right = 4cm of sum2] (sum3) {$+$};
+
+			\node[gain, above left = 1.5cm and .5cm of sum1, shape border rotate = 0] (g1) {$.1$};
+			\node[gain, right = 1.5cm of sum2, shape border rotate = 0] (g2) {$.3$};
+			\node[gain, below right = 1.5cm and .5cm of sum2] (g3) {$.5$};
+			\node[gain, below right = 4cm and 1cm of sum2, shape border rotate = 0] (g4) {$.2$};
+
+			\node[block, below right = 1.3cm and 2cm of sum2] (d1) {$D$};
+			\node[block, below = 3.625cm of sum2] (d2) {$D$};
+
+			\draw[connector] (sum1) -- (sum2);
+			\draw[connector] (sum2) -- (g2);
+			\draw[connector] (g2) -- (sum3);
+
+			\draw[connector] ($(sum3) - (1cm, 0)$) |- (d1);
+			\draw[connector] (d1) -- (g3);
+			\draw[connector] (g3) -| (sum2);
+
+			\draw[connector] ($(sum1) - (2cm, 0)$) |- (d2);
+			\draw[connector] (d2) -- (g4);
+			\draw[connector] (g4) -| (sum3);
+
+			\draw[connector] ($(sum1) - (2cm, 0)$) |- (g1);
+			\draw[connector] (g1) -| (sum1);
+
+			\draw[connector] (sum1) -- ++(-3cm,0);
+			\draw[connector] (sum3) -- ++(3cm,0);
+
+			\node[draw, inner xsep = .5cm, fit = (sum2) (d1) (g3) (g2), label = $H_1(\omega)$] {};
+		\end{tikzpicture}
+	\end{center}
+
+	Since this is a simple feedback loop, we can determine that:
+
+	\begin{align*}
+		H_1(\omega) &= \frac{\frac{3}{10}}{1 - \left( \frac{3}{10} \right)\left(\frac{1}{2} \right)e^{-i\omega}} \\
+		&= \frac{3}{10 - \frac{3}{2}e^{-i\omega}} \\
+	\end{align*}
+
+	Note here that the delay of one sample corresponds to $e^{-i\omega}$.
+
+	We can now see that the block diagram has been simplified down to the following, once again, I have indicated the next part of the diagram to simplify:
+
+	\begin{center}
+		\begin{tikzpicture}
+			\node[sum] (sum1) {$+$};
+			\node[sum, right = 6cm of sum1] (sum3) {$+$};
+
+			\node[gain, above left = 1.5cm and .5cm of sum1, shape border rotate = 0] (g1) {$.1$};
+			\node[gain, below right = 4cm and 3cm of sum1, shape border rotate = 0] (g4) {$.2$};
+
+			\node[block, right = 3cm of sum1] (H1) {$H_1(\omega)$};
+			\node[block, below right = 3.79cm and 1cm of sum1] (d2) {$D$};
+
+			\draw[connector] (sum1) -- (H1);
+			\draw[connector] (H1) -- (sum3);
+
+			\draw[connector] ($(sum1) - (2cm, 0)$) |- (d2);
+			\draw[connector] (d2) -- (g4);
+			\draw[connector] (g4) -| (sum3);
+
+			\draw[connector] ($(sum1) - (2cm, 0)$) |- (g1);
+			\draw[connector] (g1) -| (sum1);
+
+			\draw[connector] (sum1) -- ++(-3cm,0);
+			\draw[connector] (sum3) -- ++(3cm,0);
+
+			\node[draw, inner xsep = 1cm, inner ysep = .5cm, fit = (sum1) (g1), label = $H_2(\omega)$] {};
+		\end{tikzpicture}
+	\end{center}
+
+	\begin{align*}
+		H_2(\omega) &= \frac{1}{10} + 1 \\
+		&= \frac{11}{10} \\
+	\end{align*}
+
+	And we continue on in the same manner as before, giving us the frequency response of the entire system.
+
+	\begin{center}
+		\begin{tikzpicture}
+			\node[sum, right = 6cm of sum1] (sum3) {$+$};
+
+			\node[block, right = 3cm of sum1] (H1) {$H_1(\omega)$};
+			\node[block] (H2) {$H_2(\omega)$};
+
+			\node[gain, below right = 4cm and 3cm of H2, shape border rotate = 0] (g4) {$.2$};
+
+			\node[block, below right = 3.79cm and 1cm of H2] (d2) {$D$};
+
+			\draw[connector] (H1) -- (H2);
+			\draw[connector] (H1) -- (sum3);
+
+			\draw[connector] ($(sum1) - (2cm, 0)$) |- (d2);
+			\draw[connector] (d2) -- (g4);
+			\draw[connector] (g4) -| (sum3);
+
+			\draw[connector] (H2) -- ++(-3cm,0);
+			\draw[connector] (sum3) -- ++(3cm,0);
+
+			\node[draw, inner xsep = 2cm, inner ysep = .5cm, fit = (sum3) (g4) (H1) (H2) (d2), label = $H(\omega)$] {};
+		\end{tikzpicture}
+	\end{center}
+
+	\begin{align*}
+		H(\omega) &= H_1(\omega)H_2(\omega) + \frac{1}{5}e^{-i\omega} \\
+		&= \frac{3}{10 - \frac{3}{2}e^{-i\omega}} \cdot \frac{11}{10} + \frac{1}{5}e^{-i\omega} \\
+		&= \frac{33}{100 - 15e^{-i\omega}} + \frac{1}{5}e^{-i\omega}
+	\end{align*}
+\end{solution}
+
+\begin{question}[The Fourier Transform]
+	Given is a filter by its impulse response: 
+
+	\begin{align*}
+		h(t) &=
+		\begin{cases}
+			1, \; \text{if} \; -1 \le t \le 0 \\
+			-1, \; \text{if} \; 1 \le t \le 2 \\
+			0, \; \text{otherwise}
+		\end{cases} \\
+	\end{align*}
+
+	Compute the frequency response, $H(\omega)$ of the system.
+\end{question}
+
+\begin{solution}
+	We know that the frequency response
+
+	\begin{align*}
+		H_0(\omega) &=
+		\begin{cases}
+			\frac{1}{2a}, \; \text{if} \; -1 \le t \le a \\
+			0, \; \text{otherwise}
+		\end{cases} \\
+	\end{align*}
+
+	corresponds to a signal whose impulse response is given by $\sinc(a\omega)$. Thus, by considering manipulations of $H_0(\omega)$, we can find the frequency response of the system without having to directly compute it.
+
+	\begin{step}
+		Find the frequency response for $-1 \le t \le 0$.
+	\end{step}
+
+	If we set $a = \frac{1}{2}$, and advance the impulse response by half a second, we would get an impulse response corresponding to $h(t) = \begin{cases} 1, \; \text{if} \; -1 \le t \le 0 \\ 0, \; \text{otherwise} \end{cases}$, thus giving that:
+
+	\begin{align*}
+		H_2(\omega) &= \sinc \left( \frac{1}{2}\omega \right)e^{\frac{1}{2}i\omega} \\
+	\end{align*}
+
+	\begin{step}
+		Find the frequency response for $-1 \le t \le 2$.
+	\end{step}
+
+	Similarly, if we select $a = \frac{1}{2}$, delay the impulse response by 3 and a half seconds, and then scale by a factor of $-1$, we get the impulse response corresponding to $h(t) = \begin{cases} -1, \; \text{if} \; 1 \le t \le 2 \\ 0, \; \text{otherwise} \end{cases}$, thus giving that:
+
+	\begin{align*}
+		H_3(\omega) &= -\sinc \left( \frac{1}{2}\omega \right)e^{-\frac{3}{2}i\omega} \\
+	\end{align*}
+
+	\begin{step}
+		Find the frequency response of the system.
+	\end{step}
+
+	Thus, putting $H_1(\omega)$ and $H_2(\omega)$ together, we find that:
+
+	\begin{align*}
+		H(\omega) &= H_1(\omega) + H_2(\omega) \\
+		&= \sinc \left( \frac{1}{2}\omega \right)e^{\frac{1}{2}i\omega} - \sinc \left( \frac{1}{2}\omega \right)e^{-\frac{3}{2}i\omega}
+	\end{align*}
+\end{solution}
+
+\begin{question}[Short Answer Questions]
+	Answer the following questions:
+\end{question}
+
+\begin{subquestion}
+	Compute the period of the signal given by $x(n) = \cos \left( \frac{5\pi}{4}n \right)$
+\end{subquestion}
+
+\begin{solution}
+	The period, $P$ of $x(n)$ is the smallest value such that $\frac{5\pi}{4}P$ is a multiple of $2\pi$ where $P \in \mathbb{N}$. Thus, $P = 8$.
+\end{solution}
+
+\begin{subquestion}
+	Compute the Fourier series coefficients ($X_k$) of the signal given by $x(t) = 3 + 2\cos(t) + \sin(3t)$.
+\end{subquestion}
+
+\begin{solution}
+	By correlating the complex exponential expansion of each term in the signal, we arrive at the following Fourier series coefficients:
+
+	\begin{align*}
+		X_{-3} = \frac{-1}{2i} \quad & \quad X_{3} = \frac{1}{2i} \\
+		X_{-2} = 0 \quad & \quad X_{2} = 0 \\
+		X_{-1} = 1 \quad & \quad X_{1} = 1 \\
+		X_0 &= 3 \\
+	\end{align*}
+
+	Note here that no signal has a frequency of $3$, so $X_{-2} = X_{2} = 0$.
+\end{solution}
+
+\begin{subquestion}
+	How fast must one sample to observe something occurring at a frequency of 10Hz?
+\end{subquestion}
+
+\begin{solution}
+	The sampling frequency must be \underline{strictly} greater than twice the frequency of what we wish to observe. Thus, we must sample at a rate of $>20$Hz.
+\end{solution}
+
+\begin{subquestion}
+	Compute the discrete Fourier transform of the signal $x(n) = \delta(n)$.
+\end{subquestion}
+
+\begin{solution}
+	The formula for the discrete Fourier transform is given by:
+
+	\begin{align*}
+		X_k &= \sum_{n = 0}^{N - 1}x(n)e^{-i\omega_0{n}{k}} \\
+	\end{align*}
+
+	Therefore, we find that:
+
+	\begin{align*}
+		X_k &= \sum_{n = 0}^{N - 1}x(n)e^{-i\omega_0{n}{k}} \\
+		&= \sum_{n = 0}^{N - 1}\delta(n)e^{-i\omega_0{n}{k}} \\
+		&= \delta(0)e^{-i\omega_0{0}{k}} \\
+		&= e^{0} \\
+		&= 1
+	\end{align*}
+\end{solution}
+
+\begin{question}[Modulation]
+	Given the signal $y(t) = x(t)\cos \left( \omega_c{t} \right)$. Given that the Fourier transform of $x(t)$ is $X(\omega)$, compute $Y(\omega)$.
+\end{question}
+
+\begin{solution}
+	Note that multiplication in the time domain corresponds to convolution in the frequency domain. Thus, to find $y(t)$, we must find the frequency response of $\cos(\omega_c{t})$ and convolute that with $X(\omega)$. Let $H(\omega)$ be the Fourier transform of $\cos(\omega_{c}{t})$
+
+	\begin{step}
+		Compute $H(\omega)$.
+	\end{step}
+
+	To find $H(\omega)$, we must compute the continuous Fourier transform of $\cos \left( \omega_{c}{t} \right)$.
+
+	\begin{align*}
+		H(\omega) &= \int_{-\infty}^{\infty}\cos \left( \omega_{c}{t} \right)e^{-i\omega{t}}dt \\
+		&= \frac{1}{2}\int_{-\infty}^{\infty} \left( e^{i\omega_{c}t} + e^{-i\omega_{c}t} \right)e^{-i\omega{t}}dt \\
+		&= \frac{1}{2}\int_{-\infty}^{\infty} e^{it\omega(\omega_c - \omega)} + e^{-it(-\omega_c - \omega)}dt \\
+	\end{align*}
+
+	Now, using the fact that $\int_{-\infty}{\infty}e^{i\alpha{t}}dt = 2\pi\delta(a)$, we can conclude that:
+
+	\begin{align*}
+		H(\omega) &= \frac{1}{2}\left(2\pi \left( \delta(\omega_c - \omega) + \delta(\omega_c + \omega) \right) \right) \\
+		&= \pi \left( \delta(\omega_c - \omega) + \delta(\omega_c + \omega) \right) \\
+	\end{align*}
+
+	\begin{step}
+		Compute $Y(\omega)$.
+	\end{step}
+
+	As said earlier, since $y(t) = x(n)\cos(\omega_{c}t)$ and $X(\omega)$ and $H(\omega)$ are the frequency responses of $x(n)$ and $\cos(\omega_{c}{t})$ respectively, we know that $Y(\omega) = X(\omega) \ast H(\omega)$. Thus:
+
+	\begin{align*}
+		Y(\omega) &= \int_{-\infty}^{\infty}X(\Omega)H(\omega - \Omega)d\Omega \\
+		&= \pi \int_{-\infty}^{\infty}X(\Omega)\left( \delta(\omega_{c} - (\omega - \Omega)) + \delta(\omega_{c} + (\omega - \Omega)) \right)d\Omega \\
+		&= \pi \int_{-\infty}^{\infty}X(\Omega)\left( \delta(\omega_{c} - \omega + \Omega) + \delta(\omega_{c} + \omega - \Omega) \right)d\Omega \\
+		&= \pi \left( X(\omega - \omega_{c}) + X(\omega + \omega_{c}) \right) \\
+	\end{align*}
+\end{solution}
+
+\begin{question}[Filters]
+\end{question}
+
+\begin{subquestion}
+	Compute the frequency response of a filter given by the difference equation:
+
+	\begin{align*}
+		\ddot{y} + 2\omega_{0}\dot{y} + {\omega_0}^2y &= x
+	\end{align*}
+\end{subquestion}
+
+\begin{solution}
+	We know that the frequency response, $H(\omega)$, of the system is given by $y(t) = H(\omega)e^{i\omega{t}}$ when the input to the filter is given by $x(t) = e^{i\omega{t}}$. Thus, differentiating, we find that:
+
+	\begin{align*}
+		\dot{y}(t) &= {i\omega}H(\omega){e^{i\omega{t}}} \\\\
+		\ddot{y}(t) &= \left( i\omega \right)^2H(\omega){e^{i\omega{t}}} \\
+		&= -\omega^2H(\omega) e^{i\omega{t}} \\
+	\end{align*}
+
+	Thus, by substituting, we find that:
+
+	\begin{gather*}
+		\ddot{y} + 2\omega_{0}\dot{y} + {\omega_0}^2y = x \implies \\[6pt]
+		-\omega^2H(\omega)e^{i\omega{t}} + 2\omega_0{i\omega}H(\omega)e^{i\omega{t}} + {\omega_0}^2H(\omega)e^{i\omega{t}} = e^{i\omega{t}} \\[6pt]
+		-\omega^2H(\omega) + 2\omega_0{i\omega}H(\omega) + {\omega_0}^2H(\omega) = 1 \\[6pt]
+		H(\omega)\left( -\omega^2 + 2i\omega_0\omega + {\omega_0}^2 \right) = 1 \\[6pt]
+		H(\omega) = \frac{1}{-\omega^2 + 2i\omega_0\omega + {\omega_0}^2}
+	\end{gather*}
+\end{solution}
+
+\begin{subquestion}
+	Design a minimum order, discrete filter that removes DC and passes the highest possible frequency with a gain of 1.
+\end{subquestion}
+
+\begin{solution}
+
+	\begin{step}
+		Construct a prototype filter.
+	\end{step}
+
+	Let $\tilde{H}(\omega)$ be the prototype filter which we will use to construct our final filter. We know that $\tilde{H}(0) = 0$ and $|H(\pi)| = 1$, since DC corresponds to a frequency of 0 and the highest possible discrete frequency is $\pi$. Thus, we find that:
+
+	\begin{align*}
+		\tilde{H}(\omega) &= \left( 1 - e^{-i\omega} \right) \\
+	\end{align*}
+
+	Substituting in $\omega = \pi$:
+
+	\begin{align*}
+		|H(\pi)| &= |1 - e^{-i\pi}| \\
+		&= |1 - (-1)| \\
+		&= |2| \\
+		&= 2
+	\end{align*}
+
+	\begin{step}
+		Construct the final filter.
+	\end{step}
+
+	Thus, normalizing our prototype filter by multiplying it by a factor of $\frac{1}{2}$, we get our final filter, $H(\omega)$, satisfying $|H(\pi)| = 1$. Thus:
+
+	\begin{align*}
+		H(\omega) &= \frac{1}{2}\left(1 - e^{-i\omega} \right) \\
+	\end{align*}
+
+	\begin{step}
+		Find the difference equation of the filter.
+	\end{step}
+
+	Multiplying both sides of our final filter by $e^{i\omega{n}}$, and recognizing that $y(n) = H(\omega)e^{i\omega{n}}$ when $e^{i\omega{n}}$, we find the difference equation of the system to be:
+
+	\begin{gather*}
+		H(\omega) = \frac{1}{2}\left( 1 - e^{-i\omega} \right) \implies \\[6pt]
+		H(\omega)e^{i\omega{n}} = \frac{1}{2}\left(e^{i\omega{n}} - e^{-i\omega}e^{i{\omega}{n}} \right) \\[6pt]
+		y(n) = \frac{1}{2}x(n) - \frac{1}{2}x(n - 1)
+	\end{gather*}
+\end{solution}
+
+\begin{question}[The Discrete Fourier Transform]
+	Compute the discrete Fourier transform of the signal $x(n) = \delta(n) - \delta(n - 2)$ using $N = 4$.
+\end{question}
+
+\begin{solution}
+	First, since $N = 4$, we can find that $\omega_0 = \frac{2\pi}{4} = \frac{\pi}{2}$
+
+	The discrete Fourier transform is given by the formula:
+
+	\begin{align*}
+		X_k &= \sum_{n = 0}^{N - 1}x(n)e^{-i\omega_0{n}{k}} \\
+	\end{align*}
+
+	Thus, substituting in for $x(n)$ and $N$, we can simplify a little bit before computing the coefficients to help make things a little easier and less confusing.
+
+	\begin{align*}
+		X_k &= \sum_{n = 0}^{N - 1}x(n)e^{-i\omega_0{n}{k}} \\
+		&= \sum_{n = 0}^{3}\left( \delta(n) - \delta(n - 2) \right)e^{-i\frac{\pi}{2}{n}{k}} \\
+		&= \sum_{n = 0}^{3}\delta(n)e^{-i\frac{\pi}{2}{n}{k}} - \sum_{n = 0}^{3}\delta(n - 2)e^{-i\frac{\pi}{2}{n}{k}} \\
+		&= 1 - e^{-2i\frac{\pi}{2}{k}} \\
+	\end{align*}
+
+	Now, we can see that:
+
+	\begin{alignat*}{3}
+		X_0 &= 1 - e^{-2i\frac{\pi}{2}(0)} &&= 1 \; \; - \; \; 1 &= 0 \\
+		X_1 &= 1 - e^{-2i\frac{\pi}{2}(1)} &&= 1 - (-1) \; &= 2 \\
+		X_2 &= 1 - e^{-2i\frac{\pi}{2}(2)} &&= 1  \; \; - \; \; 1 &= 0 \\
+		X_3 &= 1 - e^{-2i\frac{\pi}{2}(3)} &&= 1 - (-1) \; &= 2 \\
+	\end{alignat*}
+\end{solution}
+
+
+\end{document}

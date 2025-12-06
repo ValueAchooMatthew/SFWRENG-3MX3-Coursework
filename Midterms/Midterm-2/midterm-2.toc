@@ -1,0 +1,12 @@
+\contentsline {section}{{\large {Question 1} - Block Diagrams}}{2}{section*.1}%
+\contentsline {section}{{\large {Question 2} - The Fourier Transform}}{5}{section*.2}%
+\contentsline {section}{{\large {Question 3} - Short Answer Questions}}{7}{section*.3}%
+\contentsline {subsection}{{\large {3.a}}}{7}{section*.4}%
+\contentsline {subsection}{{\large {3.b}}}{7}{section*.5}%
+\contentsline {subsection}{{\large {3.c}}}{7}{section*.6}%
+\contentsline {subsection}{{\large {3.d}}}{7}{section*.7}%
+\contentsline {section}{{\large {Question 4} - Modulation}}{9}{section*.8}%
+\contentsline {section}{{\large {Question 5} - Filters}}{11}{section*.9}%
+\contentsline {subsection}{{\large {5.a}}}{11}{section*.10}%
+\contentsline {subsection}{{\large {5.b}}}{11}{section*.11}%
+\contentsline {section}{{\large {Question 6} - The Discrete Fourier Transform}}{13}{section*.12}%
