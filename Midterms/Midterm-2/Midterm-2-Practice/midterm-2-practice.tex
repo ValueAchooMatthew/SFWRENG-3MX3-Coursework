@@ -1,0 +1,317 @@
+\documentclass{article}
+\usepackage{enumitem}
+\usepackage{etoolbox}
+\usepackage{bm}
+\usepackage{diagbox}
+\usepackage{mathtools}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{listings}
+\lstset{breaklines=true}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage[margin=1in]{geometry}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\renewcommand{\thesubsubsection}{\Roman{subsubsection}}
+\title{SFWRENG-3MX3 Midterm 2 Practice}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+\makeatletter
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, $\langle$\href{mailto:farahm11@mcmaster.ca}{farahm11@mcmaster.ca}$\rangle$, 400468251}
+\fancyhead[R]{Midterm 2 Practice}
+
+\setlength{\parindent}{0cm}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\newcounter{problem}
+\renewcommand{\theproblem}{\arabic{problem}}
+
+\newenvironment{problem}[1][0]{
+	\refstepcounter{problem}
+	\newpage\vspace{1cm}\large{\par\noindent\textbf{\theproblem) #1}}\par\vspace{.5cm}
+	\addcontentsline{toc}{section}{\protect{\large{Problem \theproblem $\;$ \emph{(#1)}}}}
+}{\vspace{0.8em}}
+
+\newenvironment{solution}{
+	\vspace{0.4cm}\par\noindent\large\textbf{{Solution:}}\par\vspace{1em}
+}{\vspace{0.1em}}
+
+\newcounter{partslist}
+
+\makeatletter
+\newcommand{\parts@seriesname}{parts@\theproblem}
+
+\newenvironment{parts}{
+	\edef\parts@ser{\parts@seriesname}
+	\ifcsname\parts@ser\endcsname
+		\begin{enumerate}[resume=\parts@ser,label=\textbf{\theproblem.\alph*)},leftmargin=2.5em,itemsep=0.4em,before=\large]
+	\else
+		\begin{enumerate}[series=\parts@ser,label=\textbf{\theproblem.\alph*)},leftmargin=2.5em,itemsep=0.4em,before=\large]
+		\expandafter\gdef\csname\parts@ser\endcsname{1}
+	\fi
+}{
+	\end{enumerate}
+}
+
+\makeatother
+
+\makeatletter
+
+\newcounter{currentstep}
+\renewcommand{\thecurrentstep}{\Roman{currentstep}}
+
+\newenvironment{steps}{
+	\let\steps@olditem\item
+	\begin{list}{}{
+		\setlength\leftmargin{2.0em}
+		\setlength\itemsep{0.4em}
+		\setlength\topsep{0.8em}
+	}
+	\renewcommand{\item}{
+		\stepcounter{currentstep}
+		\steps@olditem[\textbf{(\thecurrentstep)}]
+	}
+}{
+	\end{list}
+	\let\item\steps@olditem
+}
+
+\makeatother
+
+\AtBeginEnvironment{parts}{\setcounter{currentstep}{0}}
+\AtBeginEnvironment{problem}{\setcounter{currentstep}{0}}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+\tableofcontents
+
+\begin{problem}[Short Questions]
+\end{problem}
+
+\begin{parts}
+	\item What are the coefficients $X_k$ of the Fourier series of the signal $x(t) = \cos(t) + \sin(2t)$.
+\end{parts}
+
+\begin{solution}
+	Looking at the frequency content of each term of $x(t)$, and noting that $\cos(t) = \frac{1}{2}(e^{it} + e^{-it})$ and $\sin(t) = \frac{1}{2i}(e^{2it} - e^{-2it})$, we can see that:
+
+	\begin{align*}
+		X_{-2} &= \frac{-1}{2i} \\[6pt]
+		X_{-1} &= \frac{1}{2} \\[6pt]
+		X_{0} &= 0 \\[6pt]
+		X_{1} &= \frac{1}{2} \\[6pt]
+		X_{2} &= \frac{1}{2i} \\[6pt]
+	\end{align*}
+\end{solution}
+
+\begin{parts}
+	\item For a real-valued system, we know $H\left( \frac{\pi}{4} \right) = 1 + i$. What is the value of $H\left( \frac{-\pi}{4} \right)$ and $H\left( \frac{9\pi}{4} \right)$?
+\end{parts}
+
+\begin{solution}
+
+	\begin{steps}
+		\item What is $H\left( \frac{-\pi}{4} \right)$?
+	\end{steps}
+	
+	We know that the frequency response for all systems must have a symmetric conjugate complex, meaning that $H(-\omega) = \bar{H}(\omega)$. Therefore, since the complex conjugate of $1 + i$ is $1 - i$, $H\left( \frac{-\pi}{4} \right) = 1 - i$.
+
+	\begin{steps}
+		\item What is $H\left( \frac{9\pi}{4} \right)$?
+	\end{steps}
+
+	\emph{Note here that the argument I'm about to supply works only for the impulse response of discrete systems, since it's not specified, I'm not entirely sure why this solution is *always* correct, or if its merely an accidental omission from the problem statement.} \\
+
+	Notice here that $H\left( \frac{9\pi}{4} \right) = H\left( 2\pi + \frac{\pi}{4} \right)$. Thus, since the frequency response of a discrete system is always $2\pi$-periodic, we know that $H \left( \omega \right) = H \left( \omega + 2\pi \right)$ and thus $H\left( 2\pi + \frac{\pi}{4} \right) = H \left( \frac{\pi}{4} \right) = 1 + i$.
+\end{solution}
+
+\begin{problem}[The Frequency Response]
+	If the frequency response of a system is given by $H(\omega) = \cos(\omega)$, compute the output of the system for the input signal $x(n) = 2 + \cos(\frac{\pi}{2}t + \frac{\pi}{4}) + \sin(\pi{n} + \frac{3\pi}{2})$.
+\end{problem}
+
+\begin{solution}
+
+	Noting that the frequency of each term of the input signal is $0, \frac{\pi}{2}$, and $\pi$, respectively, we can find that:
+
+	\begin{tabularx}{\linewidth}{Y | Y | Y | Y}
+		$\omega$ & $H(\omega)$ & $|H(\omega)|$ & $arg(H(\omega))$ \\
+		\hline
+		0 & 1 & 1 & 0 \\
+		$\frac{\pi}{2}$ & 0 & 0 & - \\
+		$\pi$  & $-1$ & 1 & 0 \\
+	\end{tabularx}
+
+	Therefore, we know that:
+
+	\emph{Verify if this is correct} \\
+
+	\begin{align*}
+		y(n) &= |H(\omega_1)|\cos(\omega_1{n} + arg(H(\omega_1))) + |H(\omega_2)|\cos(\omega_2{n} + arg(H(\omega_2))) + |H(\omega_3)|\cos(\omega_3{n} + arg(H(\omega_3))) \\
+		&= 1\cos(0 + 0) + 1\cos(\pi{n} + 0) \\
+		&= 1 + \cos(\pi{n}) \\
+	\end{align*}
+\end{solution}
+
+\begin{problem}[Filter Design]
+	Give the difference equation of a causal, minimum order, discrete, real-valued system that removes any signal with the normalized frequency of 0 and $\frac{\pi}{2}$ and passes signals a signal with a normalized frequency of $\pi$ with a gain of 1.
+\end{problem}
+
+\begin{solution}
+	To solve this problem, we must first construct a prototype filter $\tilde{H}(\omega)$ which satisfies $\tilde{H}(0) = 0$ and $\tilde{H}(\frac{\pi}{2}) = 0$ and then normalize it to produce our final filter $H(\omega)$. Using this final frequency response corresponding to our filter, we can then recover the difference equation of the system.
+
+	\begin{steps}
+		\item Find $\tilde{H}(\omega)$.
+	\end{steps}
+
+	\begin{align*}
+		\tilde{H}(\omega) &= (1 - e^{-i\omega})(i + e^{-i\omega})(i - e^{-i\omega}) \\
+		&= (1 - e^{-i\omega})(-1 - e^{-2i\omega}) \\
+		&= -1 - e^{-2i\omega} + e^{-i\omega} + e^{-3i\omega} \\
+	\end{align*}
+
+	Checking, we see that:
+
+	\begin{align*}
+		|\tilde{H}(\pi)| &= |-1 -  e^{-2i\pi} + e^{-i\pi} + e^{-3i\pi}| \\
+		&= |-1 - 1 - 1 - 1| \\
+		&= |-4| \\
+		&= 4 \\
+	\end{align*}
+
+	\begin{steps}
+		\item Find $H(\omega)$.
+	\end{steps}
+
+	Since our prototype filter, $\tilde{H}(\omega)$, already has a gain of zero at $0$ and $\frac{\pi}{2}$, we need only normalize it for $\omega = \pi$ to produce our final filter, which we can do by scaling $\tilde{H}(\omega)$ by a factor of $\frac{1}{4}$. Thus:
+
+	\begin{align*}
+		H(\omega) &= \frac{1}{4}(-1 - e^{-i\omega} + e^{-2i\omega} + e^{-3i\omega}) \\
+	\end{align*}
+
+	\begin{steps}
+		\item Find the difference equation for the filter.
+	\end{steps}
+
+	By multiplying both sides by $e^{i\omega{n}}$, and recognizing that $y(n) = H(\omega)e^{i\omega{n}}$ when $x(n) = e^{i\omega{n}}$, we find the difference equation to be:
+
+	\begin{align*}
+		H(\omega)e^{i\omega{n}} &= \frac{1}{4}(-e^{i\omega{n}} - e^{-i\omega}e^{i\omega{n}} + e^{-2i\omega}e^{i\omega{n}} + e^{-3i\omega}e^{i\omega{n}}) \\
+		y(n) &= \frac{1}{4}(-e^{i\omega{n}} - e^{i\omega(n - 1)} + e^{i\omega(n - 2)} + e^{i\omega{n - 3}}) \\
+		y(n) &= \frac{1}{4}(-x(n) - x(n - 1) + x(n - 2) + x(n - 3)) \\
+	\end{align*}
+
+
+\end{solution}
+
+\begin{problem}[The Frequency Response]
+	The system $y(n) + y(n - 1) = 2x(n) - 5x(n - 2)$ has a frequency response of $H(\omega) = \frac{1 + e^{-i\omega}}{e^{-i\omega}}$. Compute the output of the system for the input $x(n) = \cos\left( \frac{\pi}{2}n + \frac{\pi}{4} \right) + \sin\left( \pi{n} + \frac{3\pi}{2}\right)$.
+\end{problem}
+
+\begin{solution}
+	Noting that the frequency of each term of the input signal is $\frac{\pi}{2}$ and $\pi$ respectively, we can find that:
+
+	\begin{tabularx}{\linewidth}{Y | Y | Y | Y}
+		$\omega$ & $H(\omega)$ & $|H(\omega)|$ & $arg(H(\omega))$ \\
+		\hline
+		$\frac{\pi}{2}$ & $\frac{1 - i}{-i} = 1 + i$ & $\sqrt{2}$ & $\frac{\pi}{4}$ \\
+		$\pi$ & 0 & 0 & - \\
+	\end{tabularx}
+
+	Therefore, we know that:
+
+	\begin{align*}
+		y(n) &= |H(\omega_1)|\cos(\omega_1{n} + arg(H(\omega_1))) + |H(\omega_2)|\cos(\omega_2{n}) \\
+		&= \sqrt{2}\cos\left( \frac{\pi}{2} + \frac{\pi}{4}\right) \\
+	\end{align*}
+\end{solution}
+
+\begin{problem}[The Fourier Transform]
+	A Continuous Time Fourier Transform (CTFT) table states that:
+	\begin{gather*}
+	x(t) = \begin{cases} \frac{\pi}{a}, \; \text{if} \; -a \le t \le a \\ 0, \; \text{otherwise} \end{cases} \iff X(\omega) = 2\pi\frac{\sin(a\omega)}{a\omega}
+	\end{gather*}
+
+	Use the table to compute the Fourier transform of the signal $x(t) = \begin{cases} 1, \; \text{if} \; 0 \le t \le 2 \\ 0, \; \text{otherwise} \end{cases}$.
+\end{problem}
+
+\begin{solution}
+	Consider the case when $a = 1$, then by the CTFT table, we know that:
+	\begin{gather*}
+		x(t) = \begin{cases} \frac{\pi}, \; \text{if} \; -1 \le t \le 1 \\ 0, \; \text{otherwise} \end{cases} \iff X(\omega) = 2\pi\frac{\sin(\omega)}{\omega}
+	\end{gather*}
+
+	Such a signal is nearly identical to the one we are requested to find in the question, except that it is scaled by a factor of $\pi$ and our signal starts at a delay of 1 second afterwards (since it is only equal to 1 on the interval $0 \le t \le 2$ as opposed to $-1 \le t \le 1$). Therefore, if we scale this signal down by a factor of $\frac{1}{\pi}$ and delay it by a unit of time equal to $t = 1$, we can recover the Fourier transform of our given $x(t)$. Doing such a scaling and delaying is reflected in the Fourier transform as multiplying by $\frac{1}{\pi}$ and $e^{-i\omega}$ respectively. Therefore, the Fourier transform for our signal is given by:
+
+	\begin{align*}
+		X(\omega) &= 2\pi\frac{\sin(\omega)}{\omega} \cdot \frac{1}{\pi} \cdot e^{-i\omega{n}} \\[6pt]
+		&= \frac{2e^{-i\omega{n}}\sin(\omega)}{\omega} \\
+	\end{align*}
+\end{solution}
+
+\begin{problem}[Convolution]
+	We use convolution to compute the output of a system $y(n)$ given its impulse response $h(n)$. Given the impulse response $h(n)$, compute the output of a system with an input $x(n) = e^{i\omega{n}}$. Explain how your result is related to the Discrete Time Fourier Transform (DTFT).
+\end{problem}
+
+\begin{solution}
+	\begin{align*}
+		y(n) &= \sum_{k = -\infty}^{\infty}(h(k)x(n - k)) \\
+		&= \sum_{k = -\infty}^{\infty}(h(k)e^{i\omega(n - k)}) \\
+		&= \sum_{k = -\infty}^{\infty}(h(k)e^{i\omega{n}}e^{-i\omega{k}}) \\
+		&= e^{i\omega{n}}\sum_{k = -\infty}^{\infty}(h(k)e^{-i\omega{k}}) \implies \\
+
+		%FIX: Something is wrong here
+		y(n)e^{-i\omega{n}} &= \sum_{k = -\infty}^{\infty}(h(k)e^{-i\omega{k}}) \implies \\
+		H(\omega) &= \sum_{}
+
+
+	\end{align*}
+\end{solution}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
