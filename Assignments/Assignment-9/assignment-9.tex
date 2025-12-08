@@ -1,0 +1,588 @@
+\documentclass[10pt]{article}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{mathtools}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, shapes.geometric, fit}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\geometry{margin=1in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\title{SFWRENG 3MX3 - Assignment 9}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+\tikzset{
+	block/.style = {draw, rectangle, minimum height=1cm, minimum width=1.4cm},
+	sum/.style   = {draw, circle, inner sep=5pt},
+	gain/.style  = {draw, isosceles triangle, isosceles triangle apex angle=60,
+		minimum height=1cm, minimum width=1cm, shape border rotate=180},
+	connector/.style={thick},
+}
+
+\DeclareMathOperator{\sinc}{sinc}
+
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\fancyhead[R]{SFWRENG 3MX3 - Assignment 9}
+
+\setlength{\parindent}{0cm}
+
+\newcommand{\sectiontitle}{SFWRENG 3MX3 - Assignment 9}
+\setcounter{section}{1}
+
+\newcounter{exercise}
+\renewcommand{\theexercise}{\arabic{exercise}}
+
+\newenvironment{exercise}[1][]{
+	\newpage
+	\refstepcounter{exercise}
+	\phantomsection
+	\addcontentsline{toc}{section}{\protect{\large{Exercise \theexercise} - #1}}
+	\vspace{1em}
+	\par
+	\large\textbf{Exercise \theexercise}
+	\vspace{.2cm}
+	\par
+	\setcounter{subexercise}{0}
+	\setcounter{step}{0}
+}{\vspace{.5em}}
+
+\newenvironment{solution}{
+	\vspace{1em}\par\large\textbf{{Solution:}}\par\vspace{1em}
+}{
+	\vspace{1em}
+}
+
+\newcounter{subexercise}
+\renewcommand{\thesubexercise}{\alph{subexercise}}
+
+\newenvironment{subexercise}{
+	\refstepcounter{subexercise}
+	\vspace{1em}\par\large\textbf{(\thesubexercise)}\hspace{-.5em}
+	\setcounter{step}{0}
+	\phantomsection
+	\addcontentsline{toc}{subsection}{\protect{\large{\theexercise.\thesubexercise.)}}}
+}{
+	\par
+	\vspace{1em}
+}
+
+\makeatother
+
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1.5em}\par\noindent\large\textbf{(\thestep)}
+}{
+	\par
+	\vspace{1.5em}
+}
+
+\makeatother
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\arraystretch}{1.8}
+
+\fontsize{10pt}{14pt}\selectfont
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\begin{exercise}[Short Answer Questions]
+	What is the minimal sampling frequency, rounded to the nearest integer, that is needed so we can sample and reconstruct the signal:
+
+	\begin{align*}
+		x(t) &= \cos(50\pi{t}) + \cos(100\pi{t})
+	\end{align*}
+\end{exercise}
+
+\begin{solution}
+	Here, we can see that $\omega_1 = 50\pi$ and $\omega_2 = 100\pi$. Thus, $f_1 = \frac{50\pi}{2\pi} = 25$ and $f_2 = \frac{100\pi}{2\pi} = 50$. Thus, since the fastest frequency in the signal is $50$Hz, and we need to sample at strictly greater than twice the fastest frequency, the minimal sampling frequency is $101$Hz.
+\end{solution}
+
+\begin{exercise}[The State Space Equations]
+	Let
+
+	\begin{align*}
+		H(\omega) &= \frac{1}{1 - \frac{1}{2}e^{-i\omega}} \\
+	\end{align*}
+
+	be the frequency response of some system. Determine the system's state space equations (its $\left( A, B, C, D \right)$ representation).
+\end{exercise}
+
+\begin{solution}
+	\begin{step}
+		Find the difference equation of the system.
+	\end{step}
+
+	Recognizing that $y(n) = H(\omega)e^{i\omega{n}}$ when $x(n) = e^{i\omega{n}}$, we can see that:
+
+	\begin{gather*}
+		H(\omega) = \frac{1}{1 - \frac{1}{2}e^{-i\omega}} \\[6pt]
+		H(\omega)\left(1 - \frac{1}{2}e^{-i\omega} \right) = 1 \\[6pt]
+		H(\omega) - \frac{1}{2}H(\omega)e^{-i\omega} = 1 \\[6pt]
+		H(\omega)e^{i\omega{n}} - \frac{1}{2}H(\omega)e^{-i\omega}e^{i\omega{n}} = e^{i\omega{n}} \\[6pt]
+		H(\omega)e^{i\omega{n}} - \frac{1}{2}H(\omega)e^{i\omega(n - 1)} = e^{i\omega{n}} \\[6pt]
+		y(n) - \frac{1}{2}y(n - 1) = x(n) \\[6pt]
+		y(n) = \frac{1}{2}y(n - 1) + x(n) \\[6pt]
+	\end{gather*}
+
+	Now using the representation of the system in difference equation form, we can begin to translate it into its state-space representation
+
+	\begin{step}
+		Find $S(n)$.
+	\end{step}
+
+	\begin{alignat*}{4}
+		& \text{Let:} && \text{Then:} & \\[6pt]
+		& s_1(n) = y(n - 1) \qquad \qquad && s_1(n + 1) = y(n) & \\
+		& &&= \frac{1}{2}y(n - 1) + x(n) & \\
+		& &&= \frac{1}{2}s_1(n) + x(n) & \\
+	\end{alignat*}
+
+	Thus, let $S(n) = \left( s_1(n) \right)$
+
+	\begin{step}
+		Find $S(n + 1)$.
+	\end{step}
+
+	\begin{align*}
+		S(n + 1) &= \left( s_1(n + 1) \right) \\[6pt]
+		&= \left( \frac{1}{2}s_1(n) + x(n) \right) \\[6pt]
+		&= \left( \frac{1}{2} \right)S(n) + \left( 1 \right)x(n) \\[6pt]
+	\end{align*}
+
+	Thus, $A = \left( \frac{1}{2} \right)$ and $B = \left( 1 \right)$.
+
+	\begin{step}
+		Find $y(n)$.
+	\end{step}
+
+	\begin{align*}
+		y(n) &= \frac{1}{2}y(n - 1) + x(n) \\[6pt]
+		&= \frac{1}{2}s(n) + x(n) \\[6pt]
+		&= \left( \frac{1}{2} \right)S(n) + \left( 1 \right)x(n) \\[6pt]
+	\end{align*}
+
+	Thus, $C = \left( \frac{1}{2} \right)$ and $D = \left( 1 \right)$.
+\end{solution}
+
+\begin{exercise}[The $Z$ and Laplace Transforms]
+\end{exercise}
+
+\begin{subexercise}
+	Determine if the system
+
+	\begin{align*}
+		\ddot{y} + 4\dot{y} - 2y = x
+	\end{align*}
+
+	is stable.
+\end{subexercise}
+
+\begin{solution}
+	We know that a continuous system is stable if its transfer function, $G(s)$, only has poles on the left-plane of the $\sigma\textendash{i\omega}$ axis. Thus, we must find the system's transfer function, which is given by $G(s) = \frac{\hat{Y}}{\hat{X}}$. Thus, we must find $\hat{Y}$, which we do by computing the Laplace transform of the system.
+
+	\begin{step}
+		Find $\hat{Y}$.
+	\end{step}
+
+	\begin{gather*}
+		\ddot{y} + 4\dot{y} - 2y = x \implies \\[6pt]
+		s^2\hat{Y} + 4s\hat{Y} - 2\hat{Y} = \hat{X} \\[6pt]
+		\hat{Y}\left( s^2 + 4s - 2 \right) = \hat{X} \\[6pt]
+		\hat{Y} = \frac{\hat{X}}{s^2 + 4s - 2} \\[6pt]
+	\end{gather*}
+
+	\begin{step}
+		Find $G(s)$.
+	\end{step}
+
+	Thus, using the formula given earlier, we can derive that the system's transfer function is given by:
+
+	\begin{align*}
+		G(s) &= \frac{\hat{Y}}{\hat{X}} \\[6pt]
+		&= \frac{\frac{\hat{X}}{s^2 + 4s - 2}}{\hat{X}} \\[6pt]
+		&= \frac{1}{s^2 + 4s - 2} \\[6pt]
+	\end{align*}
+
+	Thus, we can determine that the system's transfer function has no zeroes and its poles are located at:
+
+	\begin{align*}
+		s &= \frac{-4 \pm \sqrt{16 - 4(1)(-2)}}{2} \\[6pt]
+		&= \frac{-4 \pm \sqrt{24}}{2} \\[6pt]
+		&= \frac{-4 \pm 2\sqrt{12}}{2} \\[6pt]
+		&= -2 \pm \sqrt{12} \\[6pt]
+	\end{align*}
+
+	Thus, since one of the poles, $-2 + \sqrt{12}$, lies to the right of the $\sigma\textendash{i\omega}$ axis, the system is \underline{NOT} BIBO stable.
+\end{solution}
+
+\begin{subexercise}
+	Compute the $Z$-transform of the signal $x(n) = \delta(n) + \delta(n - 1)$.
+\end{subexercise}
+
+\begin{solution}
+	The $Z$-transform of a signal $x(n)$ is given by $\hat{X}(z) = \sum_{n = -\infty}^{\infty}x(n)z^{-n}$. Thus, substituting for $x(n)$, we find that:
+
+	\begin{align*}
+		\hat{X} &= \sum_{n = -\infty}^{\infty}x(n)z^{-n} \\
+		&= \sum_{n = -\infty}^{\infty}(\delta(n) + \delta(n - 1))z^{-n} \\
+		&= \sum_{n = -\infty}^{\infty}\left( \delta(n)z^{-n} + \delta(n - 1)z^{-n} \right) \\
+		&= \sum_{n = -\infty}^{\infty}\delta(n)z^{-n} + \sum_{n = -\infty}^{\infty}\delta(n - 1)z^{-n} \\
+		&= z^{-(0)} + z^{-1} \\
+		&= 1 + z^{-1} \\
+	\end{align*}
+\end{solution}
+
+\begin{exercise}[Designing Filters]
+	A digital system is running at the sampling frequency $f_s =
+	2000$Hz. Give the difference equation of a minimal order FIR filter
+	that removes signals with a frequency of $f = 500$Hz and filters any
+	constant signal. The filter should be normalized to have a gain of 1 at
+	$f = 1000$Hz
+\end{exercise}
+
+\begin{solution}
+	Associating $2000$Hz with a frequency of $2\pi$, we find that
+	$1000$Hz and $500$Hz are equivalent to frequencies of $\pi$ and
+	$\frac{\pi}{2}$ respectively. As well, since we wish to filter our all
+	constant signals, we must filter our all signals with a frequency of
+	$0$. Thus, we compute our prototype filter, $H(\omega)$, as follows:
+
+	\begin{step}
+		Find $\tilde{H}(\omega)$.
+	\end{step}
+
+	\begin{align*}
+		\tilde{H}(\omega) &= (e^{-i\frac{\pi}{2}} - e^{-i\omega})(e^{i\frac{\pi}{2}} - e^{-i\omega})(e^{-i(0)} - e^{-i\omega}) \\
+		&= (-i - e^{-i\omega})(i - e^{-i\omega})(1 - e^{-i\omega}) \\
+	\end{align*}
+
+	\begin{step}
+		Normalize $\tilde{H(\omega)}$.
+	\end{step}
+
+	\begin{align*}
+		|\tilde{H}(\pi)| &= |(-i - e^{-i\pi})(i - e^{-i\pi})(1 - e^{-i\pi})| \\
+		&= |(-i - (-1))(i - (-1))(1 - (-1))| \\
+		&= |(-i + 1)(i + 1)(2)| \\
+		&= |(-(-1) -i + i + 1)(2)| \\
+		&= |(1 + 1)(2)| \\
+		&= |(2)(2)| \\
+		&= 4 \\
+	\end{align*}
+
+	Thus, our filter can be given by $H(\omega) = \frac{1}{4}(-i - e^{-i\omega})(i - e^{-i\omega})(1 - e^{-i\omega})$.
+
+	\begin{step}
+		Find the filter's difference equation.
+	\end{step}
+
+	Using the fact that $H(\omega)e^{i\omega{n}} = y(n)$ when $x(n) = e^{i\omega{n}}$, we find that:
+
+	\begin{align*}
+		H(\omega) &= \frac{1}{4}(-i - e^{-i\omega})(i - e^{-i\omega})(1 - e^{-i\omega}) \\[6pt]
+		&= \frac{1}{4}(-(-1) + ie^{-i\omega} - ie^{-i\omega} +e^{-2i\omega})(1 - e^{-i\omega}) \\[6pt]
+		&= \frac{1}{4}(1 + e^{-2i\omega})(1 - e^{-i\omega}) \\[6pt]
+		&= \frac{1}{4}(1 - e^{-i\omega} + e^{-2i\omega} - e^{-3i\omega}) \implies \\[12pt]
+		H(\omega)e^{i\omega{n}} &= \frac{1}{4}(e^{i\omega{n}} - e^{i\omega(n - 1)} + e^{i\omega(n - 2)} - e^{i\omega(n - 3)}) \implies \\[12pt]
+		y(n) &= \frac{1}{4}(x(n) - x(n - 1) + x(n - 2) - x(n - 3)) \\
+	\end{align*}
+
+	Thus, the filter's difference equation is given by $y(n) = \frac{1}{4}(x(n) - x(n - 1) + x(n - 2) - x(n - 3))$.
+
+\end{solution}
+
+\begin{exercise}[Difference Equations and the Impulse Response]
+	The frequency response for a filter is given by:
+
+	\begin{align*}
+		H(\omega) &= \frac{1}{1 + \frac{1}{2}e^{-i\omega}} \\
+	\end{align*}
+
+	What is the filter's corresponding difference equation and impulse response?
+\end{exercise}
+
+\begin{solution}
+	\begin{step}
+		Find the filter's difference equation.
+	\end{step}
+
+	By utilizing the fact that $H(\omega)e^{i\omega{n}} = y(n)$ when $x(n) = e^{i\omega{n}}$, we can recover the filter's difference equation as follows:
+
+	\begin{gather*}
+		H(\omega) = \frac{1}{1 + \frac{1}{2}e^{-i\omega}} \\[6pt]
+		H(\omega)\left( 1 + \frac{1}{2}e^{-i\omega} \right) = 1 \\[6pt]
+		H(\omega) + \frac{1}{2}H(\omega)e^{-i\omega} = 1 \\[6pt]
+		H(\omega)e^{i\omega{n}} + \frac{1}{2}H(\omega)e^{-i\omega}e^{i\omega{n}} = e^{i\omega{n}} \\[6pt]
+		H(\omega)e^{i\omega{n}} + \frac{1}{2}H(\omega)e^{i\omega{n - 1}} = e^{i\omega{n}} \\[6pt]
+		y(n) + \frac{1}{2}y(n - 1) = x(n) \\[6pt]
+		y(n) = x(n) - \frac{1}{2}y(n - 1) \\[6pt]
+	\end{gather*}
+
+	\begin{step}
+		Find the filter's impulse response.
+	\end{step}
+
+	By substituting in $x(n) = \delta(n)$, we can see that:
+
+	\begin{alignat*}{4}
+		y(0) &= \delta(0) - \frac{1}{2}y(-1) &=&& 1 \\
+		y(1) &= \delta(1) - \frac{1}{2}y(0) &=&& \; -\frac{1}{2} \\
+		y(2) &= \delta(2) - \frac{1}{2}y(1) &=&& \; \frac{1}{4} \\
+		& \qquad \qquad \vdots & && \\
+		& \qquad y(n) = \frac{\left( -1 \right)^n}{2^n} & && \\
+	\end{alignat*}
+\end{solution}
+
+\begin{exercise}[The Impulse Response]
+	Given the impulse response:
+
+	\begin{align*}
+		h(n) &=
+		\begin{cases}
+			1, \; \text{if} \; n = 0 \\
+			2, \; \text{if} \; n = 1 \\
+			3, \; \text{if} \; n = 2 \\
+			0, \; \text{otherwise} \\
+		\end{cases}
+	\end{align*}
+
+	determine the system's difference equation, then use convolution to compute the output to the input $x(n) = \delta(n) + \delta(n - 1) + \delta(n - 3)$
+\end{exercise}
+
+\begin{solution}
+	\begin{step}
+		Determine the system's difference equation.
+	\end{step}
+
+	Using the fact that $y(n) = h(n)$ when $x(n) = \delta(n)$, and since $h(n)$ can be expressed as:
+
+	\begin{align*}
+		h(n) &= 1\delta(n) + 2\delta(n - 1) + 3\delta(n - 2) \\
+		&= \delta(n) + 2\delta(n - 1) + 3\delta(n - 2) \\
+	\end{align*}
+
+	We can substitute to find that:
+
+	\begin{align*}
+		y(n) &= x(n) + 2x(n - 1) + 3x(n - 2) \\
+	\end{align*}
+
+	\begin{step}
+		Find the output to the input $x(n) = \delta(n) + \delta(n - 1) + \delta(n - 3)$ using convolution.
+	\end{step}
+
+	Using convolution, we can determine that:
+
+	\begin{align*}
+		y(n) &= \sum_{k = 0}^{\infty}x(n - k)h(k) \\[6pt]
+		&= \sum_{k = 0}^{\infty}\left(\delta(n - k) + \delta(n - k - 1) + \delta(n - k - 3) \right)\left( \delta(k) + 2\delta(k - 1) + 3\delta(k - 2) \right) \\
+		&= \left( \delta(n) + \delta(n - 1) + \delta(n - 3) \right) + 2\left( \delta(n - 1) + \delta(n - 2) + \delta(n - 4) \right) \\[6pt]
+		&\qquad + 3\left( \delta(n - 2) + \delta(n - 3) + \delta(n - 5) \right) \\[6pt]
+		&= \delta(n) + 3\delta(n - 1) + 5\delta(n - 2) + 4\delta(n - 3) + 2\delta(n - 4) + 3\delta(n - 5)
+	\end{align*}
+\end{solution}
+
+\begin{exercise}[Fourier Series]
+	Compute $X_0$ and $X_1$ for the signal
+
+	\begin{align*}
+		x(t) &=
+		\begin{cases}
+			1, \; \text{if} \; 0 \le t < \pi \\
+			-1, \; \text{if} \; \pi \le t < 2\pi \\
+		\end{cases} \\
+	\end{align*}
+\end{exercise}
+
+\begin{solution}
+	To compute $X_0$ and $X_1$ for the signal $x(t)$, we must compute its Fourier (FS). The FS of a p-periodic signal is given by the formula:
+
+	\begin{align*}
+		X_k = \frac{1}{p}\int_{0}^{p}x(t)e^{-i\omega_{0}{k}{t}}dt \\
+	\end{align*}
+
+	Where $\omega_0 = \frac{2\pi}{p}$. Taking $p = 2\pi$, we find that:
+
+	\begin{align*}
+		X_k &= \frac{1}{2\pi}\int_{0}^{2\pi}x(t)e^{-i(1){k}{t}}dt \\
+		&= \frac{1}{2\pi}\left( \int_{0}^{\pi}e^{-i{k}{t}}dt - \int_{\pi}^{2\pi}e^{-i{k}{t}}dt \right) \\
+		&= \frac{1}{2\pi}\left( \frac{1}{-i{k}}e^{-i{k}{t}} \Big|_{0}^{\pi} - \frac{1}{-ik}e^{-i{k}{t}} \Big|_{\pi}^{2\pi} \right) \\
+		&= \frac{1}{2\pi}\left( \frac{i}{k}\left( e^{-\pi{i}{k}} - e^{-(0){i}{k}} - e^{2\pi{i}{k}} + e^{-\pi{i}{k}} \right)  \right) \\
+		&= \frac{i}{2k\pi}\left( 2e^{-\pi{i}{k}} -2 \right) \\
+		&= \frac{i}{k{\pi}}\left(e^{-\pi{i}{k}} - 1 \right) \\
+	\end{align*}
+
+	%TODO: FIX DIVISION BY ZERO
+
+	Therefore, we find that:
+
+	%TODO: Fix Formatting
+	\begin{alignat*}{2}
+		X_{0} = \frac{i}{(0)(\pi)}\left( 1 - 1 \right) \qquad && \qquad X_{1} = \frac{i}{(1)(\pi)}\left( -1 - 1 \right) \\
+		X_{0} = 0 \qquad && \qquad X_{1} = \frac{-2i}{\pi} \\
+	\end{alignat*}
+
+\end{solution}
+
+\begin{exercise}[The Brick Wall Filter]
+	Given a continuous system with the frequency response
+
+	\begin{align*}
+		H(\omega) &=
+		\begin{cases}
+			1, \; \text{if} \; |\omega| \le 2 \\
+			0, \; \text{otherwise} \\
+		\end{cases}
+	\end{align*}
+
+	filter the signal $x(t) = \delta(t - 2)$. (You must first compute $X(\omega)$ then filter and then transform back!)
+\end{exercise}
+
+\begin{solution}
+	\begin{step}
+		Find $X(\omega)$.
+	\end{step}
+
+	\begin{align*}
+		X(\omega) &= \int_{-\infty}^{\infty}x(t)e^{-i\omega{t}}dt \\
+		&= \int_{-\infty}^{\infty}\delta(t - 2)e^{-i\omega{t}}dt \\
+		&= e^{-2i\omega} \\
+	\end{align*}
+
+	%TODO: Elaborate
+	\begin{step}
+		Find $x(t)$.
+	\end{step}
+
+	\begin{align*}
+		x(t) &= \frac{1}{2\pi}\int_{-2}^{2}X(\omega)e^{i\omega{t}}d\omega \\
+		&= \frac{1}{2\pi}\int_{-2}^{2}e^{-2i\omega}e^{i\omega{t}}d\omega \\
+		&= \frac{1}{2\pi}\int_{-2}^{2}e^{i\omega(t - 2)}d\omega \\
+		&= \left(\frac{1}{2\pi}\right)\left(\frac{1}{i(t - 2)}\right)(e^{i\omega(t - 2)})\Big|_{-2}^{2} \\
+		&= \frac{1}{2i\pi(t - 2)}\left(e^{2i(t - 2)} - e^{-2i(t - 2)} \right) \\
+		&= \frac{2}{\pi(t - 2)}\left( \frac{e^{2i(t - 2)} - e^{-2i(t - 2)}}{2i} \right) \\
+		&= \frac{1}{\pi(t - 2)} \sin(2t - 4) \\
+		&= \frac{2}{\pi}\sinc(2t - 4) \\
+	\end{align*}
+
+\end{solution}
+
+\begin{exercise}[The Impulse and Frequency Response]
+	Use the Discrete Time Fourier Transform (DTFT) or the Continuous Time Fourier Transform (CTFT) (where appropriate) to determine the corresponding frequency responses of the following impulse responses:
+\end{exercise}
+
+\begin{subexercise}
+	$h(t) = \delta(t - 1) + 2\delta(t - 2)$.
+\end{subexercise}
+
+\begin{solution}
+	Here, our impulse response clearly corresponds to a continuous signal, thus we must compute its CTFT. Therefore, we find that:
+
+	\begin{align*}
+		H(\omega) &= \int_{-\infty}^{\infty}h(t)e^{-i\omega{t}}dt \\
+		&= \int_{-\infty}^{\infty}\left( \delta(t - 1) + 2\delta(t - 2) \right)e^{-i\omega{t}}dt \\
+		&= \int_{-\infty}^{\infty}\delta(t - 1)e^{-i\omega{t}} + 2\delta(t - 2)e^{-i\omega{t}}dt \\
+		&= \int_{-\infty}^{\infty}\delta(t - 1)e^{-i\omega{t}}dt + 2\int_{-\infty}^{\infty}\delta(t - 2)e^{-i\omega{t}}dt \\
+		&= e^{-i\omega} + 2e^{-2i\omega} \\
+	\end{align*}
+
+	Thus, $H(\omega) = e^{-i\omega} + 2e^{-2i\omega}$.
+\end{solution}
+
+\begin{subexercise}
+	\begin{align*}
+		h(n) &=
+		\begin{cases}
+			\frac{1}{3}, \; \text{if} \; x = 0, 1, 2 \\
+			0, \; \text{otherwise} \\
+		\end{cases}
+	\end{align*}
+\end{subexercise}
+
+\begin{solution}
+	Here, our impulse response corresponds to a discrete signal, thus we must compute its DTFT. Therefore, using the fact that $h(n) = \frac{1}{3}\left( \delta(n) + \delta(n - 1) + \delta(n - 2) \right)$ we find that:
+
+	\begin{align*}
+		H(\omega) &= \sum_{n = -\infty}^{\infty}h(n)e^{-i\omega{n}} \\
+		&= \frac{1}{3}\sum_{n = -\infty}^{\infty}\left( \delta(n) + \delta(n - 1) + \delta(n - 2) \right)e^{-i\omega{n}} \\
+		&= \frac{1}{3}\left( e^{-i\omega(0)} + e^{-i\omega(1)} + e^{-i\omega{n}} \right) \\
+		&= \frac{1}{3}\left( 1 + e^{-i\omega} + e^{-2i\omega} \right) \\
+	\end{align*}
+
+	Thus, $H(\omega) = \frac{1}{3}\left( 1 + e^{-i\omega} + e^{-2i\omega} \right)$.
+\end{solution}
+
+\begin{exercise}[The DFT and DTFT]
+	Compute $X(\omega)$ and $X_k$ for the signal:
+
+	\begin{align*}
+		x(n) &=
+		\begin{cases}
+			1, \; \text{if} \; n = 0 \\
+			0, \; \text{otherwise} \\
+		\end{cases}
+	\end{align*}
+\end{exercise}
+
+\begin{solution}
+	\begin{step}
+		Find $X(\omega)$.
+	\end{step}
+
+	We can find $X(\omega)$ by computing the Discrete Time Fourier Transform (DTFT) of the signal. Thus, using the fact that $x(n) = \delta(n)$, we find that:
+
+	\begin{align*}
+		X(\omega) &= \sum_{n = -\infty}^{\infty}x(n)e^{-i\omega{n}} \\
+		&= \sum_{n = -\infty}^{\infty}\delta(n)e^{-i\omega{n}} \\
+		&= e^{-i\omega(0)} \\
+		&= e^{0} \\
+		&= 1 \\
+	\end{align*}
+
+	Thus, $X(\omega) = 1$.
+
+	\begin{step}
+		Find $X_k$.
+	\end{step}
+
+	Next, we find $X_k$ using the Discrete Fourier Transform (DFT). Thus, we find that:
+
+	\begin{align*}
+		X_k &= \sum_{n = 0}^{N - 1}x(n)e^{-i\omega{n}{k}} \\
+		&= \sum_{n = 0}^{N - 1}\delta(n)e^{-i\omega{n}{k}} \\
+		&= \delta(0)e^{-i\omega(0)(k)} \\
+		&= e^{0} \\
+		&= 1 \\
+	\end{align*}
+
+	Thus, $X_k = 1$.
+\end{solution}
+
+\end{document}

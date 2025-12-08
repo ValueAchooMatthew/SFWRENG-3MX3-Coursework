@@ -1,0 +1,14 @@
+\contentsline {section}{{\large {Exercise 1} - Short Answer Questions}}{2}{section*.1}%
+\contentsline {section}{{\large {Exercise 2} - The State Space Equations}}{3}{section*.2}%
+\contentsline {section}{{\large {Exercise 3} - The $Z$ and Laplace Transforms}}{5}{section*.3}%
+\contentsline {subsection}{{\large {3.a.)}}}{5}{section*.4}%
+\contentsline {subsection}{{\large {3.b.)}}}{6}{section*.5}%
+\contentsline {section}{{\large {Exercise 4} - Designing Filters}}{7}{section*.6}%
+\contentsline {section}{{\large {Exercise 5} - Difference Equations and the Impulse Response}}{9}{section*.7}%
+\contentsline {section}{{\large {Exercise 6} - The Impulse Response}}{11}{section*.8}%
+\contentsline {section}{{\large {Exercise 7} - Fourier Series}}{12}{section*.9}%
+\contentsline {section}{{\large {Exercise 8} - The Brick Wall Filter}}{13}{section*.10}%
+\contentsline {section}{{\large {Exercise 9} - The Impulse and Frequency Response}}{15}{section*.11}%
+\contentsline {subsection}{{\large {9.a.)}}}{15}{section*.12}%
+\contentsline {subsection}{{\large {9.b.)}}}{15}{section*.13}%
+\contentsline {section}{{\large {Exercise 10} - The DFT and DTFT}}{17}{section*.14}%
